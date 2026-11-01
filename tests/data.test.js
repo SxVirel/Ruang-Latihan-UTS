@@ -68,6 +68,30 @@ test('essay items have points to grade against', () => {
   }
 });
 
+test('every script the page loads is cached for offline use', () => {
+  const html = fs.readFileSync(path.join(__dirname, '../app/index.html'), 'utf8');
+  const sw = fs.readFileSync(path.join(__dirname, '../app/sw.js'), 'utf8');
+  for (const [, src] of html.matchAll(/<script src="([^"]+)"/g)) assert.ok(sw.includes("'" + src + "'"), src);
+});
+
+test('materi weeks are well formed', () => {
+  const weeks = data.materi.ks;
+  assert.equal(weeks.length, 7);
+  for (const w of weeks) {
+    assert.ok(w.judul && w.hlm && w.ringkas && w.bagian.length, 'minggu ' + w.minggu);
+    for (const b of w.bagian) {
+      assert.ok(b.h && (b.poin || b.tabel), b.h);
+      if (b.tabel) for (const r of b.tabel.rows) assert.equal(r.length, b.tabel.head.length, b.h);
+    }
+  }
+});
+
+test('uraian items stay out of the normal practice pool', () => {
+  const uraian = data.isian.filter(it => it.section === 'uraian');
+  assert.ok(uraian.length >= 20, 'only ' + uraian.length);
+  assert.ok(uraian.every(it => it.course === 'ks' && it.ex));
+});
+
 test('only known item types', () => {
   for (const it of all) assert.ok(['mcq', 'fill', 'essay'].includes(it.type), it.id + ' ' + it.type);
 });

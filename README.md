@@ -4,13 +4,17 @@ Aplikasi latihan UTS untuk lima mata kuliah. Berjalan offline di laptop Windows,
 
 | Mata kuliah | Isi |
 |---|---|
-| Keamanan Siber | 258 pilihan ganda + 2 esai |
+| Keamanan Siber | 258 pilihan ganda + 2 esai, materi minggu 1-7, 23 prediksi uraian dan isian |
 | Kecerdasan Artifisial | 50 isian dan esai |
 | Komputasi Awan | 37 isian dan esai + 3 lab interaktif |
 | Forensik Digital | 45 isian dan esai |
 | Manajemen Proyek | 39 isian dan esai + lab CPM |
 
 Fitur: mode latihan, mode ujian dengan timer, bank soal salah, statistik progres, dan jadwal UTS pribadi di dashboard.
+
+## Cara memakai di HP
+
+Buka https://sxvirel.github.io/Ruang-Latihan-UTS/app/ di Chrome, lalu pilih menu **Add to Home screen**. Setelah dibuka sekali saat online, aplikasi tetap bisa dipakai tanpa internet. Progres di HP terpisah dari progres di laptop.
 
 ## Cara memasang (Windows)
 

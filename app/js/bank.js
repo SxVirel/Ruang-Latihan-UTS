@@ -1,6 +1,6 @@
 // Registry for question data. Data files call these before app.js runs.
 (function (root) {
-  var bank = { courses: {}, mcq: [], isian: [] };
+  var bank = { courses: {}, mcq: [], isian: [], materi: {} };
 
   function course(id, meta) {
     bank.courses[id] = Object.assign({ id: id }, meta);
@@ -29,7 +29,19 @@
     });
   }
 
-  var api = { data: bank, course: course, mcq: mcq, isian: isian };
+  // Items in the course's Uraian & Isian tab, kept out of the normal practice pool.
+  function uraian(courseId, topicId, topic, items) {
+    isian(courseId, topicId, topic, items.map(function (it) {
+      return Object.assign({ section: 'uraian' }, it);
+    }));
+  }
+
+  // weeks: { minggu, judul, hlm, ringkas, bagian: [{ h, poin, tabel?, ingat? }] }
+  function materi(courseId, weeks) {
+    bank.materi[courseId] = weeks;
+  }
+
+  var api = { data: bank, course: course, mcq: mcq, isian: isian, uraian: uraian, materi: materi };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.BANK = api;
 })(this);

@@ -59,6 +59,11 @@
     nav.appendChild(h('div', { class: 'nav-label' }, 'Progres'));
     nav.appendChild(link('bank', 'Bank soal salah', Store.bankIds().filter(byId).length));
     nav.appendChild(link('stats', 'Statistik'));
+    // The rail scrolls sideways on phones, so keep the current page in view.
+    var current = nav.querySelector('.active');
+    if (current && matchMedia('(max-width: 860px)').matches) {
+      nav.parentNode.scrollLeft = current.offsetLeft - (nav.parentNode.clientWidth - current.offsetWidth) / 2;
+    }
   }
 
   // ---------------------------------------------------------------- home
@@ -201,34 +206,50 @@
     var c = B.courses[id];
     if (!c) return home();
     var wrap = mount();
-    var items = itemsOf(id), topics = topicsOf(id);
+    var everything = itemsOf(id);
+    var uraian = tab === 'uraian';
+    var items = everything.filter(function (it) { return uraian ? it.section === 'uraian' : !it.section; });
+    var topics = topicsOf(id).filter(function (t) { return items.some(function (it) { return it.topic === t; }); });
+    var kind = uraian ? 'isian' : c.kind;
+    var prefKey = uraian ? id + '/uraian' : id;
     // Essays stay opt-in on multiple choice courses so a random 25 stays pure multiple choice.
-    if (!prefs.topics[id]) {
-      prefs.topics[id] = {};
+    if (!prefs.topics[prefKey]) {
+      prefs.topics[prefKey] = {};
       topics.forEach(function (t) {
-        prefs.topics[id][t] = c.kind !== 'mcq' || items.some(function (it) { return it.topic === t && it.type === 'mcq'; });
+        prefs.topics[prefKey][t] = kind !== 'mcq' || items.some(function (it) { return it.topic === t && it.type === 'mcq'; });
       });
     }
-    var chosen = prefs.topics[id];
+    var chosen = prefs.topics[prefKey];
     var labs = c.labs || [];
+    var weeks = B.materi[id];
+    var hasUraian = everything.some(function (it) { return it.section === 'uraian'; });
 
     wrap.appendChild(h('div', { class: 'head' },
-      h('span', { class: 'eyebrow' }, c.kind === 'mcq' ? 'Pilihan ganda · ' + items.filter(function (it) { return it.type === 'mcq'; }).length + ' soal' + (items.some(function (it) { return it.type === 'essay'; }) ? ' + esai' : '') :'Isian & esai · ' + items.length + ' soal' + (labs.length ? ' · ' + labs.length + ' lab' : '')),
+      h('span', { class: 'eyebrow' }, c.kind === 'mcq' ? 'Pilihan ganda · ' + everything.filter(function (it) { return it.type === 'mcq'; }).length + ' soal' + (everything.some(function (it) { return it.type === 'essay'; }) ? ' + esai' : '') :'Isian & esai · ' + everything.length + ' soal' + (labs.length ? ' · ' + labs.length + ' lab' : '')),
       h('h1', null, c.name),
       h('p', { class: 'lead' }, c.about)));
 
-    if (labs.length) {
+    var tabList = [['latihan', 'Latihan soal']];
+    if (weeks) tabList.push(['materi', 'Materi']);
+    if (hasUraian) tabList.push(['uraian', 'Uraian & Isian']);
+    tabList = tabList.concat(labs.map(function (l) { return [l, Labs[l].name]; }));
+    if (tabList.length > 1) {
       var tabs = h('div', { class: 'tabs', role: 'tablist' });
-      [['latihan', 'Latihan soal']].concat(labs.map(function (l) { return [l, Labs[l].name]; })).forEach(function (t) {
+      tabList.forEach(function (t) {
         tabs.appendChild(h('button', { role: 'tab', type: 'button', 'aria-selected': String((tab || 'latihan') === t[0]), onclick: function () { location.hash = '#/c/' + id + (t[0] === 'latihan' ? '' : '/' + t[0]); } }, t[1]));
       });
       wrap.appendChild(tabs);
+      if (tab === 'materi' && weeks) return renderMateri(wrap, weeks);
       if (tab && Labs[tab]) {
         var labBox = h('section', { class: 'sheet' });
         wrap.appendChild(labBox);
         Labs[tab].run(labBox);
         return;
       }
+    }
+
+    if (uraian) {
+      wrap.appendChild(h('p', { class: 'lead' }, 'Prediksi buatan sendiri mengikuti pola Latihan 1 dan kisi-kisi, bukan soal asli dosen. Tulis jawaban dulu, lalu centang poin yang terpenuhi.'));
     }
 
     var setup = h('section', { class: 'sheet stack' });
@@ -238,7 +259,7 @@
     function pool() { return items.filter(function (it) { return chosen[it.topic]; }); }
     function want() {
       var p = pool().length;
-      if (c.kind === 'mcq') return Math.min(prefs.count, p);
+      if (kind === 'mcq') return Math.min(prefs.count, p);
       return prefs.isianCount ? Math.min(prefs.isianCount, p) : p;
     }
     function refresh() {
@@ -248,7 +269,7 @@
       if (startBtn) startBtn.disabled = n === 0;
     }
 
-    if (c.kind === 'mcq') {
+    if (kind === 'mcq') {
       setup.appendChild(h('div', { class: 'stack' }, h('span', { class: 'field-label' }, 'Jumlah soal'),
         UI.seg([25, 50, 75, 100], prefs.count, function (v) { prefs.count = v; refresh(); })));
     } else {
@@ -268,11 +289,11 @@
     setup.appendChild(h('div', { class: 'stack' },
       h('div', { class: 'row between' }, h('span', { class: 'field-label' }, 'Topik'),
         h('span', { class: 'row' },
-          h('button', { class: 'btn ghost sm', type: 'button', onclick: function () { topics.forEach(function (t) { chosen[t] = true; }); course(id); } }, 'Semua'),
-          h('button', { class: 'btn ghost sm', type: 'button', onclick: function () { topics.forEach(function (t) { chosen[t] = false; }); course(id); } }, 'Kosongkan'))),
+          h('button', { class: 'btn ghost sm', type: 'button', onclick: function () { topics.forEach(function (t) { chosen[t] = true; }); course(id, tab); } }, 'Semua'),
+          h('button', { class: 'btn ghost sm', type: 'button', onclick: function () { topics.forEach(function (t) { chosen[t] = false; }); course(id, tab); } }, 'Kosongkan'))),
       checks));
 
-    var bankN = Store.bankIds(id).filter(byId).length;
+    var bankN = uraian ? 0 : Store.bankIds(id).filter(byId).length;
     startBtn = h('button', { class: 'btn hl', type: 'button', onclick: function () {
       var n = want();
       var picked = UI.shuffle(pool()).slice(0, n);
@@ -291,11 +312,33 @@
     }
   }
 
+  function renderMateri(wrap, weeks) {
+    function block(b) {
+      return h('section', { class: 'stack' },
+        h('h3', null, b.h),
+        b.tabel ? h('div', { class: 'table-wrap' }, h('table', { class: 'materi-table' },
+          h('thead', null, h('tr', null, b.tabel.head.map(function (c) { return h('th', { scope: 'col' }, c); }))),
+          h('tbody', null, b.tabel.rows.map(function (r) { return h('tr', null, r.map(function (c) { return h('td', null, c); })); })))) : null,
+        b.poin ? h('ul', { class: 'materi-list' }, b.poin.map(function (p) { return h('li', null, p); })) : null,
+        b.ingat ? h('p', { class: 'materi-ingat' }, h('strong', null, 'Ingat: '), b.ingat) : null);
+    }
+    wrap.appendChild(h('p', { class: 'lead' }, 'Ringkasan slide per minggu. Ketuk satu minggu untuk membukanya.'));
+    wrap.appendChild(h('div', { class: 'stack' }, weeks.map(function (w) {
+      return h('details', { class: 'sheet flat materi-week' },
+        h('summary', null,
+          h('span', { class: 'eyebrow' }, 'Minggu ' + w.minggu + ' · slide ' + w.hlm),
+          h('strong', null, w.judul),
+          h('span', { class: 'small muted' }, w.ringkas)),
+        h('div', { class: 'materi-body' }, w.bagian.map(block)));
+    })));
+  }
+
   function limitFor(courseId, items) {
     var c = B.courses[courseId];
     return items.reduce(function (sum, it) {
       if (c.kind !== 'mcq') return sum + (c.secsPerItem || 180);
-      return sum + (it.type === 'essay' ? 900 : 72);
+      if (it.type === 'essay') return sum + 900;
+      return sum + (it.type === 'fill' ? 180 : 72);
     }, 0);
   }
 
@@ -303,6 +346,7 @@
     stop(); // abandon any detached session before starting a new one
     var wrap = mount();
     var c = B.courses[courseId];
+    var backTab = items.length && items[0].section; // return to the tab the session came from
     active = Quiz.start(wrap, {
       course: courseId, items: items, mode: mode, kind: kind,
       limit: limitFor(courseId, items),
@@ -311,8 +355,8 @@
         active = null;
         renderNav();
         if (action === 'retry') return run(courseId, payload, 'practice', 'retry');
-        if (action === 'again') return kind === 'bank' ? runBank(courseId) : course(courseId);
-        var target = kind === 'bank' ? '#/bank' : '#/c/' + courseId;
+        if (action === 'again') return kind === 'bank' ? runBank(courseId) : course(courseId, backTab);
+        var target = kind === 'bank' ? '#/bank' : '#/c/' + courseId + (backTab ? '/' + backTab : '');
         if (location.hash === target) route();
         else location.hash = target; // hashchange renders it
       }
@@ -467,4 +511,13 @@
   window.addEventListener('study-progress', renderNav);
   initTheme();
   route();
+
+  // Only the hosted copy installs on phones and works offline. file:// has no service workers.
+  if (location.protocol === 'https:' && 'serviceWorker' in navigator) {
+    var manifest = document.createElement('link');
+    manifest.rel = 'manifest';
+    manifest.href = 'manifest.webmanifest';
+    document.head.appendChild(manifest);
+    navigator.serviceWorker.register('sw.js').catch(function () { /* app still works online */ });
+  }
 })(this);

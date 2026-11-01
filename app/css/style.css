@@ -108,8 +108,41 @@ button, input, textarea, select { font: inherit; color: inherit; }
   .rail .rail-foot { margin: 0; padding: 0; flex-direction: row; }
   .theme-btn { white-space: nowrap; }
   .nav { flex-direction: row; gap: 4px; }
-  .nav a { white-space: nowrap; padding: 8px 12px; }
+  .nav a { white-space: nowrap; padding: 8px 12px; min-height: 40px; align-items: center; }
   .main { padding-block: 24px 32px; }
+}
+
+/* ---------- phones ---------- */
+button, a, summary, label { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+@media (max-width: 640px) {
+  .sheet { padding: 16px; }
+  .btn { min-height: 44px; }
+  .btn.sm { min-height: 36px; }
+  .seg { display: flex; }
+  .seg button { flex: 1 1 auto; min-height: 44px; }
+  .check { min-height: 44px; }
+  .input, .textarea { font-size: 16px; }
+  .course { grid-template-columns: 40px minmax(0, 1fr) auto; gap: 12px; padding: 12px 16px; }
+  .course .side { min-width: 0; }
+  .qtext { font-size: var(--fs-4); }
+}
+@media (hover: none) { .kbd { display: none; } }
+
+/* ---------- materi ---------- */
+.materi-week { padding: 0; }
+.materi-week summary { display: flex; flex-direction: column; gap: 4px; padding: 16px; cursor: pointer; }
+.materi-week summary strong { font-family: var(--display); font-size: var(--fs-5); color: var(--indigo); }
+.materi-week[open] summary { border-bottom: 1px solid var(--line); }
+.materi-body { display: flex; flex-direction: column; gap: 24px; padding: 16px; }
+.materi-list { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; line-height: 1.6; max-width: 70ch; }
+.materi-ingat { border-left: 4px solid var(--yellow-2); background: var(--yellow-soft); padding: 8px 12px; border-radius: 0 8px 8px 0; }
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.materi-table { border-collapse: collapse; width: 100%; font-size: var(--fs-3); }
+.materi-table th, .materi-table td { border: 1px solid var(--line); padding: 8px; text-align: left; vertical-align: top; }
+.materi-table th { background: var(--indigo-soft); color: var(--indigo); }
+@media (max-width: 640px) {
+  .materi-table { font-size: var(--fs-2); }
+  .materi-table th, .materi-table td { padding: 4px 6px; overflow-wrap: anywhere; }
 }
 
 /* ---------- type ---------- */
