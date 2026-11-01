@@ -26,13 +26,20 @@
 
   function stop() { if (active) { active.destroy(); active = null; } }
 
+  // Navigating away detaches the running quiz instead of destroying it,
+  // so returning to the page it was started from resumes the session.
   function mount() {
-    stop();
     main.textContent = '';
     var wrap = h('div', { class: 'wrap' });
     main.appendChild(wrap);
     window.scrollTo(0, 0);
     return wrap;
+  }
+
+  function resume() {
+    main.textContent = '';
+    main.appendChild(active.el);
+    window.scrollTo(0, 0);
   }
 
   // ---------------------------------------------------------------- nav
@@ -46,6 +53,7 @@
         h('span', null, label), count ? h('span', { class: 'count' }, String(count)) : null);
     }
     nav.appendChild(link('home', 'Beranda'));
+    nav.appendChild(link('jadwal', 'Jadwal UTS', examsLeft() || null));
     nav.appendChild(h('div', { class: 'nav-label' }, 'Mata kuliah'));
     ORDER.forEach(function (id) { nav.appendChild(link('c/' + id, B.courses[id].name)); });
     nav.appendChild(h('div', { class: 'nav-label' }, 'Progres'));
@@ -67,6 +75,9 @@
       h('span', { class: 'eyebrow' }, 'UTS ganjil · Oktober 2026'),
       h('h1', null, 'Latihan dulu, baca ', h('span', { class: 'mark' }, 'belakangan'), '.'),
       h('p', { class: 'lead' }, 'Kerjakan soal, lihat pembahasan, lalu ulangi yang salah sampai benar dua kali berturut-turut. Semua progres tersimpan di browser ini.')));
+
+    var sched = schedulePreview();
+    if (sched) wrap.appendChild(sched);
 
     if (bank) {
       wrap.appendChild(h('div', { class: 'sheet flat row between' },
@@ -99,6 +110,91 @@
   }
 
   function tip(t, p) { return h('div', { class: 'tip' }, h('h3', null, t), h('p', null, p)); }
+
+  // ---------------------------------------------------------------- jadwal
+  function examDate(dateStr) {
+    var p = dateStr.split('-');
+    return new Date(+p[0], +p[1] - 1, +p[2]);
+  }
+  function daysLeft(dateStr) {
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    return Math.round((examDate(dateStr) - today) / 864e5);
+  }
+  function examsLeft() {
+    return SCHEDULE.exams.filter(function (ex) { return daysLeft(ex.date) >= 0; }).length;
+  }
+  function nextExamIndex() {
+    for (var i = 0; i < SCHEDULE.exams.length; i++) { if (daysLeft(SCHEDULE.exams[i].date) >= 0) return i; }
+    return -1;
+  }
+  function examChip(ex) {
+    var d = daysLeft(ex.date);
+    if (d < 0) return h('span', { class: 'chip ok' }, 'Selesai');
+    if (d === 0) return h('span', { class: 'chip hl' }, 'Hari ini');
+    return h('span', { class: 'chip' }, 'H-' + d);
+  }
+  function longDate(ex) {
+    return ex.day + ', ' + examDate(ex.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+  function shortDate(ex) {
+    return ex.day.slice(0, 3) + ' ' + examDate(ex.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+  }
+
+  function examCard(ex, isNext) {
+    var d = examDate(ex.date);
+    return h('section', { class: 'sheet exam' + (isNext ? ' next' : '') },
+      h('div', { class: 'exam-date' },
+        h('span', { class: 'exam-dow' }, ex.day),
+        h('strong', { class: 'num' }, String(d.getDate())),
+        h('span', { class: 'exam-mon' }, d.toLocaleDateString('id-ID', { month: 'short' }))),
+      h('div', { class: 'exam-body stack' },
+        h('div', { class: 'row between' },
+          h('h2', null, ex.name, ' ', isNext ? h('span', { class: 'chip hl' }, 'Berikutnya') : null),
+          examChip(ex)),
+        h('p', { class: 'small muted' }, ex.kode + ' · ' + ex.kelas + ' · ' + ex.range),
+        h('div', { class: 'row' },
+          h('p', { class: 'exam-when' }, h('strong', { class: 'mono' }, ex.time), ' · ', longDate(ex)),
+          h('span', { class: 'chip' }, ex.jenis)),
+        h('p', { class: 'exam-where' }, h('strong', { class: 'mono' }, ex.room), ' ', h('span', { class: 'muted small' }, SCHEDULE.gedung)),
+        ex.note ? h('p', { class: 'explain small' }, ex.note) : null,
+        h('a', { class: 'btn ghost sm', href: '#/c/' + ex.course }, 'Latihan ' + (B.courses[ex.course] ? B.courses[ex.course].code : ex.name))));
+  }
+
+  function jadwal() {
+    var wrap = mount();
+    var next = nextExamIndex();
+    wrap.appendChild(h('div', { class: 'head' },
+      h('span', { class: 'eyebrow' }, SCHEDULE.term + ' · ' + SCHEDULE.kelas),
+      h('h1', null, 'Jadwal UTS'),
+      h('p', { class: 'lead' }, 'Semua ujian onsite tertulis dengan dua pengawas per ruangan. Ruangan di bawah mengikuti nomor absen awal, jadi kamu ada di ruangan pertama tiap kelas.')));
+    var list = h('div', { class: 'stack' });
+    SCHEDULE.exams.forEach(function (ex, i) { list.appendChild(examCard(ex, i === next)); });
+    wrap.appendChild(list);
+    wrap.appendChild(h('p', { class: 'small muted' }, 'Nomor absen di paruh kedua kelas masuk ke ruangan cadangan yang tertulis di catatan tiap kartu. Sumber: jadwal resmi FIF 2627-1.'));
+  }
+
+  function schedulePreview() {
+    var next = nextExamIndex();
+    if (next < 0) return null;
+    var ex = SCHEDULE.exams[next];
+    var d = daysLeft(ex.date);
+    return h('section', { class: 'sheet flat schedule-preview' },
+      h('div', { class: 'row between' },
+        h('div', { class: 'stack', style: 'gap:4px' },
+          h('span', { class: 'eyebrow' }, 'Jadwal UTS · 2-7 November 2026'),
+          h('h2', null, 'Berikutnya: ', h('span', { class: 'mark' }, ex.name)),
+          h('p', { class: 'small muted' }, longDate(ex) + ' · ' + ex.time + ' · ' + ex.room + ' · ' + ex.jenis)),
+        h('span', { class: 'count-days num' }, d === 0 ? 'Hari ini' : 'H-' + d)),
+      h('div', { class: 'mini-exams' },
+        SCHEDULE.exams.map(function (e) {
+          return h('a', { class: 'mini-exam' + (daysLeft(e.date) < 0 ? ' past' : ''), href: '#/jadwal' },
+            h('span', { class: 'mini-date num' }, shortDate(e)),
+            h('span', { class: 'mini-name' }, e.name),
+            h('span', { class: 'mini-time mono muted' }, e.time),
+            examChip(e));
+        })));
+  }
 
   // ---------------------------------------------------------------- course
   function course(id, tab) {
@@ -204,6 +300,7 @@
   }
 
   function run(courseId, items, mode, kind) {
+    stop(); // abandon any detached session before starting a new one
     var wrap = mount();
     var c = B.courses[courseId];
     active = Quiz.start(wrap, {
@@ -220,6 +317,8 @@
         else location.hash = target; // hashchange renders it
       }
     });
+    active.el = wrap;
+    active.hash = location.hash;
   }
 
   function runBank(courseId) {
@@ -335,7 +434,9 @@
   function route() {
     var parts = location.hash.replace(/^#\/?/, '').split('/');
     renderNav();
+    if (active && active.hash === location.hash) return resume();
     if (parts[0] === 'c' && parts[1]) return course(parts[1], parts[2]);
+    if (parts[0] === 'jadwal') return jadwal();
     if (parts[0] === 'bank') return bank();
     if (parts[0] === 'stats') return stats();
     return home();

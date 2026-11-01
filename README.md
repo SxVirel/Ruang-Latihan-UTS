@@ -4,13 +4,13 @@ Aplikasi latihan UTS untuk lima mata kuliah. Berjalan offline di laptop Windows,
 
 | Mata kuliah | Isi |
 |---|---|
-| Keamanan Siber | 245 pilihan ganda + 2 esai |
+| Keamanan Siber | 258 pilihan ganda + 2 esai |
 | Kecerdasan Artifisial | 50 isian dan esai |
 | Komputasi Awan | 37 isian dan esai + 3 lab interaktif |
 | Forensik Digital | 45 isian dan esai |
 | Manajemen Proyek | 39 isian dan esai + lab CPM |
 
-Fitur: mode latihan, mode ujian dengan timer, bank soal salah, dan statistik progres.
+Fitur: mode latihan, mode ujian dengan timer, bank soal salah, statistik progres, dan jadwal UTS pribadi di dashboard.
 
 ## Cara memasang (Windows)
 
