@@ -8,7 +8,7 @@ Aplikasi latihan UTS untuk lima mata kuliah. Berjalan offline di laptop Windows,
 | Kecerdasan Artifisial | 50 isian dan esai |
 | Komputasi Awan | 37 isian dan esai + 3 lab interaktif |
 | Forensik Digital | 45 isian dan esai |
-| Manajemen Proyek | 39 isian dan esai + lab CPM |
+| Manajemen Proyek | 60 isian (semua isian, termasuk kisi-kisi NPV, ROI, ROA, payback, EV, PERT) + lab CPM |
 
 Fitur: mode latihan, mode ujian dengan timer, bank soal salah, statistik progres, dan jadwal UTS pribadi di dashboard.
 

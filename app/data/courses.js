@@ -33,6 +33,6 @@ BANK.course('fd', {
 });
 BANK.course('mp', {
   name: 'Manajemen Proyek', code: 'MP', kind: 'isian', secsPerItem: 180, labs: ['cpm'],
-  blurb: 'PMBOK, organisasi, integrasi, scope, waktu',
-  about: 'Isian dan hitungan dari Manpro 1-6: proyek vs operasional, struktur organisasi, process groups, project charter, NPV/ROI/payback, WBS, jalur kritis, dan PERT.'
+  blurb: 'Isian semua: NPV, PV, ROI, ROA, payback, EV, jalur kritis, PERT',
+  about: 'Semua soal berbentuk isian, sesuai format UTS. Disusun dari Manpro 1-6: proyek vs operasional, struktur organisasi, process groups, project charter, NPV/ROI/payback, WBS, jalur kritis, dan PERT. Topik kisi-kisi melatih NPV dan PV, ROI dan ROA, payback period, earned value, jaringan aktivitas, dan PERT.'
 });

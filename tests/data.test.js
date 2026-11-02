@@ -95,3 +95,9 @@ test('uraian items stay out of the normal practice pool', () => {
 test('only known item types', () => {
   for (const it of all) assert.ok(['mcq', 'fill', 'essay'].includes(it.type), it.id + ' ' + it.type);
 });
+
+test('Manajemen Proyek is fill-in only, like the exam', () => {
+  const mp = data.isian.filter(it => it.course === 'mp');
+  assert.ok(mp.length >= 50, 'only ' + mp.length);
+  for (const it of mp) assert.equal(it.type, 'fill', it.id);
+});

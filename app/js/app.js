@@ -225,7 +225,7 @@
     var hasUraian = everything.some(function (it) { return it.section === 'uraian'; });
 
     wrap.appendChild(h('div', { class: 'head' },
-      h('span', { class: 'eyebrow' }, c.kind === 'mcq' ? 'Pilihan ganda · ' + everything.filter(function (it) { return it.type === 'mcq'; }).length + ' soal' + (everything.some(function (it) { return it.type === 'essay'; }) ? ' + esai' : '') :'Isian & esai · ' + everything.length + ' soal' + (labs.length ? ' · ' + labs.length + ' lab' : '')),
+      h('span', { class: 'eyebrow' }, c.kind === 'mcq' ? 'Pilihan ganda · ' + everything.filter(function (it) { return it.type === 'mcq'; }).length + ' soal' + (everything.some(function (it) { return it.type === 'essay'; }) ? ' + esai' : '') :(everything.some(function (it) { return it.type === 'essay'; }) ? 'Isian & esai · ' : 'Isian · ') + everything.length + ' soal' + (labs.length ? ' · ' + labs.length + ' lab' : '')),
       h('h1', null, c.name),
       h('p', { class: 'lead' }, c.about)));
 

@@ -14,10 +14,18 @@ BANK.isian('mp', 'intro', 'Pengantar & PMBOK', [
   { type: 'fill', q: 'CHAOS Report Standish Group 1994: persentase proyek IT yang sukses, gagal, dan bermasalah (challenged).',
     fields: [{ label: 'Succeeded (%)', a: 16, tol: 0.5 }, { label: 'Failed (%)', a: 31, tol: 0.5 }, { label: 'Challenged (%)', a: 53, tol: 0.5 }],
     ex: 'Tahun 2009: sukses 32%, gagal 24%, challenged 44%.' },
-  { type: 'essay', q: 'Bedakan portfolio, program, dan project.',
-    points: ['Project: tujuan terdefinisi, cakupan dielaborasi progresif, sukses diukur kualitas, waktu, anggaran, kepuasan', 'Program: kelompok proyek terkait yang dikoordinasi untuk manfaat lebih besar', 'Portfolio: kumpulan proyek, program, dan operasi untuk tujuan strategis organisasi', 'Sukses portfolio diukur dari performa investasi dan realisasi keuntungan'] },
-  { type: 'essay', q: 'Sebutkan karakteristik proyek dan perbedaan proyek IT dengan non-IT.',
-    points: ['Sementara, hasil unik, memerlukan perencanaan, sumber daya terbatas, penuh ketidakpastian, tugas tidak rutin', 'Proyek IT terhubung fungsi bisnis/sistem organisasi', 'Scope proyek IT lemah penetapannya dan mudah berubah', 'Stakeholder IT sulit diidentifikasi', 'Risiko IT sulit diidentifikasi dengan dampak besar', 'Estimasi anggaran dan jadwal IT lemah'] }
+  { type: 'fill', q: 'Portfolio, program, atau project? Isi istilah yang tepat.',
+    fields: [
+      { label: 'Tujuan terdefinisi, cakupan dielaborasi progresif', a: ['project', 'proyek'] },
+      { label: 'Kelompok proyek terkait yang dikoordinasi untuk manfaat lebih besar', a: 'program' },
+      { label: 'Kumpulan proyek dan program untuk tujuan strategis organisasi', a: ['portfolio', 'portofolio'] },
+      { label: 'Suksesnya diukur dari performa investasi dan realisasi keuntungan', a: ['portfolio', 'portofolio'] }],
+    ex: 'Diubah dari esai menjadi isian. Project → program → portfolio makin luas cakupannya.' },
+  { type: 'fill', q: 'Karakteristik proyek: sementara, menghasilkan sesuatu yang ..., sumber daya ..., dan penuh .... Proyek IT berbeda karena scope-nya mudah ....',
+    fields: [
+      { label: 'Hasil', a: ['unik', 'unique'] }, { label: 'Sumber daya', a: ['terbatas', 'limited'] },
+      { label: 'Penuh', a: ['ketidakpastian', 'uncertainty'] }, { label: 'Scope IT mudah', a: ['berubah', 'change', 'berubah ubah'] }],
+    ex: 'Diubah dari esai. Proyek IT: terhubung sistem bisnis, scope mudah berubah, stakeholder dan risiko sulit diidentifikasi, estimasi lemah.' }
 ]);
 
 BANK.isian('mp', 'org', 'Organisasi & Proses', [
@@ -40,8 +48,13 @@ BANK.isian('mp', 'org', 'Organisasi & Proses', [
       { label: 'Harmoni kebutuhan organisasi dan orang', a: ['human resources', 'sdm', 'human resource'] },
       { label: 'Koalisi, konflik, dan kekuasaan', a: ['political', 'politik', 'politis'] },
       { label: 'Simbol, makna, budaya', a: ['symbolic', 'simbolik'] }] },
-  { type: 'essay', q: 'Jelaskan tujuan dan output tiap tahap manajemen proyek (inisiasi sampai penutupan).',
-    points: ['Inisiasi: tunjuk PM, identifikasi stakeholder, kriteria sukses; output project charter + business case', 'Perencanaan: scope, jadwal, dana, risiko, komunikasi, baseline; output scope statement, WBS, Gantt chart, daftar risiko', 'Eksekusi: merealisasikan rencana, koordinasi tim dan sumber daya', 'Pengontrolan: memastikan sesuai target; output status dan progress report', 'Penutupan: akhiri formal; output arsip proyek dan lesson learned'] },
+  { type: 'fill', q: 'Tuliskan tahap yang menghasilkan output berikut: inisiasi, perencanaan, eksekusi, pengontrolan, atau penutupan.',
+    fields: [
+      { label: 'Project charter dan business case', a: ['inisiasi', 'initiating'] },
+      { label: 'Scope statement, WBS, Gantt chart', a: ['perencanaan', 'planning'] },
+      { label: 'Status dan progress report', a: ['pengontrolan', 'controlling', 'monitoring and controlling', 'pengawasan'] },
+      { label: 'Arsip proyek dan lesson learned', a: ['penutupan', 'closing'] }],
+    ex: 'Diubah dari esai. Eksekusi merealisasikan rencana dengan mengoordinasi tim dan sumber daya.' },
   { type: 'fill', q: 'Kelompokkan kegiatan ke tahap proyek (inisiasi, perencanaan, eksekusi, monitoring, penutupan).',
     fields: [
       { label: 'Pembuatan project charter', a: ['inisiasi', 'initiating'] },
@@ -56,8 +69,9 @@ BANK.isian('mp', 'org', 'Organisasi & Proses', [
       { label: 'Iterasi 30 hari disebut sprint, rapat harian singkat', a: ['scrum'] },
       { label: 'Developer pair programming dan menulis test sendiri', a: ['xp', 'extreme programming'] },
       { label: 'Kategori model untuk scope yang bisa diprediksi', a: ['predictive', 'prediktif'] }] },
-  { type: 'essay', q: 'Apa itu PMO dan budaya organisasi yang mendukung proyek?',
-    points: ['PMO = "manajer dari manajer proyek", di antara PM dan chief executive', 'PMO memberi pertimbangan, kebijakan, prosedur, dan memformalkan wewenang PM', 'Budaya organisasi: asumsi, nilai, dan perilaku bersama', 'Proyek berhasil jika member identity, group emphasis, unit integration, risk tolerance, reward criteria, conflict tolerance, open-systems focus kuat'] }
+  { type: 'fill', q: 'PMO disebut "manajer dari manajer ...". Letaknya di antara project manager dan .... Budaya organisasi adalah asumsi, nilai, dan ... bersama.',
+    fields: [{ label: 'Manajer dari manajer', a: ['proyek', 'project'] }, { label: 'Di antara PM dan', a: ['chief executive', 'ceo', 'eksekutif'] }, { label: 'Asumsi, nilai, dan', a: ['perilaku', 'tingkah laku', 'behavior', 'behaviors'] }],
+    ex: 'Diubah dari esai. Budaya yang mendukung: member identity, group emphasis, unit integration, risk tolerance, reward criteria, conflict tolerance, open-systems focus.' }
 ]);
 
 BANK.isian('mp', 'integ', 'Integration & Finansial', [
@@ -76,12 +90,14 @@ BANK.isian('mp', 'integ', 'Integration & Finansial', [
   { type: 'fill', q: 'Investasi 500 juta. Arus kas: tahun 1 = 150, tahun 2 = 200, tahun 3 = 250 (juta). Hitung payback period dengan rumus n + (a − b)/(c − b).',
     fields: [{ label: 'n', a: 2, tol: 0 }, { label: 'b (kumulatif tahun n)', a: 350, tol: 0 }, { label: 'c (kumulatif tahun n+1)', a: 600, tol: 0 }, { label: 'Payback (tahun)', a: 2.6, tol: 0.01 }],
     ex: 'Kumulatif: 150, 350, 600. n = 2, a = 500, b = 350, c = 600. Payback = 2 + (500−350)/(600−350) = 2 + 150/250 = 2,6 tahun.' },
-  { type: 'essay', q: 'Apa isi project charter?',
-    points: ['Requirements dan kebutuhan bisnis / deskripsi proyek tingkat tinggi', 'Tujuan atau justifikasi proyek (business case, ROI)', 'Manajer proyek yang ditugaskan dan tingkat wewenangnya', 'Ringkasan jadwal milestone', 'Stakeholder dan pengaruhnya, organisasi fungsional yang terlibat', 'Asumsi dan kendala', 'Ringkasan anggaran', 'Ditandatangani stakeholder penting'] },
+  { type: 'fill', q: 'Isi project charter: justifikasi proyek (misalnya pengembalian investasi atau ...), manajer proyek dan tingkat ..., ringkasan ..., dan dokumen ini ditandatangani ....',
+    fields: [{ label: 'Pengembalian investasi', a: ['roi', 'return on investment'] }, { label: 'Tingkat', a: ['wewenang', 'kewenangan', 'authority'] }, { label: 'Ringkasan', a: ['anggaran', 'budget', 'jadwal', 'milestone'] }, { label: 'Ditandatangani', a: ['stakeholder', 'pemangku kepentingan', 'sponsor'] }],
+    ex: 'Diubah dari esai. Isi lain: requirements, deskripsi proyek, stakeholder, asumsi dan kendala.' },
   { type: 'fill', q: 'Metode seleksi proyek (tools project charter).',
     fields: [{ label: 'Comparative approach, kalkulasi sederhana', a: ['benefit measurement model', 'benefit measurement'] }, { label: 'Constrained optimization, perhitungan kompleks', a: ['mathematical model', 'model matematis'] }] },
-  { type: 'essay', q: 'Sebutkan subsidiary plan dalam project management plan.',
-    points: ['Scope management plan', 'Schedule management plan', 'Cost management plan', 'Quality management plan', 'Staffing/HR management plan', 'Communication management plan', 'Risk management plan', 'Procurement management plan', 'Komponen: milestone list, resource calendar, baseline jadwal/biaya/kualitas, risk register'] }
+  { type: 'fill', q: 'Sebutkan empat subsidiary plan dalam project management plan, cukup kata kuncinya (misalnya scope). Jangan mengulang yang sama.',
+    fields: [{ label: 'Plan 1', a: ['scope', 'schedule', 'cost', 'quality', 'process improvement', 'staffing', 'communication', 'risk', 'procurement', 'ruang lingkup', 'jadwal', 'biaya', 'kualitas', 'sdm', 'komunikasi', 'risiko', 'pengadaan'] }, { label: 'Plan 2', a: ['scope', 'schedule', 'cost', 'quality', 'process improvement', 'staffing', 'communication', 'risk', 'procurement', 'ruang lingkup', 'jadwal', 'biaya', 'kualitas', 'sdm', 'komunikasi', 'risiko', 'pengadaan'] }, { label: 'Plan 3', a: ['scope', 'schedule', 'cost', 'quality', 'process improvement', 'staffing', 'communication', 'risk', 'procurement', 'ruang lingkup', 'jadwal', 'biaya', 'kualitas', 'sdm', 'komunikasi', 'risiko', 'pengadaan'] }, { label: 'Plan 4', a: ['scope', 'schedule', 'cost', 'quality', 'process improvement', 'staffing', 'communication', 'risk', 'procurement', 'ruang lingkup', 'jadwal', 'biaya', 'kualitas', 'sdm', 'komunikasi', 'risiko', 'pengadaan'] }],
+    ex: 'Diubah dari esai. Daftar lengkap: scope, schedule, cost, quality, process improvement, staffing, communication, risk, procurement.' }
 ]);
 
 BANK.isian('mp', 'scope', 'Scope & WBS', [
@@ -99,8 +115,9 @@ BANK.isian('mp', 'scope', 'Scope & WBS', [
       { label: 'Mulai dari pekerjaan spesifik lalu digabung', a: ['bottom up', 'bottom-up'] },
       { label: 'Memakai WBS proyek sejenis', a: ['analogi', 'analogy'] },
       { label: 'Menulis cabang non-linear lalu disusun', a: ['mind mapping', 'mind-mapping'] }] },
-  { type: 'essay', q: 'Apa itu scope creep, beri contoh, dan bagaimana mencegahnya dengan input user?',
-    points: ['Scope creep: lingkup bertambah terus tanpa kendali', 'Contoh: FoxMeyer Drug bangkrut karena proyek robotic warehouse', 'Seleksi proyek yang baik dan sponsor dari organisasi user', 'Tempatkan user di tim dengan peran penting', 'Rapat rutin dengan agenda, user menandatangani deliverable', 'Jangan menjanjikan yang tidak bisa disampaikan; tempatkan user dan developer berdekatan'] },
+  { type: 'fill', q: 'Lingkup proyek yang terus bertambah tanpa kendali disebut .... Contoh perusahaan yang bangkrut karenanya: ... Drug. Salah satu cara mencegahnya: user ... deliverable pokok.',
+    fields: [{ label: 'Istilah', a: ['scope creep'] }, { label: 'Perusahaan', a: ['foxmeyer', 'fox meyer'] }, { label: 'User', a: ['menandatangani', 'tanda tangan', 'sign off', 'signoff'] }],
+    ex: 'Diubah dari esai. Cara lain: user di tim proyek, rapat rutin, jangan janji berlebihan, user dan developer berdekatan.' },
   { type: 'fill', q: 'Metode pengumpulan requirements (sebutkan tiga).',
     fields: [{ label: '1', a: ['interview', 'interviewing', 'wawancara', 'focus group', 'workshop', 'questionnaire', 'kuesioner', 'survey', 'observation', 'observasi', 'prototyping', 'benchmarking'] },
       { label: '2', a: ['interview', 'interviewing', 'wawancara', 'focus group', 'workshop', 'questionnaire', 'kuesioner', 'survey', 'observation', 'observasi', 'prototyping', 'benchmarking'] },
@@ -139,8 +156,10 @@ BANK.isian('mp', 'time', 'Time Management', [
       { label: 'Waktu tunda tanpa menunda aktivitas berikutnya', a: ['free slack', 'free float'] },
       { label: 'Waktu tunda tanpa menunda tanggal selesai proyek', a: ['total slack', 'total float'] },
       { label: 'Slack aktivitas di jalur kritis', a: 0, tol: 0 }] },
-  { type: 'essay', q: 'Jelaskan critical chain scheduling.',
-    points: ['Penjadwalan yang mempertimbangkan keterbatasan resource', 'Berdasar Theory of Constraints (Goldratt, The Goal)', 'Meminimalkan multitasking', 'Buffer dihapus dari tiap task', 'Project buffer ditambahkan sebelum due date proyek', 'Feeding buffer ditambahkan sebelum task di jalur kritis'] },
-  { type: 'essay', q: 'Catatan penting tentang jalur kritis.',
-    points: ['Jalur kritis = jalur terpanjang, slack paling kecil, menentukan waktu tercepat proyek selesai', 'Jika aktivitas kritis terlambat, seluruh proyek mundur', 'Jalur kritis bukan berarti semua aktivitasnya paling penting, hanya soal durasi', 'Bisa ada lebih dari satu jalur kritis', 'Jalur kritis bisa berubah selama proyek berjalan'] }
+  { type: 'fill', q: 'Critical chain scheduling berdasar Theory of ... (Goldratt). Metode ini meminimalkan .... Buffer sebelum due date proyek disebut ... buffer, dan sebelum task di jalur kritis disebut ... buffer.',
+    fields: [{ label: 'Theory of', a: ['constraints', 'constraint'] }, { label: 'Meminimalkan', a: ['multitasking', 'multi tasking'] }, { label: 'Sebelum due date', a: 'project' }, { label: 'Sebelum task kritis', a: 'feeding' }],
+    ex: 'Diubah dari esai. Critical chain mempertimbangkan keterbatasan resource dan menghapus buffer dari tiap task.' },
+  { type: 'fill', q: 'Jalur kritis: jalur paling ... dengan slack paling .... Jika aktivitas kritis terlambat, seluruh proyek .... Jalur kritis bisa lebih dari ... dan bisa berubah.',
+    fields: [{ label: 'Jalur paling', a: ['panjang', 'lama', 'longest'] }, { label: 'Slack paling', a: ['kecil', 'sedikit', 'nol', '0'] }, { label: 'Proyek', a: ['mundur', 'terlambat', 'tertunda'] }, { label: 'Lebih dari', a: ['satu', '1'] }],
+    ex: 'Diubah dari esai. Jalur kritis soal durasi, bukan soal aktivitas yang paling penting.' }
 ]);
