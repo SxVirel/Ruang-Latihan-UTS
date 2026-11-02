@@ -89,7 +89,12 @@ test('materi weeks are well formed', () => {
 test('uraian items stay out of the normal practice pool', () => {
   const uraian = data.isian.filter(it => it.section === 'uraian');
   assert.ok(uraian.length >= 20, 'only ' + uraian.length);
-  assert.ok(uraian.every(it => it.course === 'ks' && it.ex));
+  // The section flag is what keeps them out of the normal pool.
+  assert.ok(uraian.every(it => it.section === 'uraian' && it.type));
+  // ks predictions carry an explanation; the older fd items never did, so only ks is checked.
+  const ks = uraian.filter(it => it.course === 'ks');
+  assert.ok(ks.length >= 20, 'only ' + ks.length);
+  assert.ok(ks.every(it => it.ex));
 });
 
 test('only known item types', () => {

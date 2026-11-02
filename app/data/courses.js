@@ -28,8 +28,12 @@ BANK.course('ca', {
 });
 BANK.course('fd', {
   name: 'Forensik Digital', code: 'FD', kind: 'isian', secsPerItem: 150,
-  blurb: 'Prinsip, framework, akuisisi, dead & memory forensics',
-  about: 'Isian dan esai dari tujuh slide: Locard, ACPO, ISO/IEC 27037, tahapan forensik, hashing dan timestamp, imaging, write blocker, disk sanitation, serta memory forensics dengan Volatility.'
+  // Kisi-kisi UTS: 20 pilihan ganda (40 poin) + 5 soal analisis (60 poin), 135 menit.
+  // Sesi latihan memakai bentuk yang sama: 20 PG + 5 isian singkat, diacak dan dicampur.
+  // Timer ujian dihitung dari campuran ini: 20 x 120 detik + 5 x 300 detik = 65 menit.
+  mix: { mcq: 20, fill: 5 }, mixSecs: { mcq: 120, fill: 300 },
+  blurb: 'Tiap sesi 20 pilihan ganda + 5 isian, bobot kisi-kisi 28/12/40/20',
+  about: 'Bank soal kisi-kisi UTS: prinsip Locard dan tahapan forensik, Daubert, ACPO, ISO/IEC 27037, live dan dead imaging, write blocker, hash, sanitasi media, registry Windows, timestamp, cluster dan slack, serta memory forensics dengan Volatility. Setiap sesi selalu berisi 20 pilihan ganda dan 5 isian singkat yang diacak, seperti bentuk ujian. Tab Materi merangkum tujuh dek slide, dan tab Uraian & Isian memuat soal isian serta esai lama untuk latihan bebas.'
 });
 BANK.course('mp', {
   name: 'Manajemen Proyek', code: 'MP', kind: 'isian', secsPerItem: 180, labs: ['cpm'],

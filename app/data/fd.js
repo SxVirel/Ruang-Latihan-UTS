@@ -1,5 +1,6 @@
 // Forensik Digital — dari 7 slide (prinsip, framework, konsep & tool, computer/dead/memory forensics)
-BANK.isian('fd', 'prin', 'Prinsip & Standar', [
+// Isian dan esai lama untuk tab Uraian & Isian. Sesi 20 PG + 5 isian memakai app/data/fd-2.js.
+BANK.uraian('fd', 'prin', 'Prinsip & Standar', [
   { type: 'fill', q: 'Prinsip forensik: "Every contact leaves a trace" dikemukakan oleh siapa dan disebut prinsip apa?',
     fields: [{ label: 'Tokoh', a: ['edmond locard', 'locard'] }, { label: 'Nama prinsip', a: ['locard exchange principle', 'locards exchange principle', 'exchange principle', 'prinsip pertukaran locard'] }, { label: 'Tahun', a: 1910, tol: 0 }],
     ex: 'Pelaku membawa sesuatu ke TKP dan membawa sesuatu darinya. Pada intrusi komputer, jejak ada di file system, registry, log sistem, dan log jaringan.' },
@@ -27,7 +28,7 @@ BANK.isian('fd', 'prin', 'Prinsip & Standar', [
     points: ['Minimalkan penanganan perangkat asli atau bukti digital potensial', 'Catat setiap perubahan dan dokumentasikan semua tindakan', 'Patuhi aturan pembuktian lokal', 'DEFR dan DES tidak boleh bertindak di luar kompetensinya', 'Proses harus divalidasi sebelum dipakai'] }
 ]);
 
-BANK.isian('fd', 'frame', 'Framework & Tahapan', [
+BANK.uraian('fd', 'frame', 'Framework & Tahapan', [
   { type: 'fill', q: 'Tahapan umum forensik digital (urutkan, lima tahap).',
     fields: [{ label: 'Tahap 1', a: ['preparation', 'persiapan'] }, { label: 'Tahap 2', a: ['identification', 'identifikasi'] }, { label: 'Tahap 3', a: ['preservation', 'preservasi'] }, { label: 'Tahap 4', a: ['analysis', 'analisis', 'examination and analysis'] }, { label: 'Tahap 5', a: ['presentation', 'presentasi', 'pelaporan', 'reporting'] }],
     ex: 'Versi NIST: collection, examination, analysis, reporting. Versi slide proses umum: identifikasi, koleksi, akuisisi, analisis, pelaporan.' },
@@ -49,7 +50,7 @@ BANK.isian('fd', 'frame', 'Framework & Tahapan', [
     points: ['Perangkat asli disimpan dan tidak dipakai analisis', 'Primary copy (hasil akuisisi 1) disimpan sebagai master', 'Secondary copy (hasil akuisisi 2) dipakai untuk analisis', 'Verifikasi integritas dengan hash dan membandingkan hasil antar tool'] }
 ]);
 
-BANK.isian('fd', 'konsep', 'Hash, Timestamp & Metadata', [
+BANK.uraian('fd', 'konsep', 'Hash, Timestamp & Metadata', [
   { type: 'fill', q: 'Unix time.',
     fields: [{ label: 'Epoch (tanggal mulai, format 1 januari yyyy)', a: ['1 januari 1970', '1 january 1970', '01 01 1970', '1970 01 01', '1 1 1970'] }, { label: 'Unix time tengah malam 1 Januari 2010', a: 1262304000, tol: 0 }, { label: 'Tahun overflow Unix time 32-bit', a: 2038, tol: 0 }],
     ex: 'Unix time = jumlah detik non-leap sejak 00:00:00 UTC 1 Januari 1970, disimpan sebagai signed integer.' },
@@ -69,7 +70,7 @@ BANK.isian('fd', 'konsep', 'Hash, Timestamp & Metadata', [
     points: ['Melihat dan mengedit isi file dalam bentuk byte (hexadecimal)', 'Analisis struktur file dan signature/header', 'Diffing: membandingkan file asli dengan file setelah berubah', 'Contoh: HxD, ImHex, hexed.it'] }
 ]);
 
-BANK.isian('fd', 'akuis', 'Akuisisi & Computer Forensics', [
+BANK.uraian('fd', 'akuis', 'Akuisisi & Computer Forensics', [
   { type: 'fill', q: 'Dua jenis data dalam penyidikan.',
     fields: [{ label: 'Hilang saat listrik terputus', a: ['volatile', 'volatile data'] }, { label: 'Tetap ada setelah mati', a: ['persistent', 'non volatile', 'persistent data'] }] },
   { type: 'essay', q: 'Kapan live imaging diperlukan? Sebutkan situasinya.',
@@ -97,7 +98,7 @@ BANK.isian('fd', 'akuis', 'Akuisisi & Computer Forensics', [
     points: ['Preliminary examination', 'Filtering', 'Automated analysis', 'Timeline analysis', 'Relational/link analysis', 'Graph and visual representation', 'Metadata analysis'] }
 ]);
 
-BANK.isian('fd', 'dead', 'Dead Forensics & Sanitasi', [
+BANK.uraian('fd', 'dead', 'Dead Forensics & Sanitasi', [
   { type: 'fill', q: 'Disk sanitation: delete, format, atau wipe?',
     fields: [
       { label: 'Record MFT ditandai terhapus, data masih ada sampai ditimpa', a: ['delete', 'hapus'] },
@@ -109,7 +110,7 @@ BANK.isian('fd', 'dead', 'Dead Forensics & Sanitasi', [
     points: ['Mencegah kontaminasi: sisa data lama bisa tercampur dengan bukti', 'Bukti harus bisa dibuktikan berasal dari sumber, bukan dari media target', 'Delete dan quick format tidak menghapus data', 'Wipe menimpa seluruh partisi sehingga media bersih'] }
 ]);
 
-BANK.isian('fd', 'mem', 'Memory Forensics', [
+BANK.uraian('fd', 'mem', 'Memory Forensics', [
   { type: 'fill', q: 'Konsep memori.',
     fields: [
       { label: 'Menyalin isi memori volatile ke penyimpanan non-volatile', a: ['memory acquisition', 'akuisisi memori'] },

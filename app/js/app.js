@@ -202,6 +202,27 @@
   }
 
   // ---------------------------------------------------------------- course
+  var TYPE_LABEL = { mcq: 'pilihan ganda', fill: 'isian', essay: 'esai' };
+  function typeLabel(t) { return TYPE_LABEL[t] || t; }
+  function countOf(items, type) { return items.filter(function (it) { return it.type === type; }).length; }
+  // "20 pilihan ganda + 5 isian", built from the course's mix setting.
+  function mixLabel(mix) {
+    return Object.keys(mix).map(function (t) { return mix[t] + ' ' + typeLabel(t); }).join(' + ');
+  }
+  function mixParts(pool, mix) {
+    return Object.keys(mix).map(function (t) { return countOf(pool, t) + ' ' + typeLabel(t); }).join(', ');
+  }
+
+  // counts = the items of the tab being shown (normal pool or uraian pool).
+  function eyebrow(c, counts, uraian) {
+    if (!uraian && c.mix) return mixLabel(c.mix) + ' tiap sesi · ' + counts.length + ' soal';
+    if (c.kind === 'mcq') {
+      return 'Pilihan ganda · ' + countOf(counts, 'mcq') + ' soal' + (counts.some(function (it) { return it.type === 'essay'; }) ? ' + esai' : '');
+    }
+    return (counts.some(function (it) { return it.type === 'essay'; }) ? 'Isian & esai · ' : 'Isian · ') + counts.length + ' soal' +
+      (!uraian && c.labs && c.labs.length ? ' · ' + c.labs.length + ' lab' : '');
+  }
+
   function course(id, tab) {
     var c = B.courses[id];
     if (!c) return home();
@@ -211,6 +232,8 @@
     var items = everything.filter(function (it) { return uraian ? it.section === 'uraian' : !it.section; });
     var topics = topicsOf(id).filter(function (t) { return items.some(function (it) { return it.topic === t; }); });
     var kind = uraian ? 'isian' : c.kind;
+    // A course with a fixed exam shape draws that shape on every session, topics aside.
+    var mix = uraian ? null : c.mix;
     var prefKey = uraian ? id + '/uraian' : id;
     // Essays stay opt-in on multiple choice courses so a random 25 stays pure multiple choice.
     if (!prefs.topics[prefKey]) {
@@ -225,7 +248,7 @@
     var hasUraian = everything.some(function (it) { return it.section === 'uraian'; });
 
     wrap.appendChild(h('div', { class: 'head' },
-      h('span', { class: 'eyebrow' }, c.kind === 'mcq' ? 'Pilihan ganda · ' + everything.filter(function (it) { return it.type === 'mcq'; }).length + ' soal' + (everything.some(function (it) { return it.type === 'essay'; }) ? ' + esai' : '') :(everything.some(function (it) { return it.type === 'essay'; }) ? 'Isian & esai · ' : 'Isian · ') + everything.length + ' soal' + (labs.length ? ' · ' + labs.length + ' lab' : '')),
+      h('span', { class: 'eyebrow' }, eyebrow(c, items, uraian)),
       h('h1', null, c.name),
       h('p', { class: 'lead' }, c.about)));
 
@@ -263,13 +286,24 @@
       return prefs.isianCount ? Math.min(prefs.isianCount, p) : p;
     }
     function refresh() {
-      var p = pool().length, n = want();
-      var mins = p ? Math.round(n * limitFor(id, pool()) / p / 60) : 0;
-      countLabel.textContent = n + ' soal dari ' + p + ' tersedia' + (prefs.mode === 'exam' ? ' · waktu ' + mins + ' menit' : '');
+      var p = pool();
+      if (mix) {
+        var ok = Session.ready(c, p);
+        countLabel.textContent = (ok ? mixLabel(mix) + ' tiap sesi' : 'Butuh ' + mixLabel(mix)) +
+          ' · tersedia ' + mixParts(p, mix) + (prefs.mode === 'exam' ? ' · waktu ' + Math.round(limitMix(id) / 60) + ' menit' : '');
+        if (startBtn) startBtn.disabled = !ok;
+        return;
+      }
+      var n = want();
+      var mins = p.length ? Math.round(n * limitFor(id, p) / p.length / 60) : 0;
+      countLabel.textContent = n + ' soal dari ' + p.length + ' tersedia' + (prefs.mode === 'exam' ? ' · waktu ' + mins + ' menit' : '');
       if (startBtn) startBtn.disabled = n === 0;
     }
 
-    if (kind === 'mcq') {
+    if (mix) {
+      setup.appendChild(h('div', { class: 'stack' }, h('span', { class: 'field-label' }, 'Isi sesi'),
+        h('p', { class: 'small muted' }, 'Setiap sesi selalu ' + mixLabel(mix) + ' dari topik yang dicentang, diacak dan dicampur. Jumlah soal tidak bisa diubah.')));
+    } else if (kind === 'mcq') {
       setup.appendChild(h('div', { class: 'stack' }, h('span', { class: 'field-label' }, 'Jumlah soal'),
         UI.seg([25, 50, 75, 100], prefs.count, function (v) { prefs.count = v; refresh(); })));
     } else {
@@ -295,9 +329,13 @@
 
     var bankN = uraian ? 0 : Store.bankIds(id).filter(byId).length;
     startBtn = h('button', { class: 'btn hl', type: 'button', onclick: function () {
-      var n = want();
-      var picked = UI.shuffle(pool()).slice(0, n);
-      run(id, picked, prefs.mode, 'normal');
+      var p = pool();
+      if (mix) {
+        var set = Session.compose(c, p, UI.shuffle);
+        if (set) run(id, set, prefs.mode, 'normal');
+        return;
+      }
+      run(id, UI.shuffle(p).slice(0, want()), prefs.mode, 'normal');
     } }, 'Mulai');
     setup.appendChild(h('div', { class: 'row' }, startBtn,
       bankN ? h('button', { class: 'btn ghost', type: 'button', onclick: function () { runBank(id); } }, 'Ulangi ' + bankN + ' soal salah') : null,
@@ -333,13 +371,22 @@
     })));
   }
 
+  function itemSecs(c, type) {
+    if (c.mixSecs && c.mixSecs[type] != null) return c.mixSecs[type];
+    if (c.kind !== 'mcq') return c.secsPerItem || 180;
+    if (type === 'essay') return 900;
+    return type === 'fill' ? 180 : 72;
+  }
+
   function limitFor(courseId, items) {
     var c = B.courses[courseId];
-    return items.reduce(function (sum, it) {
-      if (c.kind !== 'mcq') return sum + (c.secsPerItem || 180);
-      if (it.type === 'essay') return sum + 900;
-      return sum + (it.type === 'fill' ? 180 : 72);
-    }, 0);
+    return items.reduce(function (sum, it) { return sum + itemSecs(c, it.type); }, 0);
+  }
+
+  // Timer for a fixed mix, so the setup screen can show it before a session is drawn.
+  function limitMix(courseId) {
+    var c = B.courses[courseId];
+    return Session.seconds(c, function (type) { return itemSecs(c, type); });
   }
 
   function run(courseId, items, mode, kind) {
