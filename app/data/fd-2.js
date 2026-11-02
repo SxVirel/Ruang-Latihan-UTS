@@ -17,7 +17,7 @@ BANK.mcq('fd', 'proses', 'Prinsip & Proses Forensik (PG)', [
   {
     q: 'Kasus: penyerang masuk lewat VPN lalu menyalin basis data pelanggan. Jejak yang paling sesuai dengan penerapan prinsip Locard pada slide adalah ...',
     a: 'Log sistem, log jaringan, entri registry, dan sisa file di file system',
-    w: ['Hanya sidik jari pada casing server', 'Hanya rekaman CCTV ruang server', 'Hanya catatan wawancara administrator'],
+    w: ['Sidik jari di casing server, rekaman CCTV ruang server, dan buku tamu gedung', 'Hanya rekaman CCTV ruang server', 'Hanya catatan wawancara administrator'],
     ex: 'Pada intrusi komputer penyerang meninggalkan banyak jejak di file system, registry, system log, dan network-level log.'
   },
   {
@@ -55,19 +55,19 @@ BANK.mcq('fd', 'proses', 'Prinsip & Proses Forensik (PG)', [
   {
     q: 'Di lokasi ditemukan laptop menyala dengan sesi RDP aktif dan hard disk 1 TB. Sesuai faktor prioritas NIST, data yang diambil lebih dulu adalah ...',
     a: 'Isi RAM dan daftar koneksi jaringan, karena akan hilang jika daya dilepas',
-    w: ['Seluruh isi hard disk 1 TB, karena kapasitasnya paling besar', 'Dokumen di folder Documents, karena paling relevan dengan kasus', 'Log aplikasi di partisi lain, karena ukurannya kecil'],
+    w: ['Seluruh isi hard disk 1 TB, karena kapasitasnya paling besar', 'Dokumen di folder Documents lebih dulu, karena paling relevan dengan dugaan kasus', 'Log aplikasi di partisi lain, karena ukurannya kecil'],
     ex: 'Prioritas NIST: likely value, volatility, amount of effort required. Data yang hilang saat daya dicabut didahulukan. Kunci disusun sendiri.'
   },
   {
     q: 'Formulir chain of custody memuat tanggal pemindahan, pihak yang menyerahkan dan menerima, lokasi, serta tindakan yang dilakukan. Tujuan pencatatan itu adalah ...',
     a: 'Menunjukkan bahwa bukti tidak berubah sejak dikumpulkan sampai dianalisis',
-    w: ['Mempercepat proses imaging di laboratorium', 'Menghitung biaya operasional penyidikan', 'Menentukan besar hukuman bagi pelaku'],
+    w: ['Membuktikan bahwa analis yang memeriksa bukti sudah lulus sertifikasi forensik', 'Menghitung biaya operasional penyidikan', 'Menentukan besar hukuman bagi pelaku'],
     ex: 'Chain of custody melacak perpindahan bukti sepanjang siklus koleksi, pengamanan, dan analisis (NIST).'
   },
   {
     q: 'Tim membuat image disk lalu mengirimkannya ke laboratorium. Menurut slide, chain of custody harus mencakup ...',
     a: 'Perangkat asli dan data atau image yang dihasilkan',
-    w: ['Hanya perangkat kerasnya saja', 'Hanya laporan akhir pemeriksaan', 'Hanya berkas yang sudah dicetak'],
+    w: ['Hanya perangkat asli, karena image cukup diverifikasi dengan nilai hash', 'Hanya laporan akhir pemeriksaan', 'Hanya berkas yang sudah dicetak'],
     ex: 'Pemeliharaan chain of custody bukan hanya untuk perangkat, tetapi juga untuk datanya.'
   },
   {
@@ -79,7 +79,7 @@ BANK.mcq('fd', 'proses', 'Prinsip & Proses Forensik (PG)', [
   {
     q: 'Seorang anggota tim yang belum pernah menangani perangkat mobile diminta mengekstrak data. Tindakan yang sesuai prinsip proses forensik adalah ...',
     a: 'Menyerahkan pekerjaan kepada anggota yang kompeten dan mendokumentasikan keputusan itu',
-    w: ['Mencoba sendiri lalu mencatat hasilnya sebagai temuan resmi', 'Mematikan perangkat agar data di dalamnya aman', 'Menghapus aplikasi mencurigakan sebelum ekstraksi'],
+    w: ['Mencoba mengekstrak sendiri dengan panduan dari internet, lalu mencatat hasilnya sebagai temuan resmi', 'Mematikan perangkat agar data di dalamnya aman', 'Menghapus aplikasi mencurigakan sebelum ekstraksi'],
     ex: 'Kegiatan forensik digital hanya dilakukan tim yang kompeten; perubahan yang tak terhindarkan harus minimal dan bisa dijelaskan.'
   },
   {
@@ -101,12 +101,12 @@ BANK.mcq('fd', 'proses', 'Prinsip & Proses Forensik (PG)', [
   {
     q: 'Di TKP, seorang petugas menyalakan ulang laptop yang sedang tidur agar lebih mudah diperiksa. Prinsip proses forensik yang dilanggar adalah ...',
     a: 'Tidak boleh ada tindakan yang berpotensi mengubah data atau menghilangkan bukti volatile',
-    w: ['Chain of custody belum diisi', 'Write blocker tidak dipakai', 'Laporan akhir belum dibuat'],
+    w: ['Chain of custody harus diisi lebih dulu sebelum petugas menyalakan perangkat apa pun di TKP', 'Write blocker tidak dipakai', 'Laporan akhir belum dibuat'],
     ex: 'Restart menghapus isi RAM dan mengubah timestamp sistem, sehingga bukti volatile hilang. Kunci disusun sendiri.'
   },
   {
     q: 'Menurut penerapan prinsip Locard pada intrusi komputer, sesuatu yang ikut terbawa pelaku dari TKP digital dapat berupa ...',
-    a: 'Password pengguna atau PII yang dicuri', w: ['Sidik jari pada prosesor', 'Serat kain pada keyboard', 'Bekas sidik kaki di lantai'],
+    a: 'Password pengguna atau PII yang dicuri', w: ['Sidik jari pelaku yang tertinggal pada prosesor server', 'Serat kain pada keyboard', 'Bekas sidik kaki di lantai'],
     ex: 'Slide Locard: penyerang dapat membawa elemen TKP, misalnya password pengguna atau PII dari file atau basis data.'
   }
 ]);
@@ -136,7 +136,7 @@ BANK.mcq('fd', 'hukum', 'Hukum & Standar Bukti (PG)', [
   {
     q: 'Pihak ketiga independen diminta mengulang proses pemeriksaan dan memperoleh hasil yang sama. Prinsip ACPO yang mendukung permintaan itu adalah ...',
     a: 'Prinsip 3: audit trail semua proses dibuat dan disimpan sehingga pihak ketiga dapat memeriksanya',
-    w: ['Prinsip 1: tindakan tidak boleh mengubah data yang akan dipakai di pengadilan', 'Prinsip 2: yang mengakses data asli harus kompeten dan mampu menjelaskan implikasinya', 'Prinsip 4: penanggung jawab investigasi memastikan hukum dan prinsip dipatuhi'],
+    w: ['Prinsip 1: tindakan tidak boleh mengubah data yang akan dipakai di pengadilan', 'Prinsip 2: orang yang mengakses data asli harus kompeten dan mampu menjelaskan relevansi serta implikasi tindakannya', 'Prinsip 4: penanggung jawab investigasi memastikan hukum dan prinsip dipatuhi'],
     ex: 'ACPO Principle 3: audit trail atau rekaman semua proses dibuat dan dipelihara untuk pemeriksaan pihak ketiga.'
   },
   {
@@ -151,7 +151,7 @@ BANK.mcq('fd', 'hukum', 'Hukum & Standar Bukti (PG)', [
   },
   {
     q: 'Menurut SWGDE (2013), jenis kesalahan dalam implementasi tool forensik digital adalah ...',
-    a: 'Incompleteness, inaccuracy, dan misinterpretation', w: ['Latency, jitter, dan packet loss', 'False positive, false negative, dan drift', 'Overwrite, corruption, dan truncation'],
+    a: 'Incompleteness, inaccuracy, dan misinterpretation', w: ['Latency, jitter, dan packet loss', 'False positive, false negative, dan drift pada hasil hashing', 'Overwrite, corruption, dan truncation'],
     ex: 'Slide Guidelines: SWGDE (2013) menyebut incompleteness, inaccuracy, dan misinterpretation.'
   }
 ]);
@@ -161,37 +161,37 @@ BANK.mcq('fd', 'akuisisi', 'Akuisisi & Penanganan Bukti (PG)', [
   {
     q: 'Laptop tersangka menyala dengan BitLocker aktif dan kunci dekripsi belum diketahui. Tindakan yang tepat adalah ...',
     a: 'Melakukan live imaging lebih dulu sebelum daya dilepas',
-    w: ['Mematikan laptop lalu melepas disk untuk dead imaging', 'Menunggu laptop mati sendiri agar aman', 'Memformat disk agar bersih sebelum di-image'],
+    w: ['Mematikan laptop lalu melepas disk untuk dead imaging', 'Menunggu laptop masuk mode sleep agar isi memori tersimpan aman ke disk', 'Memformat disk agar bersih sebelum di-image'],
     ex: 'Live imaging diperlukan bila disk terenkripsi dan kunci tidak dimiliki, agar data masih bisa diakses.'
   },
   {
     q: 'Tim tiba di lokasi dan mendapati komputer menyala dengan program penghapus berjalan. Panduan first responder menyarankan ...',
     a: 'Jangan matikan perangkat, hentikan proses anti-forensik bila perlu dengan mencabut daya, lalu isolasi dari jaringan',
-    w: ['Matikan komputer dengan shutdown normal agar data tersimpan rapi', 'Restart komputer agar proses mencurigakan berhenti sendiri', 'Hubungkan ke jaringan kantor untuk memantau aktivitasnya'],
+    w: ['Matikan komputer dengan shutdown normal agar semua data di memori tersimpan rapi ke disk sebelum disita dan dibawa ke laboratorium', 'Restart komputer agar proses mencurigakan berhenti sendiri', 'Hubungkan ke jaringan kantor untuk memantau aktivitasnya'],
     ex: 'Interpol Guidelines 2021: jika peralatan menyala, jangan dimatikan; hentikan program penghapus; isolasi dari jaringan.'
   },
   {
     q: 'Petugas menonaktifkan screensaver dan screen lock pada komputer yang menyala. Alasannya adalah ...',
     a: 'Agar perangkat tidak hibernasi atau terkunci sehingga data volatile tetap dapat diakses',
-    w: ['Agar baterai lebih hemat selama pemeriksaan', 'Agar pengguna tidak bisa login ke sistem', 'Agar proses imaging berjalan lebih cepat'],
+    w: ['Agar baterai lebih hemat selama pemeriksaan', 'Agar pengguna lain tidak bisa login ke sistem dan mengubah konfigurasi selama pemeriksaan', 'Agar proses imaging berjalan lebih cepat'],
     ex: 'Interpol: disable screensavers dan screen locking untuk mencegah perangkat hibernasi atau suspend.'
   },
   {
     q: 'Komputer dalam keadaan mati saat tim tiba. Menurut panduan first responder, tindakan yang benar adalah ...',
     a: 'Jangan menyalakannya sampai diproses dengan jaminan prosedur',
-    w: ['Nyalakan untuk melihat siapa yang sedang login', 'Nyalakan lalu langsung lakukan imaging', 'Nyalakan dalam safe mode untuk memeriksa startup'],
+    w: ['Nyalakan untuk melihat siapa yang sedang login', 'Nyalakan lalu langsung lakukan imaging', 'Nyalakan dalam safe mode untuk memeriksa program startup tanpa ikut memuat malware'],
     ex: 'Interpol: jika peralatan mati, jangan dinyalakan sampai diproses dengan jaminan.'
   },
   {
     q: 'Analis melepas hard disk bukti, menyambungkannya ke port read-only sebuah write blocker, lalu menghubungkan media target ke port read-write. Tujuan pemasangan itu adalah ...',
     a: 'Agar pembacaan media bukti tidak mengubah isinya, sementara image ditulis ke media target',
-    w: ['Agar proses imaging berjalan dua kali lebih cepat', 'Agar nilai hash media bukti berubah mengikuti isi image', 'Agar media bukti bisa diformat setelah di-image'],
+    w: ['Agar proses imaging berjalan dua kali lebih cepat', 'Agar nilai hash media bukti ikut diperbarui mengikuti isi image yang ditulis ke media target', 'Agar media bukti bisa diformat setelah di-image'],
     ex: 'Langkah dead imaging: hard disk ke port read-only write blocker, media target ke port read-write.'
   },
   {
     q: 'Manajer bertanya apa bedanya image dengan copy-paste folder. Jawaban yang tepat adalah ...',
     a: 'Image adalah salinan bit-wise 1:1 termasuk slack dan unallocated space, sedangkan copy-paste hanya menyalin file aktif',
-    w: ['Image hanya menyalin file aktif, sedangkan copy-paste menyalin seluruh disk', 'Keduanya sama dan hanya berbeda nama tool', 'Image menyalin file aktif dan file terhapus, sedangkan copy-paste menyalin seluruh disk'],
+    w: ['Image hanya menyalin file aktif, sedangkan copy-paste menyalin seluruh disk', 'Keduanya sama dan hanya berbeda nama tool', 'Image menyalin file aktif dan file terhapus saja, sedangkan copy-paste menyalin seluruh disk beserta slack space-nya'],
     ex: 'Imaging: bit-wise 1:1 copy pada active data, unused space, slack, dan unallocated space. Copy-paste hanya file aktif.'
   },
   {
@@ -208,7 +208,7 @@ BANK.mcq('fd', 'akuisisi', 'Akuisisi & Penanganan Bukti (PG)', [
   {
     q: 'Tersangka menyalin data ke USB lalu melakukan quick format. Kemungkinan data lama pada USB itu adalah ...',
     a: 'Masih ada di disk karena quick format hanya menandai partisi terformat dan menghancurkan indeks lokasi file',
-    w: ['Hilang total karena seluruh sektor ditimpa', 'Hilang total karena MFT dihapus dan ditimpa', 'Tetap ada tetapi otomatis terenkripsi'],
+    w: ['Hilang total karena seluruh sektor ditimpa', 'Hilang total karena quick format menghapus MFT lalu menimpa seluruh sektor dengan angka nol secara otomatis', 'Tetap ada tetapi otomatis terenkripsi'],
     ex: 'Quick format: MFT dihapus dan indeks lokasi file dihancurkan, tetapi data masih berada di hard disk.'
   },
   {
@@ -230,7 +230,7 @@ BANK.mcq('fd', 'akuisisi', 'Akuisisi & Penanganan Bukti (PG)', [
   {
     q: 'Mengapa dead imaging pada media SSD perlu catatan khusus?',
     a: 'Ada isu integritas data pada media SSD yang dapat mengubah isi setelah di-image',
-    w: ['SSD tidak dapat di-image dengan write blocker', 'SSD selalu terenkripsi secara bawaan', 'SSD tidak memiliki file slack'],
+    w: ['SSD tidak dapat di-image memakai write blocker karena antarmukanya tidak didukung', 'SSD selalu terenkripsi secara bawaan', 'SSD tidak memiliki file slack'],
     ex: 'Slide dead imaging mencantumkan note issue data integrity pada media SSD.'
   },
   {
@@ -241,37 +241,37 @@ BANK.mcq('fd', 'akuisisi', 'Akuisisi & Penanganan Bukti (PG)', [
   {
     q: 'Tantangan utama saat mengakuisisi data persisten menurut slide adalah ...',
     a: 'Data persisten berada pada disk terenkripsi yang kuncinya tidak dimiliki',
-    w: ['Data persisten selalu berubah setiap kali dibaca', 'Data persisten hilang saat daya listrik dilepas', 'Data persisten tidak dapat di-hash'],
+    w: ['Data persisten selalu berubah setiap kali dibaca sehingga nilai hash tidak pernah sama', 'Data persisten hilang saat daya listrik dilepas', 'Data persisten tidak dapat di-hash'],
     ex: 'Tantangannya ketika data persisten disimpan pada disk terenkripsi dan kunci dekripsi tidak dimiliki.'
   },
   {
     q: 'Server produksi tidak boleh dimatikan karena transaksi sedang berjalan. Pilihan akuisisi yang tepat adalah ...',
     a: 'Live imaging dengan urutan pengumpulan yang memprioritaskan data volatile',
-    w: ['Dead imaging dengan mematikan server pada malam hari', 'Menunggu jadwal maintenance berikutnya', 'Menyalin folder aplikasi dengan copy-paste'],
+    w: ['Dead imaging dengan mematikan server pada malam hari saat transaksi sedang sepi', 'Menunggu jadwal maintenance berikutnya', 'Menyalin folder aplikasi dengan copy-paste'],
     ex: 'Salah satu situasi live imaging: perangkat tidak bisa atau tidak boleh dimatikan karena alasan bisnis.'
   },
   {
     q: 'Data bukti berada di kantor cabang lain dan akses fisik sangat terbatas. Menurut slide, live imaging diperlukan karena ...',
     a: 'Data berada di lokasi jauh dengan akses fisik yang sulit',
-    w: ['Data terlalu kecil untuk di-image', 'Data tidak memiliki nilai pembuktian', 'Data sudah tersalin di backup pusat'],
+    w: ['Data terlalu kecil untuk di-image', 'Data tidak memiliki nilai pembuktian', 'Data sudah tersalin di backup pusat sehingga perangkat aslinya tidak perlu diperiksa'],
     ex: 'Situasi live imaging: data berada di lokasi jauh dengan akses fisik terbatas atau sulit.'
   },
   {
     q: 'Menurut panduan Interpol, mencabut kabel daya atau melepas baterai dibenarkan dalam situasi ...',
     a: 'Ada program penghapus lokal atau jarak jauh yang berjalan dan tidak bisa dihentikan dengan cara lain',
-    w: ['Petugas ingin mempercepat pekerjaan', 'Perangkat terlalu panas saat diperiksa', 'Pemilik meminta perangkat dimatikan'],
+    w: ['Petugas ingin mempercepat pekerjaan', 'Perangkat terlalu panas saat diperiksa dan dikhawatirkan merusak komponen penyimpanan di dalam casing', 'Pemilik meminta perangkat dimatikan'],
     ex: 'Interpol: hentikan proses tersebut bahkan dengan mencabut kabel daya atau melepas baterai bila perlu.'
   },
   {
     q: 'Laporan penggandaan data menurut panduan Interpol harus memuat ...',
     a: 'Prosedur yang dipakai, tool, lokasi tujuan, algoritma hash beserta nilainya, dan catatan kejadian selama proses',
-    w: ['Nama korban, alamat, nomor telepon, dan pekerjaan', 'Harga perangkat, tanggal pembelian, dan masa garansi', 'Daftar aplikasi terpasang beserta versinya'],
+    w: ['Nama korban, alamat, nomor telepon, dan pekerjaan', 'Harga perangkat, tanggal pembelian, masa garansi, serta nama toko dan nomor faktur pembelian perangkat tersebut', 'Daftar aplikasi terpasang beserta versinya'],
     ex: 'Interpol: procedure used, tool, destination location, HASH (algoritma dan signature), observations.'
   },
   {
     q: 'Sebelum mematikan daya listrik perangkat, best practice yang harus dilakukan adalah ...',
     a: 'Memeriksa apakah enkripsi aktif pada media penyimpanan',
-    w: ['Memastikan baterai dalam keadaan penuh', 'Menghapus file sementara di folder temp', 'Mencatat nomor seri monitor'],
+    w: ['Memastikan baterai dalam keadaan penuh', 'Menghapus file sementara di folder temp agar image lebih kecil', 'Mencatat nomor seri monitor'],
     ex: 'Best practice akuisisi: cek lebih dulu apakah enkripsi aktif sebelum mematikan daya.'
   },
   {
@@ -288,7 +288,7 @@ BANK.mcq('fd', 'akuisisi', 'Akuisisi & Penanganan Bukti (PG)', [
   {
     q: 'File 600 byte disimpan pada volume dengan cluster 2048 byte. Sisa 1448 byte pada cluster tersebut ...',
     a: 'Tidak ditimpa dan dapat berisi data file lama (file slack)',
-    w: ['Otomatis dihapus oleh sistem file', 'Selalu diisi angka nol oleh sistem', 'Dipakai untuk menyimpan nama file'],
+    w: ['Otomatis dihapus oleh sistem file', 'Selalu diisi angka nol oleh sistem file agar tidak ada sisa data', 'Dipakai untuk menyimpan nama file'],
     ex: 'Sektor sisa dalam cluster tidak ditimpa dan dapat berisi data file sebelumnya, disebut slack.'
   },
   {
@@ -299,13 +299,13 @@ BANK.mcq('fd', 'akuisisi', 'Akuisisi & Penanganan Bukti (PG)', [
   {
     q: 'Fungsi utama write blocker adalah ...',
     a: 'Mencegah operasi tulis ke media bukti sehingga isinya tidak berubah',
-    w: ['Mempercepat transfer data ke media target', 'Mengenkripsi image secara otomatis', 'Menghitung nilai hash media target'],
+    w: ['Mempercepat transfer data dari media bukti ke media target saat imaging', 'Mengenkripsi image secara otomatis', 'Menghitung nilai hash media target'],
     ex: 'Best practice akuisisi: gunakan write blocker untuk mencegah perubahan data.'
   },
   {
     q: 'Setelah imaging, nilai hash image ternyata berbeda dari nilai hash media asli. Langkah yang benar adalah ...',
     a: 'Menyatakan salinan tidak sah, mencari penyebabnya, lalu mengulang akuisisi',
-    w: ['Menganggap selisih hash wajar karena jumlah file berbeda', 'Tetap menganalisis image karena isinya terlihat sama', 'Mengubah nilai hash media asli agar sama'],
+    w: ['Menganggap selisih hash wajar karena jumlah file pada image dan media asli berbeda', 'Tetap menganalisis image karena isinya terlihat sama', 'Mengubah nilai hash media asli agar sama'],
     ex: 'Verifikasi integritas memakai hash; image harus identik dengan media asli. Kunci disusun sendiri.'
   },
   {
@@ -335,7 +335,7 @@ BANK.mcq('fd', 'artefak', 'Artefak & Memori (PG)', [
   {
     q: 'Perbedaan HKLM dan HKCU adalah ...',
     a: 'HKLM menyimpan setelan sistem, HKCU menyimpan setelan khusus pengguna',
-    w: ['HKLM khusus pengguna, HKCU khusus sistem', 'Keduanya identik dan dapat dipakai bergantian', 'HKLM hanya ada di memori, HKCU hanya ada di disk'],
+    w: ['HKLM khusus pengguna, HKCU khusus sistem', 'Keduanya identik dan dapat dipakai bergantian', 'HKLM hanya tersimpan di memori saat sistem berjalan, HKCU hanya tersimpan di disk'],
     ex: 'HKEY_LOCAL_MACHINE adalah registry sistem; HKEY_CURRENT_USER adalah registry pengguna.'
   },
   {
