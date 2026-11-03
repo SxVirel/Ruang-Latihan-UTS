@@ -106,3 +106,38 @@ test('Manajemen Proyek is fill-in only, like the exam', () => {
   assert.ok(mp.length >= 50, 'only ' + mp.length);
   for (const it of mp) assert.equal(it.type, 'fill', it.id);
 });
+
+// Critical path items list the nodes as an activity-on-arrow table. Recompute every path from the table
+// and compare it with the keys, so a typo in a duration or a key cannot slip through.
+test('critical path keys match their node tables', () => {
+  const items = data.isian.filter(it => it.course === 'mp' && it.table && it.table.head[1] === 'Initial Node');
+  assert.ok(items.length >= 8, 'only ' + items.length);
+  for (const it of items) {
+    const rows = it.table.rows, out = {}, into = {};
+    for (const r of rows) { (out[r[1]] = out[r[1]] || []).push(r); into[r[2]] = true; }
+    const found = [];
+    const walk = (n, acts, nodes, tot) => {
+      if (!out[n]) return found.push({ acts: acts.join(''), nodes: nodes.join(''), tot });
+      for (const r of out[n]) walk(r[2], acts.concat(r[0]), nodes.concat(r[2]), tot + r[3]);
+    };
+    for (const n of Object.keys(out)) if (!into[n]) walk(Number(n), [], [n], 0);
+    found.sort((a, b) => a.tot - b.tot);
+    const max = found[found.length - 1].tot, critical = found.filter(p => p.tot === max);
+    const slack = act => max - Math.max(...found.filter(p => p.acts.includes(act)).map(p => p.tot));
+    for (const f of it.fields) {
+      let m;
+      if ((m = /^Path (\d+)/.exec(f.label))) {
+        const p = found[m[1] - 1];
+        assert.ok(Check.checkField(f, p.acts) && Check.checkField(f, p.nodes), it.id + ' ' + f.label);
+        assert.equal(new Set(found.map(q => q.tot)).size, found.length, it.id + ' path totals tie, so the order is ambiguous');
+      } else if ((m = /^Total path (\d+)$/.exec(f.label))) assert.equal(f.a, found[m[1] - 1].tot, it.id + ' ' + f.label);
+      else if (/^Critical path( awal)?$/.test(f.label)) {
+        assert.equal(critical.length, 1, it.id);
+        assert.ok(Check.checkField(f, critical[0].acts) && Check.checkField(f, critical[0].nodes), it.id + ' ' + f.label);
+      } else if (/^Durasi proyek( awal)?$/.test(f.label)) assert.equal(f.a, max, it.id + ' ' + f.label);
+      else if (f.label === 'Jumlah path') assert.equal(f.a, found.length, it.id);
+      else if (f.label === 'Jumlah critical path') assert.equal(f.a, critical.length, it.id);
+      else if ((m = /^Float ([A-Z])\b/.exec(f.label))) assert.equal(f.a, slack(m[1]), it.id + ' ' + f.label);
+    }
+  }
+});
