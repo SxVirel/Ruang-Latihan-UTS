@@ -1,0 +1,131 @@
+// Manajemen Proyek — paket mirip soal UTS tahun lalu (soal-ujian-manpro 2026 Genap, lihat mp-3.js).
+// Narasi, urutan kalimat, dan pertanyaan meniru tiap soal ujian; yang diganti hanya kasus dan angkanya.
+// Soal 3 ujian tidak terfoto. Lembar rumus ujian memuat slack, jadi topik m3 menebak bentuknya: forward/backward pass.
+// Semua angka dihitung dengan kode. Tabel jaringan di m3 dicek ulang oleh tests/data.test.js.
+var MP_MIRIP = 'Soal buatan sendiri yang meniru bentuk soal UTS tahun lalu, dengan kasus dan angka berbeda.';
+var MP_ROI = 'ROI (%), rumus slide: (manfaat diskonto − biaya diskonto) / biaya diskonto';
+var MP_AON = ['Aktivitas', 'Keterangan', 'Pendahulu', 'Durasi (hari)'];
+var MP_SLACK = 'ES dan EF dari forward pass, LS dan LF dari backward pass. Total slack = LS − ES. Free slack = ES paling awal dari aktivitas sesudahnya − EF.';
+
+BANK.isian('mp', 'm1', 'Mirip Soal 1: NPV, ROI, PBP', [
+  { type: 'fill', q: 'Integration Management — Soal 1 (30 poin).\nPT Tani Cerdas Nusantara adalah perusahaan rintisan yang didirikan oleh tiga alumni perguruan tinggi yang bertujuan menghadirkan sistem irigasi pintar berbasis aplikasi untuk petani dan kelompok tani di Indonesia. Pada tahap awal proyek, biaya Perizinan, Riset Produk, Legal, dan Operasional Awal yang dikeluarkan adalah Rp 1.200.000.000,00. Pada tahun pertama, proyek dikembangkan di Malang dengan pengeluaran sebesar Rp 250.000.000,00 dan pemasukan sebesar Rp 520.000.000,00. Pada tahun kedua, proyek dikembangkan ke Kediri dengan tambahan modal sebesar Rp 120.000.000,00 serta pemasukan dari Kediri sebesar Rp 260.000.000,00. Pada tahun kedua ini juga tercatat pengeluaran Malang sebesar Rp 90.000.000,00 dengan pemasukan Malang sebesar Rp 450.000.000,00. Pada tahun ketiga, proyek dikembangkan ke Blitar dengan modal tambahan Rp 80.000.000,00 dan langsung mendapatkan pemasukan Rp 150.000.000,00. Sedangkan pemasukan di Malang Rp 380.000.000,00 dan pemasukan di Kediri Rp 210.000.000,00, dengan pengeluaran di Malang Rp 110.000.000,00 dan di Kediri Rp 70.000.000,00. Pada tahun keempat pemasukan pada ketiga kota tersebut sama besar, yaitu masing-masing kota memperoleh pendapatan sebesar Rp 200.000.000,00, dan pengeluarannya untuk masing-masing kota adalah sebesar Rp 60.000.000,00.\nHitung NPV proyek tersebut dalam 4 tahun pada discount rate 8%. Berapa ROI dan PBP-nya? Tulis jawaban dalam juta rupiah.',
+    fields: [
+      { label: 'Arus kas bersih tahun 1', a: 270, tol: 0.5 }, { label: 'Arus kas bersih tahun 2', a: 500, tol: 0.5 },
+      { label: 'Arus kas bersih tahun 3', a: 480, tol: 0.5 }, { label: 'Arus kas bersih tahun 4', a: 420, tol: 0.5 },
+      { label: 'NPV (juta)', a: 168.42, tol: 0.5 }, { label: MP_ROI, a: 8.64, tol: 0.05 },
+      { label: 'PBP biasa (tahun)', a: 2.9, tol: 0.01 }, { label: 'PBP diskonto (tahun)', a: 3.45, tol: 0.01 }],
+    ex: 'Tahun 2: 260 + 450 − 120 − 90 = 500. Tahun 3: 150 + 380 + 210 − 80 − 110 − 70 = 480. Tahun 4: 3 × (200 − 60) = 420. PV: 250 + 428,67 + 381,04 + 308,71 = 1368,42, jadi NPV = 168,42. Manfaat diskonto 2118,65, biaya diskonto 1950,22, ROI = 8,64%. Kumulatif 270, 770, 1250: PBP = 2 + (1200 − 770)/(1250 − 770) = 2,90 tahun. Kumulatif diskonto 1059,71 di tahun 3 masih di bawah 1200 dan 1368,42 di tahun 4, jadi PBP diskonto = 3 + (1200 − 1059,71)/308,71 = 3,45 tahun. ROI tanpa diskonto = (2570 − 2100)/2100 = 22,38%. ' + MP_MIRIP },
+  { type: 'fill', q: 'Integration Management — Soal 1 (30 poin).\nCV Edukasi Pintar adalah perusahaan rintisan yang didirikan oleh dua guru dan seorang programmer yang bertujuan menghadirkan platform bimbingan belajar daring untuk siswa SMA di Jawa Timur. Pada tahap awal proyek, biaya Perizinan, Pembuatan Konten, Legal, dan Operasional Awal yang dikeluarkan adalah Rp 900.000.000,00. Pada tahun pertama, layanan dibuka di Surabaya dengan pengeluaran sebesar Rp 200.000.000,00 dan pemasukan sebesar Rp 380.000.000,00. Pada tahun kedua, layanan dikembangkan ke Sidoarjo dengan tambahan modal sebesar Rp 100.000.000,00 serta pemasukan dari Sidoarjo sebesar Rp 210.000.000,00. Pada tahun kedua ini juga tercatat pengeluaran Surabaya sebesar Rp 60.000.000,00 dengan pemasukan Surabaya sebesar Rp 320.000.000,00. Pada tahun ketiga, layanan dikembangkan ke Gresik dengan modal tambahan Rp 70.000.000,00 dan langsung mendapatkan pemasukan Rp 130.000.000,00. Sedangkan pemasukan di Surabaya Rp 280.000.000,00 dan di Sidoarjo Rp 160.000.000,00, dengan pengeluaran di Surabaya Rp 90.000.000,00 dan di Sidoarjo Rp 50.000.000,00. Pada tahun keempat pemasukan ketiga kota sama besar, yaitu masing-masing Rp 150.000.000,00, dan pengeluaran masing-masing kota sebesar Rp 55.000.000,00.\nHitung NPV proyek tersebut dalam 4 tahun pada discount rate 7%. Berapa ROI dan PBP-nya? Tulis jawaban dalam juta rupiah.',
+    fields: [
+      { label: 'Arus kas bersih tahun 1', a: 180, tol: 0.5 }, { label: 'Arus kas bersih tahun 2', a: 370, tol: 0.5 },
+      { label: 'Arus kas bersih tahun 3', a: 360, tol: 0.5 }, { label: 'Arus kas bersih tahun 4', a: 285, tol: 0.5 },
+      { label: 'NPV (juta)', a: 102.69, tol: 0.5 }, { label: MP_ROI, a: 6.74, tol: 0.05 },
+      { label: 'PBP biasa (tahun)', a: 2.97, tol: 0.01 }, { label: 'PBP diskonto (tahun)', a: 3.53, tol: 0.01 }],
+    ex: 'Tahun 2: 210 + 320 − 100 − 60 = 370. Tahun 3: 130 + 280 + 160 − 70 − 90 − 50 = 360. Tahun 4: 3 × (150 − 55) = 285. PV: 168,22 + 323,17 + 293,87 + 217,43 = 1002,69, jadi NPV = 102,69. Manfaat diskonto 1626,66, biaya diskonto 1523,97, ROI = 6,74%. Kumulatif 180, 550, 910: PBP = 2 + (900 − 550)/(910 − 550) = 2,97 tahun. Kumulatif diskonto 785,26 lalu 1002,69: PBP diskonto = 3 + 114,74/217,43 = 3,53 tahun. ROI tanpa diskonto = (1930 − 1635)/1635 = 18,04%. ' + MP_MIRIP },
+  { type: 'fill', q: 'Integration Management — Soal 1 (30 poin).\nPT Samudra Data Nusantara adalah perusahaan rintisan yang didirikan oleh empat alumni perguruan tinggi yang bertujuan menghadirkan aplikasi pelacakan kapal dan pencatatan hasil tangkapan untuk nelayan di Sulawesi Selatan. Pada tahap awal proyek, biaya Perizinan, Riset Produk, Legal, dan Operasional Awal yang dikeluarkan adalah Rp 2.000.000.000,00. Pada tahun pertama, proyek dikembangkan di Makassar dengan pengeluaran sebesar Rp 400.000.000,00 dan pemasukan sebesar Rp 750.000.000,00. Pada tahun kedua, proyek dikembangkan ke Parepare dengan tambahan modal sebesar Rp 200.000.000,00 serta pemasukan dari Parepare sebesar Rp 420.000.000,00. Pada tahun kedua ini juga tercatat pengeluaran Makassar sebesar Rp 120.000.000,00 dengan pemasukan Makassar sebesar Rp 650.000.000,00. Pada tahun ketiga, proyek dikembangkan ke Bone dengan modal tambahan Rp 150.000.000,00 dan langsung mendapatkan pemasukan Rp 250.000.000,00. Sedangkan pemasukan di Makassar Rp 500.000.000,00 dan di Parepare Rp 300.000.000,00, dengan pengeluaran di Makassar Rp 150.000.000,00 dan di Parepare Rp 110.000.000,00. Pada tahun keempat pemasukan ketiga kota sama besar, yaitu masing-masing Rp 260.000.000,00, dan pengeluaran masing-masing kota sebesar Rp 90.000.000,00.\nHitung NPV proyek tersebut dalam 4 tahun pada discount rate 10%. Berapa ROI dan PBP-nya? Apakah proyek layak? Tulis jawaban dalam juta rupiah.',
+    fields: [
+      { label: 'Arus kas bersih tahun 1', a: 350, tol: 0.5 }, { label: 'Arus kas bersih tahun 2', a: 750, tol: 0.5 },
+      { label: 'Arus kas bersih tahun 3', a: 640, tol: 0.5 }, { label: 'Arus kas bersih tahun 4', a: 510, tol: 0.5 },
+      { label: 'NPV (juta)', a: -232.81, tol: 0.5 }, { label: MP_ROI, a: -7.46, tol: 0.05 },
+      { label: 'PBP biasa (tahun)', a: 3.51, tol: 0.01 },
+      { label: 'Kelayakan proyek', a: ['tidak layak', 'ditolak', 'tolak', 'tidak'] }],
+    ex: 'Tahun 2: 420 + 650 − 200 − 120 = 750. Tahun 3: 250 + 500 + 300 − 150 − 150 − 110 = 640. Tahun 4: 3 × (260 − 90) = 510. PV: 318,18 + 619,83 + 480,84 + 348,34 = 1767,19, jadi NPV = −232,81. ROI = (2887,75 − 3120,55)/3120,55 = −7,46%. Kumulatif biasa 350, 1100, 1740, 2250: PBP = 3 + (2000 − 1740)/(2250 − 1740) = 3,51 tahun. Modal kembali tanpa diskonto, tetapi PV kumulatif baru 1767,19 di tahun 4, jadi PBP diskonto melewati 4 tahun. NPV negatif, jadi proyek tidak layak. ' + MP_MIRIP },
+  { type: 'fill', q: 'Integration Management — Soal 1 (30 poin).\nPT Kas Desa Digital adalah perusahaan rintisan yang didirikan oleh tiga alumni perguruan tinggi yang bertujuan menghadirkan aplikasi simpan pinjam untuk koperasi desa di Jawa Tengah. Pada tahap awal proyek, biaya Perizinan, Riset Produk, Legal, dan Operasional Awal yang dikeluarkan adalah Rp 1.000.000.000,00. Pada tahun pertama, proyek dikembangkan di Semarang dengan pengeluaran sebesar Rp 220.000.000,00 dan pemasukan sebesar Rp 480.000.000,00. Pada tahun kedua, proyek dikembangkan ke Kudus dengan tambahan modal sebesar Rp 100.000.000,00 serta pemasukan dari Kudus sebesar Rp 230.000.000,00. Pada tahun kedua ini juga tercatat pengeluaran Semarang sebesar Rp 70.000.000,00 dengan pemasukan Semarang sebesar Rp 400.000.000,00. Pada tahun ketiga, proyek dikembangkan ke Pati dengan modal tambahan Rp 60.000.000,00 dan langsung mendapatkan pemasukan Rp 140.000.000,00. Sedangkan pemasukan di Semarang Rp 350.000.000,00 dan di Kudus Rp 200.000.000,00, dengan pengeluaran di Semarang Rp 90.000.000,00 dan di Kudus Rp 60.000.000,00. Pada tahun keempat pemasukan ketiga kota sama besar, yaitu masing-masing Rp 190.000.000,00, dan pengeluaran masing-masing kota sebesar Rp 65.000.000,00. Total aset perusahaan pada akhir tahun keempat tercatat Rp 2.500.000.000,00.\nHitung NPV proyek tersebut dalam 4 tahun pada discount rate 9%. Berapa ROI dan PBP-nya? Hitung juga ROA tahun keempat (arus kas bersih tahun 4 dianggap laba bersih). Tulis jawaban dalam juta rupiah.',
+    fields: [
+      { label: 'Arus kas bersih tahun 1', a: 260, tol: 0.5 }, { label: 'Arus kas bersih tahun 2', a: 460, tol: 0.5 },
+      { label: 'Arus kas bersih tahun 3', a: 480, tol: 0.5 }, { label: 'Arus kas bersih tahun 4', a: 375, tol: 0.5 },
+      { label: 'NPV (juta)', a: 262.01, tol: 0.5 }, { label: MP_ROI, a: 15.93, tol: 0.05 },
+      { label: 'PBP biasa (tahun)', a: 2.58, tol: 0.01 }, { label: 'PBP diskonto (tahun)', a: 3.01, tol: 0.01 },
+      { label: 'ROA tahun keempat (%)', a: 15, tol: 0.01 }],
+    ex: 'Tahun 2: 230 + 400 − 100 − 70 = 460. Tahun 3: 140 + 350 + 200 − 60 − 90 − 60 = 480. Tahun 4: 3 × (190 − 65) = 375. PV: 238,53 + 387,17 + 370,65 + 265,66 = 1262,01, jadi NPV = 262,01. Manfaat diskonto 1907,23, biaya diskonto 1645,22, ROI = 15,93%. Kumulatif 260, 720, 1200: PBP = 2 + (1000 − 720)/(1200 − 720) = 2,58 tahun. Kumulatif diskonto 996,35 lalu 1262,01: PBP diskonto = 3 + 3,65/265,66 = 3,01 tahun. ROA = 375/2500 = 15%; rumus ROA dari buku standar, bukan slide. ' + MP_MIRIP }
+]);
+
+BANK.isian('mp', 'm2', 'Mirip Soal 2: WBS', [
+  { type: 'fill', q: 'Scope Management — Soal 2 (20 poin).\nDinas Lingkungan Hidup Kota Harapan akan mengembangkan sebuah perangkat lunak Sistem Informasi Bank Sampah yang digunakan untuk mencatat setoran sampah dan saldo tabungan warga di setiap kelurahan. Dalam proses pengembangannya digunakan metode "Design Thinking". Dari penyelenggara diminta untuk diadakannya Pertemuan di Awal (kickoff meeting), Laporan Kemajuan 1 setelah proses "Define", Laporan Kemajuan 2 setelah proses "Prototype", serta Laporan Akhir & Serah Terima di akhir kegiatan. Tahapan design thinking: Empati (Empathize), Definisi (Define), Ideasi (Ideate), Prototipe (Prototype), dan Pengujian (Test).\nDi ujian, WBS dibuat sampai level 3 dalam bentuk tabel. Di sini, isi urutan aktivitas level 1 dan satu kode WBS.',
+    fields: [
+      { label: '1', a: ['kickoff meeting', 'kickoff', 'kick off meeting', 'kick off', 'pertemuan awal', 'pertemuan di awal'] },
+      { label: '2', a: ['empathize', 'empati', 'empathy'] },
+      { label: '3', a: ['define', 'definisi'] },
+      { label: '4', a: ['laporan kemajuan 1', 'laporan kemajuan', 'laporan kemajuan i', 'progress report'] },
+      { label: '5', a: ['ideate', 'ideasi'] },
+      { label: '6', a: ['prototype', 'prototipe'] },
+      { label: '7', a: ['laporan kemajuan 2', 'laporan kemajuan', 'laporan kemajuan ii', 'progress report'] },
+      { label: '8', a: ['test', 'pengujian', 'testing'] },
+      { label: '9', a: ['laporan akhir & serah terima', 'laporan akhir dan serah terima', 'laporan akhir', 'serah terima'] },
+      { label: 'Kode WBS level 2 pertama di bawah Ideate', a: ['5.1', '51'] }],
+    ex: 'Milestone penyelenggara disisipkan tepat sesudah tahap yang disebut: Laporan Kemajuan 1 sesudah Define, Laporan Kemajuan 2 sesudah Prototype. Ideate ada di nomor 5, jadi level 2 pertamanya 5.1 (misalnya brainstorming fitur) dan level 3-nya 5.1.1. ' + MP_MIRIP },
+  { type: 'fill', q: 'Scope Management — Soal 2 (20 poin).\nPT Ekspedisi Kilat Nusantara akan mengembangkan sebuah perangkat lunak Sistem Pelacakan Paket berbasis web dan mobile untuk kurir dan pelanggan. Dalam proses pengembangannya digunakan metode Rapid Application Development (RAD). Dari manajemen diminta untuk diadakannya Pertemuan di Awal (kickoff meeting), Laporan Kemajuan setelah tahap "User Design", serta Laporan Akhir & Serah Terima di akhir kegiatan. Tahapan RAD: Requirements Planning (menyepakati kebutuhan dan ruang lingkup), User Design (pengguna dan pengembang membangun prototipe secara iteratif), Construction (prototipe dikembangkan menjadi sistem utuh, dikodekan, dan diuji), serta Cutover (konversi data, pelatihan pengguna, dan peralihan ke sistem baru).\nIsi urutan aktivitas level 1 WBS, lalu jawab pertanyaan penempatan aktivitas.',
+    fields: [
+      { label: '1', a: ['kickoff meeting', 'kickoff', 'kick off meeting', 'kick off', 'pertemuan awal', 'pertemuan di awal'] },
+      { label: '2', a: ['requirements planning', 'requirement planning', 'perencanaan kebutuhan'] },
+      { label: '3', a: ['user design', 'desain pengguna'] },
+      { label: '4', a: ['laporan kemajuan', 'progress report'] },
+      { label: '5', a: ['construction', 'konstruksi', 'rapid construction'] },
+      { label: '6', a: ['cutover', 'cut over', 'peralihan'] },
+      { label: '7', a: ['laporan akhir & serah terima', 'laporan akhir dan serah terima', 'laporan akhir', 'serah terima'] },
+      { label: 'Pelatihan kurir menjadi level 2 di bawah aktivitas nomor', a: 6, tol: 0 }],
+    ex: 'Laporan kemajuan diletakkan sesudah User Design karena itu permintaan manajemen. Pelatihan pengguna termasuk tahap Cutover (nomor 6), jadi kodenya 6.x, misalnya 6.2 pelatihan kurir dan 6.2.1 pelatihan aplikasi mobile. ' + MP_MIRIP },
+  { type: 'fill', q: 'Scope Management — Soal 2 (20 poin).\nRumah Sakit Ibu dan Anak Bunda Sehat akan mengembangkan sebuah perangkat lunak Sistem Reservasi Dokter Online yang digunakan pasien untuk memilih jadwal dokter dan mendapat nomor antrean. Dalam proses pengembangannya digunakan metode "Prototyping" dengan tahapan Komunikasi (Communication), Perencanaan Cepat (Quick Plan), Pemodelan Desain Cepat (Modeling Quick Design), Konstruksi Prototipe (Construction of Prototype), serta Penyerahan dan Umpan Balik (Deployment, Delivery & Feedback). Dari pihak rumah sakit diminta untuk diadakannya Pertemuan di Awal (kickoff meeting), Laporan Kemajuan setelah tahap Pemodelan Desain Cepat, serta Laporan Akhir & Sosialisasi di akhir kegiatan.\nIsi urutan aktivitas level 1 WBS dan satu kode WBS.',
+    fields: [
+      { label: '1', a: ['kickoff meeting', 'kickoff', 'kick off meeting', 'kick off', 'pertemuan awal', 'pertemuan di awal'] },
+      { label: '2', a: ['komunikasi', 'communication'] },
+      { label: '3', a: ['perencanaan cepat', 'quick plan', 'perencanaan'] },
+      { label: '4', a: ['pemodelan desain cepat', 'modeling quick design', 'quick design', 'pemodelan', 'desain cepat'] },
+      { label: '5', a: ['laporan kemajuan', 'progress report'] },
+      { label: '6', a: ['konstruksi prototipe', 'construction of prototype', 'konstruksi', 'construction', 'pembuatan prototipe'] },
+      { label: '7', a: ['penyerahan dan umpan balik', 'penyerahan & umpan balik', 'deployment delivery & feedback', 'deployment delivery and feedback', 'deployment', 'umpan balik', 'feedback'] },
+      { label: '8', a: ['laporan akhir & sosialisasi', 'laporan akhir dan sosialisasi', 'laporan akhir', 'sosialisasi'] },
+      { label: 'Kode WBS level 3 kedua di bawah 4.1', a: ['4.1.2', '412'] }],
+    ex: 'Pemodelan Desain Cepat ada di nomor 4, jadi laporan kemajuan menjadi nomor 5. Contoh level 2 dan 3: 4.1 desain antarmuka, 4.1.1 wireframe halaman jadwal dokter, 4.1.2 wireframe halaman antrean. ' + MP_MIRIP }
+]);
+
+BANK.isian('mp', 'm3', 'Mirip Soal 3: Time Management (tebakan)', [
+  { type: 'fill', q: 'Time Management. Soal 3 ujian tidak terfoto, tetapi lembar rumusnya memuat slack, jadi bentuk ini tebakan.\nPuskesmas Sukamaju mengembangkan aplikasi antrean pasien. Aktivitas, pendahulu, dan durasinya ada di tabel. Gambar network diagram, lalu hitung dengan forward pass dan backward pass. ' + MP_SLACK,
+    table: { head: MP_AON, rows: [['A', 'Analisis kebutuhan', '-', 4], ['B', 'Desain database', 'A', 3], ['C', 'Desain antarmuka', 'A', 5], ['D', 'Pengembangan backend', 'B', 7], ['E', 'Pengembangan frontend', 'C', 6], ['F', 'Integrasi', 'D, E', 3], ['G', 'Penyusunan manual', 'C', 2], ['H', 'Pengujian dan pelatihan', 'F, G', 4]] },
+    fields: [
+      { label: 'Durasi proyek', a: 22, tol: 0 }, { label: 'Critical path', a: ['ACEFH'] },
+      { label: 'ES F', a: 15, tol: 0 }, { label: 'LS D', a: 8, tol: 0 },
+      { label: 'Total slack B', a: 1, tol: 0 }, { label: 'Free slack B', a: 0, tol: 0 }, { label: 'Total slack G', a: 7, tol: 0 }],
+    ex: 'Path: A-B-D-F-H = 21, A-C-E-F-H = 22, A-C-G-H = 15. Forward pass: EF A = 4, EF B = 7, EF C = 9, EF D = 14, EF E = 15, ES F = max(14, 15) = 15, EF F = 18, EF G = 11, ES H = 18, EF H = 22. Backward pass: LS D = 15 − 7 = 8, jadi LS B = 5. Total slack B = 5 − 4 = 1, tetapi free slack B = ES D − EF B = 7 − 7 = 0: kalau B terlambat, D ikut mundur walau proyek belum mundur. Total slack G = 18 − 11 = 7. ' + MP_MIRIP },
+  { type: 'fill', q: 'Time Management (tebakan bentuk Soal 3).\nBagian TI kampus merenovasi ruang server. Durasi dalam minggu. Hitung dengan forward pass dan backward pass. ' + MP_SLACK,
+    table: { head: ['Aktivitas', 'Keterangan', 'Pendahulu', 'Durasi (minggu)'], rows: [['A', 'Survei dan desain', '-', 2], ['B', 'Pengadaan rak dan UPS', 'A', 4], ['C', 'Pembongkaran ruangan', 'A', 3], ['D', 'Instalasi listrik', 'C', 4], ['E', 'Instalasi pendingin', 'C', 5], ['F', 'Pemasangan rak dan UPS', 'B, D', 2], ['G', 'Migrasi server', 'E, F', 3], ['H', 'Uji coba', 'G', 1]] },
+    fields: [
+      { label: 'Durasi proyek', a: 15, tol: 0 }, { label: 'Critical path', a: ['ACDFGH'] },
+      { label: 'EF E', a: 10, tol: 0 }, { label: 'LF E', a: 11, tol: 0 },
+      { label: 'Total slack B', a: 3, tol: 0 }, { label: 'Free slack E', a: 1, tol: 0 }],
+    ex: 'Path: A-B-F-G-H = 12, A-C-D-F-G-H = 15, A-C-E-G-H = 14. Forward pass: EF C = 5, EF D = 9, EF E = 10, ES F = max(6, 9) = 9, EF F = 11, ES G = max(10, 11) = 11, EF H = 15. LF E = LS G = 11. Total slack B = LS B − ES B = 5 − 2 = 3. Free slack E = ES G − EF E = 11 − 10 = 1. ' + MP_MIRIP },
+  { type: 'fill', q: 'Time Management (tebakan bentuk Soal 3).\nTim pemasaran menyiapkan acara peluncuran produk. A dan B boleh dimulai bersamaan. Hitung dengan forward pass dan backward pass. ' + MP_SLACK,
+    table: { head: MP_AON, rows: [['A', 'Konsep acara', '-', 3], ['B', 'Booking venue', '-', 2], ['C', 'Desain materi promosi', 'A', 4], ['D', 'Cetak materi', 'C', 2], ['E', 'Undangan media', 'A, B', 3], ['F', 'Persiapan venue', 'B', 5], ['G', 'Gladi resik', 'D, E, F', 2], ['H', 'Hari H dan evaluasi', 'G', 1]] },
+    fields: [
+      { label: 'Durasi proyek', a: 12, tol: 0 }, { label: 'Critical path', a: ['ACDGH'] },
+      { label: 'ES E', a: 3, tol: 0 }, { label: 'LS F', a: 4, tol: 0 },
+      { label: 'Total slack B', a: 2, tol: 0 }, { label: 'Free slack B', a: 0, tol: 0 }, { label: 'Total slack E', a: 3, tol: 0 }],
+    ex: 'Path: A-C-D-G-H = 12, A-E-G-H = 9, B-E-G-H = 8, B-F-G-H = 10. ES E = max(EF A, EF B) = max(3, 2) = 3. ES G = max(9, 6, 7) = 9. LS F = 9 − 5 = 4, jadi LF B = min(LS E, LS F) = min(6, 4) = 4 dan total slack B = 4 − 2 = 2. Free slack B = ES F − EF B = 2 − 2 = 0, karena F langsung menunggu B. Total slack E = 9 − 6 = 3. ' + MP_MIRIP }
+]);
+
+BANK.isian('mp', 'm4', 'Mirip Soal 4: Earned Value', [
+  { type: 'fill', q: 'Project Cost Management — Soal 4 (25 poin).\nSebuah proyek pengembangan sistem informasi akademik didanai sebesar Rp 200 juta dengan durasi proyek selama 10 bulan. Pada akhir bulan ke-6, diketahui bahwa pekerjaan yang telah selesai mencapai 50% dari total pekerjaan. Laporan keuangan menunjukkan bahwa anggaran yang sudah terpakai adalah sebesar Rp 110 juta. Berdasarkan informasi tersebut:\na. Tentukan PV, EV, AC, dan BAC di akhir bulan ke-6.\nb. Hitunglah CPI, CV, SPI, SV, EAC, dan Estimated Time to Complete di proyek ini di akhir bulan ke-6!',
+    fields: [
+      { label: 'PV (juta)', a: 120, tol: 0.01 }, { label: 'EV (juta)', a: 100, tol: 0.01 }, { label: 'AC (juta)', a: 110, tol: 0.01 }, { label: 'BAC (juta)', a: 200, tol: 0.01 },
+      { label: 'CPI', a: 0.91, tol: 0.005 }, { label: 'CV (juta)', a: -10, tol: 0.01 }, { label: 'SPI', a: 0.83, tol: 0.005 }, { label: 'SV (juta)', a: -20, tol: 0.01 },
+      { label: 'EAC (juta)', a: 220, tol: 0.5 }, { label: 'Estimated Time to Complete (bulan)', a: 12, tol: 0.05 }],
+    ex: 'PV = 200 × 6/10 = 120. EV = 50% × 200 = 100. AC = 110. CPI = 100/110 = 0,909. CV = 100 − 110 = −10. SPI = 100/120 = 0,833. SV = 100 − 120 = −20. EAC = 200/0,909 = 220. Estimated Time to Complete = 10/0,833 = 12 bulan. ' + MP_MIRIP },
+  { type: 'fill', q: 'Project Cost Management — Soal 4 (25 poin).\nSebuah proyek pengembangan aplikasi telemedicine didanai sebesar Rp 360 juta dengan durasi proyek selama 1,5 tahun. Pada akhir bulan ke-12, diketahui bahwa pekerjaan yang telah selesai mencapai 70% dari total pekerjaan. Laporan keuangan menunjukkan bahwa anggaran yang sudah terpakai adalah sebesar Rp 225 juta. Berdasarkan informasi tersebut:\na. Tentukan PV, EV, AC, dan BAC di akhir bulan ke-12.\nb. Hitunglah CPI, CV, SPI, SV, EAC, dan Estimated Time to Complete di proyek ini di akhir bulan ke-12!',
+    fields: [
+      { label: 'PV (juta)', a: 240, tol: 0.01 }, { label: 'EV (juta)', a: 252, tol: 0.01 }, { label: 'AC (juta)', a: 225, tol: 0.01 }, { label: 'BAC (juta)', a: 360, tol: 0.01 },
+      { label: 'CPI', a: 1.12, tol: 0.005 }, { label: 'CV (juta)', a: 27, tol: 0.01 }, { label: 'SPI', a: 1.05, tol: 0.005 }, { label: 'SV (juta)', a: 12, tol: 0.01 },
+      { label: 'EAC (juta)', a: 321.43, tol: 0.5 }, { label: 'Estimated Time to Complete (bulan)', a: 17.14, tol: 0.05 }],
+    ex: '1,5 tahun = 18 bulan. PV = 360 × 12/18 = 240. EV = 70% × 360 = 252. AC = 225. CPI = 252/225 = 1,12. CV = 252 − 225 = 27. SPI = 252/240 = 1,05. SV = 252 − 240 = 12. EAC = 360/1,12 = 321,43. Estimated Time to Complete = 18/1,05 = 17,14 bulan. Proyek ini hemat dan lebih cepat dari jadwal. ' + MP_MIRIP },
+  { type: 'fill', q: 'Project Cost Management — Soal 4 (25 poin).\nSebuah proyek pembuatan website promosi desa wisata didanai sebesar Rp 90 juta dengan durasi proyek selama 6 bulan. Pada akhir bulan ke-4, diketahui bahwa pekerjaan yang telah selesai mencapai 50% dari total pekerjaan. Laporan keuangan menunjukkan bahwa anggaran yang sudah terpakai adalah sebesar Rp 54 juta. Berdasarkan informasi tersebut:\na. Tentukan PV, EV, AC, dan BAC di akhir bulan ke-4.\nb. Hitunglah CPI, CV, SPI, SV, EAC, dan Estimated Time to Complete di proyek ini di akhir bulan ke-4!',
+    fields: [
+      { label: 'PV (juta)', a: 60, tol: 0.01 }, { label: 'EV (juta)', a: 45, tol: 0.01 }, { label: 'AC (juta)', a: 54, tol: 0.01 }, { label: 'BAC (juta)', a: 90, tol: 0.01 },
+      { label: 'CPI', a: 0.83, tol: 0.005 }, { label: 'CV (juta)', a: -9, tol: 0.01 }, { label: 'SPI', a: 0.75, tol: 0.005 }, { label: 'SV (juta)', a: -15, tol: 0.01 },
+      { label: 'EAC (juta)', a: 108, tol: 0.5 }, { label: 'Estimated Time to Complete (bulan)', a: 8, tol: 0.05 }],
+    ex: 'PV = 90 × 4/6 = 60. EV = 50% × 90 = 45. AC = 54. CPI = 45/54 = 0,833. CV = 45 − 54 = −9. SPI = 45/60 = 0,75. SV = 45 − 60 = −15. EAC = 90/0,833 = 108. Estimated Time to Complete = 6/0,75 = 8 bulan. ' + MP_MIRIP },
+  { type: 'fill', q: 'Project Cost Management — Soal 4 (25 poin).\nSebuah proyek implementasi sistem ERP di sebuah pabrik didanai sebesar Rp 480 juta dengan durasi proyek selama 2 tahun. Pada akhir bulan ke-15, diketahui bahwa pekerjaan yang telah selesai mencapai 65% dari total pekerjaan. Laporan keuangan menunjukkan bahwa anggaran yang sudah terpakai adalah sebesar Rp 290 juta. Berdasarkan informasi tersebut:\na. Tentukan PV, EV, AC, dan BAC di akhir bulan ke-15.\nb. Hitunglah CPI, CV, SPI, SV, EAC, dan Estimated Time to Complete di proyek ini di akhir bulan ke-15!',
+    fields: [
+      { label: 'PV (juta)', a: 300, tol: 0.01 }, { label: 'EV (juta)', a: 312, tol: 0.01 }, { label: 'AC (juta)', a: 290, tol: 0.01 }, { label: 'BAC (juta)', a: 480, tol: 0.01 },
+      { label: 'CPI', a: 1.08, tol: 0.005 }, { label: 'CV (juta)', a: 22, tol: 0.01 }, { label: 'SPI', a: 1.04, tol: 0.005 }, { label: 'SV (juta)', a: 12, tol: 0.01 },
+      { label: 'EAC (juta), pakai CPI tanpa dibulatkan', a: 446.15, tol: 0.5 }, { label: 'Estimated Time to Complete (bulan)', a: 23.08, tol: 0.05 }],
+    ex: '2 tahun = 24 bulan. PV = 480 × 15/24 = 300. EV = 65% × 480 = 312. AC = 290. CPI = 312/290 = 1,076. CV = 312 − 290 = 22. SPI = 312/300 = 1,04. SV = 312 − 300 = 12. EAC = 480/1,0759 = 446,15 (kalau CPI dibulatkan 1,08 hasilnya 444,44). Estimated Time to Complete = 24/1,04 = 23,08 bulan. ' + MP_MIRIP }
+]);

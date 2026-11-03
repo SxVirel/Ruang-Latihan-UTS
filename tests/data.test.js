@@ -141,3 +141,39 @@ test('critical path keys match their node tables', () => {
     }
   }
 });
+
+// Activity-on-node tables (Pendahulu column): redo the forward and backward pass and compare with the keys.
+test('forward and backward pass keys match their precedence tables', () => {
+  const items = data.isian.filter(it => it.course === 'mp' && it.table && it.table.head.includes('Pendahulu'));
+  assert.ok(items.length >= 5, 'only ' + items.length);
+  let checked = 0;
+  for (const it of items) {
+    const head = it.table.head, pi = head.indexOf('Pendahulu'), di = head.findIndex(x => /^Durasi/.test(x));
+    const acts = it.table.rows.map(r => ({ id: r[0], dur: r[di], pre: r[pi] === '-' ? [] : String(r[pi]).split(/,\s*/) }));
+    const by = Object.fromEntries(acts.map(a => [a.id, a]));
+    const ef = id => by[id].ef != null ? by[id].ef : (by[id].ef = Math.max(0, ...by[id].pre.map(p => ef(p))) + by[id].dur);
+    acts.forEach(a => ef(a.id));
+    const end = Math.max(...acts.map(a => a.ef)), next = id => acts.filter(a => a.pre.includes(id));
+    const ls = id => by[id].ls != null ? by[id].ls : (by[id].ls = Math.min(end, ...next(id).map(n => ls(n.id))) - by[id].dur);
+    acts.forEach(a => ls(a.id));
+    const crit = [], walk = (a, path) => {
+      const nxt = next(a.id).filter(n => n.ef - n.dur === a.ef && n.ls === n.ef - n.dur);
+      if (!next(a.id).length) return crit.push(path);
+      nxt.forEach(n => walk(n, path + n.id));
+    };
+    acts.filter(a => !a.pre.length && a.ls === 0).forEach(a => walk(a, a.id));
+    for (const f of it.fields) {
+      let m; const a = (m = /^(ES|EF|LS|LF|Total slack|Free slack) ([A-Z])$/.exec(f.label)) && by[m[2]];
+      if (a) {
+        const es = a.ef - a.dur, v = { ES: es, EF: a.ef, LS: a.ls, LF: a.ls + a.dur, 'Total slack': a.ls - es,
+          'Free slack': Math.min(end, ...next(a.id).map(n => n.ef - n.dur)) - a.ef }[m[1]];
+        assert.equal(f.a, v, it.id + ' ' + f.label); checked++;
+      } else if (f.label === 'Durasi proyek') { assert.equal(f.a, end, it.id); checked++; }
+      else if (f.label === 'Critical path' || f.label === 'Jalur kritis') {
+        assert.equal(crit.length, 1, it.id);
+        assert.ok(Check.checkField(f, crit[0]), it.id + ' ' + crit[0]); checked++;
+      }
+    }
+  }
+  assert.ok(checked >= 20, 'checked ' + checked);
+});

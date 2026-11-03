@@ -37,6 +37,6 @@ BANK.course('fd', {
 });
 BANK.course('mp', {
   name: 'Manajemen Proyek', code: 'MP', kind: 'isian', secsPerItem: 180, labs: ['cpm'],
-  blurb: 'Isian semua: NPV, ROI, ROA, payback, EV, critical path, soal cerita UTS',
-  about: 'Semua soal berbentuk isian, sesuai format UTS. Disusun dari Manpro 1-6: proyek vs operasional, struktur organisasi, process groups, project charter, NPV/ROI/payback, WBS, jalur kritis, dan PERT. Topik kisi-kisi melatih NPV dan PV, ROI dan ROA, payback period, earned value, jaringan aktivitas, dan PERT. Topik Soal UTS Tahun Lalu berisi soal ujian 2026 Genap, Soal Cerita Setara UTS melatih bentuk yang sama dengan cerita berbeda, dan topik Critical Path memuat Latihan Individu Pertemuan 5 beserta variasinya.'
+  blurb: 'Fokus kisi-kisi dan soal UTS tahun lalu: NPV, ROI, ROA, payback, EV, WBS, critical path',
+  about: 'Semua soal berbentuk isian, sesuai format UTS, dan hanya mencakup kisi-kisi serta soal UTS tahun lalu. Topik kisi-kisi melatih NPV dan PV, ROI dan ROA, payback period, earned value, jaringan aktivitas, dan PERT. Topik Soal UTS Tahun Lalu berisi soal ujian 2026 Genap. Topik Mirip Soal 1-4 memakai narasi soal ujian itu dengan kasus dan angka berbeda; Soal 3 tidak terfoto, jadi bentuknya ditebak dari lembar rumus. Soal Cerita Setara UTS dan Critical Path (Latihan Individu Pertemuan 5) menambah variasi.'
 });

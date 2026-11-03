@@ -87,7 +87,7 @@ BANK.isian('mp', 'k-net', 'Kisi-kisi: Jaringan Aktivitas & PERT', [
   { type: 'fill', q: 'Tabel PERT dari slide: hitung t = (a + 4m + b)/6 dengan a = optimistic, b = pessimistic, m = most likely.',
     table: { head: ['Aktivitas', 'a', 'b', 'm'], rows: [['A', 1, 3, 2], ['B', 2, 4, 3], ['C', 1, 3, 2], ['D', 2, 6, 4], ['H', 1, 3, 2]] },
     fields: [{ label: 'A', a: 2, tol: 0.01 }, { label: 'B', a: 3, tol: 0.01 }, { label: 'D', a: 4, tol: 0.01 }, { label: 'H', a: 2, tol: 0.01 }],
-    ex: 'A = (1+8+3)/6 = 2. B = (2+12+4)/6 = 3. D = (2+16+6)/6 = 4. H = (1+8+3)/6 = 2. E, F, G ada di topik Time Management.' },
+    ex: 'A = (1+8+3)/6 = 2. B = (2+12+4)/6 = 3. D = (2+16+6)/6 = 4. H = (1+8+3)/6 = 2.' },
   { type: 'fill', q: 'PERT: aktivitas X punya optimistic 4, most likely 6, pessimistic 14 hari. Aktivitas Y punya optimistic 2, most likely 5, pessimistic 8 hari. X dan Y berurutan.',
     fields: [{ label: 't X', a: 7, tol: 0.01 }, { label: 't Y', a: 5, tol: 0.01 }, { label: 'Total X lalu Y', a: 12, tol: 0.01 }],
     ex: 'X = (4 + 24 + 14)/6 = 7. Y = (2 + 20 + 8)/6 = 5. Total 12 hari. ' + MP_SENDIRI },
