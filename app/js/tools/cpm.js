@@ -23,6 +23,14 @@
       res[id].ls = lf - byId[id].d;
       res[id].slack = res[id].ls - res[id].es;
     });
+    // Free slack: how long an activity can slip before any successor has to start later.
+    order.forEach(function (id) {
+      var next = duration;
+      acts.forEach(function (s) {
+        if (s.pre.indexOf(id) >= 0) next = Math.min(next, res[s.id].es);
+      });
+      res[id].free = next - res[id].ef;
+    });
     var all = paths(acts, byId);
     var critical = all.filter(function (p) { return p.length === duration; }).map(function (p) { return p.ids; });
     return { order: order, res: res, duration: duration, paths: all, critical: critical };

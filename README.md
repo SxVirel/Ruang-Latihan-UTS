@@ -8,7 +8,7 @@ Aplikasi latihan UTS untuk lima mata kuliah. Berjalan offline di laptop Windows,
 | Kecerdasan Artifisial | 50 isian dan esai |
 | Komputasi Awan | 37 isian dan esai + 3 lab interaktif |
 | Forensik Digital | 66 pilihan ganda + 24 isian kisi-kisi (tiap sesi selalu 20 PG + 5 isian), materi 7 dek, plus 36 isian dan esai lama di tab Uraian & Isian |
-| Manajemen Proyek | 63 isian, hanya kisi-kisi dan soal UTS tahun lalu: NPV, ROI, ROA, payback, EV, WBS, critical path, PERT, soal ujian 2026 Genap, dan soal mirip ujian itu + lab CPM |
+| Manajemen Proyek | 70 isian hitungan dari kisi-kisi, soal UTS 2026 Genap, dan soal remedial 2024/2025 (NPV, ROI, ROA, payback, EV, critical path, ES sampai slack, PERT) + soal mirip ujian itu, materi 10 bab dengan diagram WBS dan network diagram, lab CPM |
 
 Fitur: mode latihan, mode ujian dengan timer, bank soal salah, statistik progres, dan jadwal UTS pribadi di dashboard.
 

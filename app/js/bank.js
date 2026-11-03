@@ -19,8 +19,10 @@
   }
 
   // items: { type: 'short'|'num'|'essay'|'tool', q, ... } (see isian.js)
+  // A null entry keeps the slot of a removed item, so the ids after it stay the same.
   function isian(courseId, topicId, topic, items) {
     items.forEach(function (it, i) {
+      if (!it) return;
       bank.isian.push(Object.assign({
         id: courseId + '-' + topicId + '-' + (i + 1),
         course: courseId,
@@ -36,7 +38,7 @@
     }));
   }
 
-  // weeks: { minggu, judul, hlm, ringkas, bagian: [{ h, poin, tabel?, ingat? }] }
+  // weeks: { minggu, judul, hlm, ringkas, label?, bagian: [{ h, poin?, tabel?, ingat?, soal?, wbs?, net? }] }
   function materi(courseId, weeks) {
     bank.materi[courseId] = weeks;
   }

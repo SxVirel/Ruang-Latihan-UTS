@@ -37,6 +37,7 @@ BANK.course('fd', {
 });
 BANK.course('mp', {
   name: 'Manajemen Proyek', code: 'MP', kind: 'isian', secsPerItem: 180, labs: ['cpm'],
-  blurb: 'Fokus kisi-kisi dan soal UTS tahun lalu: NPV, ROI, ROA, payback, EV, WBS, critical path',
-  about: 'Semua soal berbentuk isian, sesuai format UTS, dan hanya mencakup kisi-kisi serta soal UTS tahun lalu. Topik kisi-kisi melatih NPV dan PV, ROI dan ROA, payback period, earned value, jaringan aktivitas, dan PERT. Topik Soal UTS Tahun Lalu berisi soal ujian 2026 Genap. Topik Mirip Soal 1-4 memakai narasi soal ujian itu dengan kasus dan angka berbeda; Soal 3 tidak terfoto, jadi bentuknya ditebak dari lembar rumus. Soal Cerita Setara UTS dan Critical Path (Latihan Individu Pertemuan 5) menambah variasi.'
+  blurb: 'Hitungan kisi-kisi, UTS tahun lalu, dan remedial: NPV, ROI, ROA, payback, EV, critical path. WBS di tab Materi',
+  about: 'Latihan soal hanya berisi hitungan, dalam bentuk isian seperti UTS, dari kisi-kisi, soal UTS 2026 Genap, dan soal remedial Ganjil 2024/2025. Topik kisi-kisi melatih NPV dan PV, ROI dan ROA, payback period, earned value, jaringan aktivitas, dan PERT. Topik Mirip Soal dan Mirip Soal Remedial memakai narasi soal ujian dengan kasus dan angka berbeda. Tab Materi merangkum tiap butir kisi-kisi dan tiap soal ujian, lengkap dengan diagram WBS dan network diagram dari contoh soal.',
+  materiLead: 'Materi disusun per soal ujian dan butir kisi-kisi. Soal WBS dan network diagram ada di sini sebagai contoh bergambar, bukan di latihan soal. Ketuk satu bab untuk membukanya.'
 });

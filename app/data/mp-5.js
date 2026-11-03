@@ -1,6 +1,7 @@
 // Manajemen Proyek — paket mirip soal UTS tahun lalu (soal-ujian-manpro 2026 Genap, lihat mp-3.js).
 // Narasi, urutan kalimat, dan pertanyaan meniru tiap soal ujian; yang diganti hanya kasus dan angkanya.
 // Soal 3 ujian tidak terfoto. Lembar rumus ujian memuat slack, jadi topik m3 menebak bentuknya: forward/backward pass.
+// Soal remedial (mp-6.js) kemudian memperlihatkan bentuk aslinya: tabel AOA, daftar path, lalu tabel ES sampai TS.
 // Semua angka dihitung dengan kode. Tabel jaringan di m3 dicek ulang oleh tests/data.test.js.
 var MP_MIRIP = 'Soal buatan sendiri yang meniru bentuk soal UTS tahun lalu, dengan kasus dan angka berbeda.';
 var MP_ROI = 'ROI (%), rumus slide: (manfaat diskonto − biaya diskonto) / biaya diskonto';
@@ -38,45 +39,6 @@ BANK.isian('mp', 'm1', 'Mirip Soal 1: NPV, ROI, PBP', [
       { label: 'PBP biasa (tahun)', a: 2.58, tol: 0.01 }, { label: 'PBP diskonto (tahun)', a: 3.01, tol: 0.01 },
       { label: 'ROA tahun keempat (%)', a: 15, tol: 0.01 }],
     ex: 'Tahun 2: 230 + 400 − 100 − 70 = 460. Tahun 3: 140 + 350 + 200 − 60 − 90 − 60 = 480. Tahun 4: 3 × (190 − 65) = 375. PV: 238,53 + 387,17 + 370,65 + 265,66 = 1262,01, jadi NPV = 262,01. Manfaat diskonto 1907,23, biaya diskonto 1645,22, ROI = 15,93%. Kumulatif 260, 720, 1200: PBP = 2 + (1000 − 720)/(1200 − 720) = 2,58 tahun. Kumulatif diskonto 996,35 lalu 1262,01: PBP diskonto = 3 + 3,65/265,66 = 3,01 tahun. ROA = 375/2500 = 15%; rumus ROA dari buku standar, bukan slide. ' + MP_MIRIP }
-]);
-
-BANK.isian('mp', 'm2', 'Mirip Soal 2: WBS', [
-  { type: 'fill', q: 'Scope Management — Soal 2 (20 poin).\nDinas Lingkungan Hidup Kota Harapan akan mengembangkan sebuah perangkat lunak Sistem Informasi Bank Sampah yang digunakan untuk mencatat setoran sampah dan saldo tabungan warga di setiap kelurahan. Dalam proses pengembangannya digunakan metode "Design Thinking". Dari penyelenggara diminta untuk diadakannya Pertemuan di Awal (kickoff meeting), Laporan Kemajuan 1 setelah proses "Define", Laporan Kemajuan 2 setelah proses "Prototype", serta Laporan Akhir & Serah Terima di akhir kegiatan. Tahapan design thinking: Empati (Empathize), Definisi (Define), Ideasi (Ideate), Prototipe (Prototype), dan Pengujian (Test).\nDi ujian, WBS dibuat sampai level 3 dalam bentuk tabel. Di sini, isi urutan aktivitas level 1 dan satu kode WBS.',
-    fields: [
-      { label: '1', a: ['kickoff meeting', 'kickoff', 'kick off meeting', 'kick off', 'pertemuan awal', 'pertemuan di awal'] },
-      { label: '2', a: ['empathize', 'empati', 'empathy'] },
-      { label: '3', a: ['define', 'definisi'] },
-      { label: '4', a: ['laporan kemajuan 1', 'laporan kemajuan', 'laporan kemajuan i', 'progress report'] },
-      { label: '5', a: ['ideate', 'ideasi'] },
-      { label: '6', a: ['prototype', 'prototipe'] },
-      { label: '7', a: ['laporan kemajuan 2', 'laporan kemajuan', 'laporan kemajuan ii', 'progress report'] },
-      { label: '8', a: ['test', 'pengujian', 'testing'] },
-      { label: '9', a: ['laporan akhir & serah terima', 'laporan akhir dan serah terima', 'laporan akhir', 'serah terima'] },
-      { label: 'Kode WBS level 2 pertama di bawah Ideate', a: ['5.1', '51'] }],
-    ex: 'Milestone penyelenggara disisipkan tepat sesudah tahap yang disebut: Laporan Kemajuan 1 sesudah Define, Laporan Kemajuan 2 sesudah Prototype. Ideate ada di nomor 5, jadi level 2 pertamanya 5.1 (misalnya brainstorming fitur) dan level 3-nya 5.1.1. ' + MP_MIRIP },
-  { type: 'fill', q: 'Scope Management — Soal 2 (20 poin).\nPT Ekspedisi Kilat Nusantara akan mengembangkan sebuah perangkat lunak Sistem Pelacakan Paket berbasis web dan mobile untuk kurir dan pelanggan. Dalam proses pengembangannya digunakan metode Rapid Application Development (RAD). Dari manajemen diminta untuk diadakannya Pertemuan di Awal (kickoff meeting), Laporan Kemajuan setelah tahap "User Design", serta Laporan Akhir & Serah Terima di akhir kegiatan. Tahapan RAD: Requirements Planning (menyepakati kebutuhan dan ruang lingkup), User Design (pengguna dan pengembang membangun prototipe secara iteratif), Construction (prototipe dikembangkan menjadi sistem utuh, dikodekan, dan diuji), serta Cutover (konversi data, pelatihan pengguna, dan peralihan ke sistem baru).\nIsi urutan aktivitas level 1 WBS, lalu jawab pertanyaan penempatan aktivitas.',
-    fields: [
-      { label: '1', a: ['kickoff meeting', 'kickoff', 'kick off meeting', 'kick off', 'pertemuan awal', 'pertemuan di awal'] },
-      { label: '2', a: ['requirements planning', 'requirement planning', 'perencanaan kebutuhan'] },
-      { label: '3', a: ['user design', 'desain pengguna'] },
-      { label: '4', a: ['laporan kemajuan', 'progress report'] },
-      { label: '5', a: ['construction', 'konstruksi', 'rapid construction'] },
-      { label: '6', a: ['cutover', 'cut over', 'peralihan'] },
-      { label: '7', a: ['laporan akhir & serah terima', 'laporan akhir dan serah terima', 'laporan akhir', 'serah terima'] },
-      { label: 'Pelatihan kurir menjadi level 2 di bawah aktivitas nomor', a: 6, tol: 0 }],
-    ex: 'Laporan kemajuan diletakkan sesudah User Design karena itu permintaan manajemen. Pelatihan pengguna termasuk tahap Cutover (nomor 6), jadi kodenya 6.x, misalnya 6.2 pelatihan kurir dan 6.2.1 pelatihan aplikasi mobile. ' + MP_MIRIP },
-  { type: 'fill', q: 'Scope Management — Soal 2 (20 poin).\nRumah Sakit Ibu dan Anak Bunda Sehat akan mengembangkan sebuah perangkat lunak Sistem Reservasi Dokter Online yang digunakan pasien untuk memilih jadwal dokter dan mendapat nomor antrean. Dalam proses pengembangannya digunakan metode "Prototyping" dengan tahapan Komunikasi (Communication), Perencanaan Cepat (Quick Plan), Pemodelan Desain Cepat (Modeling Quick Design), Konstruksi Prototipe (Construction of Prototype), serta Penyerahan dan Umpan Balik (Deployment, Delivery & Feedback). Dari pihak rumah sakit diminta untuk diadakannya Pertemuan di Awal (kickoff meeting), Laporan Kemajuan setelah tahap Pemodelan Desain Cepat, serta Laporan Akhir & Sosialisasi di akhir kegiatan.\nIsi urutan aktivitas level 1 WBS dan satu kode WBS.',
-    fields: [
-      { label: '1', a: ['kickoff meeting', 'kickoff', 'kick off meeting', 'kick off', 'pertemuan awal', 'pertemuan di awal'] },
-      { label: '2', a: ['komunikasi', 'communication'] },
-      { label: '3', a: ['perencanaan cepat', 'quick plan', 'perencanaan'] },
-      { label: '4', a: ['pemodelan desain cepat', 'modeling quick design', 'quick design', 'pemodelan', 'desain cepat'] },
-      { label: '5', a: ['laporan kemajuan', 'progress report'] },
-      { label: '6', a: ['konstruksi prototipe', 'construction of prototype', 'konstruksi', 'construction', 'pembuatan prototipe'] },
-      { label: '7', a: ['penyerahan dan umpan balik', 'penyerahan & umpan balik', 'deployment delivery & feedback', 'deployment delivery and feedback', 'deployment', 'umpan balik', 'feedback'] },
-      { label: '8', a: ['laporan akhir & sosialisasi', 'laporan akhir dan sosialisasi', 'laporan akhir', 'sosialisasi'] },
-      { label: 'Kode WBS level 3 kedua di bawah 4.1', a: ['4.1.2', '412'] }],
-    ex: 'Pemodelan Desain Cepat ada di nomor 4, jadi laporan kemajuan menjadi nomor 5. Contoh level 2 dan 3: 4.1 desain antarmuka, 4.1.1 wireframe halaman jadwal dokter, 4.1.2 wireframe halaman antrean. ' + MP_MIRIP }
 ]);
 
 BANK.isian('mp', 'm3', 'Mirip Soal 3: Time Management (tebakan)', [

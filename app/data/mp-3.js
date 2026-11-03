@@ -1,5 +1,6 @@
 // Manajemen Proyek — soal UTS tahun lalu (soal-ujian-manpro 2026 Genap), dari foto layar kiriman teman.
-// Soal 3 tidak ada di foto. Kunci soal 4 tercantum di dokumen; kunci soal 1 dan 2 dihitung atau disusun sendiri.
+// Soal 3 tidak ada di foto. Kunci soal 4 tercantum di dokumen; kunci soal 1 dihitung sendiri.
+// Soal 2 (WBS) dipindah ke tab Materi (mp-materi.js); slot null menjaga id soal sesudahnya.
 // Satuan uang ditulis dalam juta rupiah supaya mudah diketik.
 var MP_TL = 'Soal UTS tahun lalu (2026 Genap).';
 
@@ -14,17 +15,7 @@ BANK.isian('mp', 'tl', 'Soal UTS Tahun Lalu', [
       { label: 'PBP biasa (tahun), rumus n + (a − b)/(c − b)', a: 3.18, tol: 0.01 },
       { label: 'PBP diskonto (tahun)', a: 3.69, tol: 0.01 }],
     ex: 'PV: 283,02 + 551,80 + 419,81 + 356,44 = 1611,07, jadi NPV = 1611,07 − 1500 = 111,07. Manfaat diskonto 2500,22, biaya diskonto 2389,15, ROI = 4,65%. Kumulatif biasa 300, 920, 1420, 1870: PBP = 3 + (1500 − 1420)/(1870 − 1420) = 3,18 tahun. Kumulatif diskonto 1254,63 dan 1611,07: PBP = 3 + 245,37/356,44 = 3,69 tahun. ' + MP_TL + ' Kunci dihitung sendiri. Kalau dosen memakai ROI tanpa diskonto, hasilnya (2890 − 2520)/2520 = 14,68%.' },
-  { type: 'fill', q: 'Soal 2 (20 poin) — WBS Sistem Informasi Konseling Mahasiswa dengan metode Design Thinking. Penyelenggara meminta pertemuan awal (kickoff meeting), laporan kemajuan setelah tahap Ideate, serta laporan akhir dan sosialisasi di akhir. Isi urutan aktivitas level 1 WBS.',
-    fields: [
-      { label: '1', a: ['kickoff meeting', 'kickoff', 'pertemuan awal', 'kick off meeting', 'kick off'] },
-      { label: '2', a: ['empathize', 'empati', 'empathy'] },
-      { label: '3', a: ['define', 'definisi'] },
-      { label: '4', a: ['ideate', 'ideasi'] },
-      { label: '5', a: ['laporan kemajuan', 'progress report'] },
-      { label: '6', a: ['prototype', 'prototipe'] },
-      { label: '7', a: ['test', 'pengujian', 'testing'] },
-      { label: '8', a: ['laporan akhir dan sosialisasi', 'laporan akhir sosialisasi', 'laporan akhir', 'sosialisasi'] }],
-    ex: 'Di ujian, tiap aktivitas level 1 dipecah sampai level 3 dalam bentuk tabel (misalnya 2.1 riset pengguna, 2.1.1 wawancara mahasiswa). ' + MP_TL + ' Urutan disusun sendiri dari teks soal.' },
+  null, // Soal 2 (WBS) ada di tab Materi sebagai contoh soal bergambar.
   { type: 'fill', q: 'Soal 4a (25 poin) — Proyek sistem manajemen inventori didanai Rp150 juta dengan durasi 1 tahun. Pada akhir bulan ke-9, pekerjaan selesai 60% dan anggaran terpakai Rp100 juta. Tentukan PV, EV, AC, dan BAC di akhir bulan ke-9 (juta rupiah).',
     fields: [{ label: 'PV', a: 112.5, tol: 0.01 }, { label: 'EV', a: 90, tol: 0.01 }, { label: 'AC', a: 100, tol: 0.01 }, { label: 'BAC', a: 150, tol: 0.01 }],
     ex: 'PV = 150 × 9/12 = 112,5. EV = 60% × 150 = 90. AC = 100. BAC = 150. ' + MP_TL + ' Kunci sesuai dokumen.' },

@@ -136,6 +136,65 @@ button, a, summary, label { -webkit-tap-highlight-color: transparent; touch-acti
 .materi-body { display: flex; flex-direction: column; gap: 24px; padding: 16px; }
 .materi-list { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; line-height: 1.6; max-width: 70ch; overflow-wrap: anywhere; }
 .materi-ingat { border-left: 4px solid var(--yellow-2); background: var(--yellow-soft); padding: 8px 12px; border-radius: 0 8px 8px 0; }
+.materi-soal { border: 1px solid var(--line); border-left: 4px solid var(--indigo-2); border-radius: 0 8px 8px 0; padding: 8px 12px; display: flex; flex-direction: column; gap: 4px; }
+.materi-soal p { margin: 0; white-space: pre-line; line-height: 1.6; max-width: 70ch; }
+
+/* ---------- diagrams (WBS chart, network) ---------- */
+.diagram { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.diagram-scroll { overflow-x: auto; max-width: 100%; padding-bottom: 4px; }
+.dg { display: block; max-width: none; }
+.dg text { font-family: var(--body); font-size: 12px; fill: var(--ink); }
+.dg .dg-name { font-weight: 700; font-size: 13px; }
+.dg .dg-small { fill: var(--muted); font-size: 11px; }
+.dg .dg-label { paint-order: stroke; stroke: var(--sheet); stroke-width: 4px; stroke-linejoin: round; fill: var(--muted); }
+.dg .dg-label.crit { fill: var(--indigo); font-weight: 700; }
+.dg-edge { stroke: var(--muted); stroke-width: 1.5; }
+.dg-edge.crit { stroke: var(--indigo-2); stroke-width: 3; }
+.dg-head { fill: var(--muted); }
+.dg-head.crit { fill: var(--indigo-2); }
+.dg-node { fill: var(--sheet); stroke: var(--muted); stroke-width: 1.5; }
+.dg-node.crit { fill: var(--indigo-soft); stroke: var(--indigo-2); stroke-width: 2.5; }
+.dg-rule { stroke: var(--line); }
+
+.wbs { display: inline-flex; flex-direction: column; align-items: center; min-width: 100%; padding: 4px; font-size: var(--fs-2); line-height: 1.35; }
+.wbs ul { list-style: none; margin: 0; padding: 0; }
+.wbs b { font-family: var(--mono); color: var(--indigo); font-weight: 700; }
+.wbs-root { background: var(--indigo); color: var(--sheet); border-radius: 8px; padding: 8px 16px; font-weight: 700; text-align: center; max-width: 320px; }
+.wbs-box { border: 1px solid var(--line); background: var(--sheet); border-radius: 6px; padding: 6px 8px; }
+/* Level 1 sits in one row under the root, joined by a horizontal bar. */
+.wbs .wbs-l1 { display: flex; gap: 12px; padding-top: 16px; position: relative; }
+.wbs-l1::before { content: ""; position: absolute; top: 0; left: 50%; height: 16px; border-left: 2px solid var(--line); }
+.wbs-l1 > li { position: relative; width: 180px; flex: none; padding-top: 16px; }
+.wbs-l1 > li::before { content: ""; position: absolute; top: 0; left: -8px; right: -8px; border-top: 2px solid var(--line); }
+.wbs-l1 > li:first-child::before { left: 50%; }
+.wbs-l1 > li:last-child::before { right: 50%; }
+.wbs-l1 > li:only-child::before { display: none; }
+.wbs-l1 > li::after { content: ""; position: absolute; top: 0; left: 50%; height: 16px; border-left: 2px solid var(--line); }
+.wbs-l1 > li > .wbs-box { background: var(--indigo-soft); border-color: var(--indigo-2); font-weight: 600; }
+/* Level 2 and 3 hang below their parent as an indented list. */
+.wbs .wbs-l2, .wbs .wbs-l3 { display: flex; flex-direction: column; gap: 6px; padding: 6px 0 0 10px; }
+.wbs-l2 > li, .wbs-l3 > li { position: relative; padding-left: 12px; }
+.wbs-l2 > li::before, .wbs-l3 > li::before { content: ""; position: absolute; left: 0; top: -6px; bottom: 0; border-left: 2px solid var(--line); }
+.wbs-l2 > li:last-child::before, .wbs-l3 > li:last-child::before { bottom: auto; height: 21px; }
+.wbs-l2 > li::after, .wbs-l3 > li::after { content: ""; position: absolute; left: 0; top: 15px; width: 10px; border-top: 2px solid var(--line); }
+.wbs-l3 .wbs-box { border-style: dashed; padding: 4px 6px; color: var(--muted); }
+.wbs-outline summary { cursor: pointer; color: var(--indigo); font-weight: 600; }
+.wbs-outline ul { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 2px; font-size: var(--fs-3); }
+.wbs-outline b { font-family: var(--mono); color: var(--indigo); }
+.wbs-o2 { padding-left: 20px; }
+.wbs-o3 { padding-left: 44px; color: var(--muted); }
+/* Phones: the level 1 row turns into the same indented tree as levels 2 and 3, so nothing scrolls sideways. */
+@media (max-width: 640px) {
+  .wbs { display: flex; align-items: stretch; }
+  .wbs-root { align-self: flex-start; }
+  .wbs .wbs-l1 { flex-direction: column; gap: 8px; padding: 8px 0 0 10px; }
+  .wbs-l1::before { display: none; }
+  .wbs-l1 > li { width: auto; padding: 0 0 0 12px; }
+  .wbs-l1 > li::before, .wbs-l1 > li:first-child::before, .wbs-l1 > li:last-child::before, .wbs-l1 > li:only-child::before {
+    display: block; left: 0; right: auto; top: -8px; bottom: 0; border-top: 0; border-left: 2px solid var(--line); }
+  .wbs-l1 > li:last-child::before { bottom: auto; height: 23px; }
+  .wbs-l1 > li::after { left: 0; top: 15px; height: 0; width: 10px; border-left: 0; border-top: 2px solid var(--line); }
+}
 .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .materi-table { border-collapse: collapse; width: 100%; font-size: var(--fs-3); }
 .materi-table th, .materi-table td { border: 1px solid var(--line); padding: 8px; text-align: left; vertical-align: top; }

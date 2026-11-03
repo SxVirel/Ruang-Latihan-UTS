@@ -142,14 +142,16 @@ test('critical path keys match their node tables', () => {
   }
 });
 
-// Activity-on-node tables (Pendahulu column): redo the forward and backward pass and compare with the keys.
+// Precedence tables (Pendahulu column) and node tables: redo the forward and backward pass and compare with the keys.
+// In a node table an activity follows every activity that ends at its initial node.
 test('forward and backward pass keys match their precedence tables', () => {
-  const items = data.isian.filter(it => it.course === 'mp' && it.table && it.table.head.includes('Pendahulu'));
+  const items = data.isian.filter(it => it.course === 'mp' && it.table && (it.table.head.includes('Pendahulu') || it.table.head[1] === 'Initial Node'));
   assert.ok(items.length >= 5, 'only ' + items.length);
   let checked = 0;
   for (const it of items) {
-    const head = it.table.head, pi = head.indexOf('Pendahulu'), di = head.findIndex(x => /^Durasi/.test(x));
-    const acts = it.table.rows.map(r => ({ id: r[0], dur: r[di], pre: r[pi] === '-' ? [] : String(r[pi]).split(/,\s*/) }));
+    const head = it.table.head, pi = head.indexOf('Pendahulu'), di = head.findIndex(x => /^(Durasi|Estimated Duration)/.test(x));
+    const pre = r => pi < 0 ? it.table.rows.filter(q => q[2] === r[1]).map(q => q[0]) : r[pi] === '-' ? [] : String(r[pi]).split(/,\s*/);
+    const acts = it.table.rows.map(r => ({ id: r[0], dur: r[di], pre: pre(r) }));
     const by = Object.fromEntries(acts.map(a => [a.id, a]));
     const ef = id => by[id].ef != null ? by[id].ef : (by[id].ef = Math.max(0, ...by[id].pre.map(p => ef(p))) + by[id].dur);
     acts.forEach(a => ef(a.id));
@@ -175,5 +177,43 @@ test('forward and backward pass keys match their precedence tables', () => {
       }
     }
   }
-  assert.ok(checked >= 20, 'checked ' + checked);
+  assert.ok(checked >= 80, 'checked ' + checked);
+});
+
+test('a removed item keeps its slot, so later ids do not shift', () => {
+  assert.ok(!all.some(it => it.id === 'mp-tl-3'));
+  assert.match(all.find(it => it.id === 'mp-tl-4').q, /^Soal 4a/);
+});
+
+test('Manajemen Proyek materi is well formed and its worked tables match the diagram', () => {
+  const cpm = require('../app/js/tools/cpm.js');
+  const bab = data.materi.mp;
+  assert.ok(bab.length >= 8, 'only ' + bab.length);
+  const depth = n => typeof n === 'string' ? 1 : 1 + Math.max(0, ...(n[1] || []).map(depth));
+  let wbs = 0, aoa = null, esTable = null;
+  for (const w of bab) {
+    assert.ok(w.label && w.judul && w.ringkas && w.bagian.length, w.judul);
+    for (const b of w.bagian) {
+      assert.ok(b.h && (b.poin || b.tabel || b.wbs || b.net), b.h);
+      if (b.tabel) for (const r of b.tabel.rows) assert.equal(r.length, b.tabel.head.length, b.h);
+      if (b.tabel && b.tabel.head.join() === 'Activity,ES,EF,LS,LF,FS,TS') esTable = b.tabel;
+      if (b.wbs) {
+        wbs++;
+        // The exam asks for WBS down to level 3.
+        assert.ok(b.wbs.root && b.wbs.items.every(n => depth(n) === 3), b.h);
+      }
+      if (b.net) {
+        const nodes = b.net.type === 'aon' ? b.net.rows.map(r => r[0]) : b.net.rows.flatMap(r => [r[1], r[2]]);
+        for (const n of nodes) assert.ok(b.net.pos[n], b.h + ': no position for node ' + n);
+        if (b.net.type === 'aoa' && !aoa) aoa = b.net.rows;
+      }
+    }
+  }
+  assert.ok(wbs >= 6, 'only ' + wbs + ' WBS diagrams');
+  assert.ok(aoa && esTable, 'worked network example missing');
+  const r = cpm.compute(aoa.map(x => ({ id: x[0], d: x[3], pre: aoa.filter(q => q[2] === x[1]).map(q => q[0]) })));
+  for (const row of esTable.rows) {
+    const x = r.res[row[0]];
+    assert.equal(row.slice(1).join(), [x.es, x.ef, x.ls, x.lf, x.free, x.slack].join(), row[0]);
+  }
 });

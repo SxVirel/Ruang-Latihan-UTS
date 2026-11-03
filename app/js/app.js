@@ -262,7 +262,7 @@
         tabs.appendChild(h('button', { role: 'tab', type: 'button', 'aria-selected': String((tab || 'latihan') === t[0]), onclick: function () { location.hash = '#/c/' + id + (t[0] === 'latihan' ? '' : '/' + t[0]); } }, t[1]));
       });
       wrap.appendChild(tabs);
-      if (tab === 'materi' && weeks) return renderMateri(wrap, weeks);
+      if (tab === 'materi' && weeks) return renderMateri(wrap, weeks, c);
       if (tab && Labs[tab]) {
         var labBox = h('section', { class: 'sheet' });
         wrap.appendChild(labBox);
@@ -350,21 +350,24 @@
     }
   }
 
-  function renderMateri(wrap, weeks) {
+  function renderMateri(wrap, weeks, c) {
     function block(b) {
       return h('section', { class: 'stack' },
         h('h3', null, b.h),
+        b.soal ? h('div', { class: 'materi-soal' }, h('span', { class: 'eyebrow' }, 'Contoh soal'), h('p', null, b.soal)) : null,
+        b.wbs ? Diagram.wbs(b.wbs) : null,
+        b.net ? Diagram.net(b.net) : null,
         b.tabel ? h('div', { class: 'table-wrap' }, h('table', { class: 'materi-table' },
           h('thead', null, h('tr', null, b.tabel.head.map(function (c) { return h('th', { scope: 'col' }, c); }))),
           h('tbody', null, b.tabel.rows.map(function (r) { return h('tr', null, r.map(function (c) { return h('td', null, c); })); })))) : null,
         b.poin ? h('ul', { class: 'materi-list' }, b.poin.map(function (p) { return h('li', null, p); })) : null,
         b.ingat ? h('p', { class: 'materi-ingat' }, h('strong', null, 'Ingat: '), b.ingat) : null);
     }
-    wrap.appendChild(h('p', { class: 'lead' }, 'Ringkasan slide per minggu. Ketuk satu minggu untuk membukanya.'));
+    wrap.appendChild(h('p', { class: 'lead' }, c.materiLead || 'Ringkasan slide per minggu. Ketuk satu minggu untuk membukanya.'));
     wrap.appendChild(h('div', { class: 'stack' }, weeks.map(function (w) {
       return h('details', { class: 'sheet flat materi-week' },
         h('summary', null,
-          h('span', { class: 'eyebrow' }, 'Minggu ' + w.minggu + ' · slide ' + w.hlm),
+          h('span', { class: 'eyebrow' }, w.label || 'Minggu ' + w.minggu + ' · slide ' + w.hlm),
           h('strong', null, w.judul),
           h('span', { class: 'small muted' }, w.ringkas)),
         h('div', { class: 'materi-body' }, w.bagian.map(block)));

@@ -1,5 +1,6 @@
 // Manajemen Proyek — soal cerita setara UTS dan latihan critical path.
-// Soal cerita meniru bentuk soal UTS tahun lalu (mp-3.js) untuk tiap butir kisi-kisi: NPV dan PV, ROI, ROA, payback, EV, WBS.
+// Soal cerita meniru bentuk soal UTS tahun lalu (mp-3.js) untuk tiap butir kisi-kisi: NPV dan PV, ROI, ROA, payback, EV.
+// Contoh WBS dipindah ke tab Materi (mp-materi.js).
 // Topik critical path memuat Latihan Individu Pertemuan 5 (tanpa kunci dari dosen) dan variasinya.
 // Semua angka dihitung dengan kode. Kunci path dicek ulang oleh tests/data.test.js.
 var MP_CERITA = 'Soal cerita buatan sendiri dengan bentuk seperti soal UTS tahun lalu.';
@@ -83,19 +84,7 @@ BANK.isian('mp', 'cerita', 'Soal Cerita Setara UTS', [
       { label: 'CV', a: 20, tol: 0.01 }, { label: 'SV', a: -25, tol: 0.01 },
       { label: 'EAC', a: 320, tol: 0.01 }, { label: 'Estimated Time to Complete (bulan)', a: 12.5, tol: 0.01 },
       { label: 'Persen pekerjaan selesai (%)', a: 25, tol: 0.01 }],
-    ex: 'EV = CPI × AC = 1,25 × 80 = 100. PV = EV/SPI = 100/0,8 = 125. CV = 100 − 80 = 20. SV = 100 − 125 = −25. EAC = 400/1,25 = 320. Waktu = 10/0,8 = 12,5 bulan. Persen selesai = EV/BAC = 100/400 = 25%. ' + MP_CERITA },
-  { type: 'fill', q: 'WBS Sistem Informasi Perpustakaan Daerah dengan metode Waterfall (analisis kebutuhan, desain, implementasi, pengujian). Pemberi kerja meminta kickoff meeting di awal, laporan kemajuan setelah tahap desain, User Acceptance Test (UAT) setelah pengujian, serta serah terima dan pelatihan pengguna di akhir. Isi urutan aktivitas level 1 WBS, lalu kode WBS-nya.',
-    fields: [
-      { label: '1', a: ['kickoff meeting', 'kickoff', 'kick off meeting', 'kick off', 'pertemuan awal'] },
-      { label: '2', a: ['analisis kebutuhan', 'analisis', 'analisis kebutuhan sistem', 'requirement analysis', 'requirements'] },
-      { label: '3', a: ['desain', 'design', 'desain sistem', 'perancangan'] },
-      { label: '4', a: ['laporan kemajuan', 'progress report'] },
-      { label: '5', a: ['implementasi', 'implementation', 'coding', 'pengkodean'] },
-      { label: '6', a: ['pengujian', 'testing', 'test', 'pengujian sistem'] },
-      { label: '7', a: ['uat', 'user acceptance test', 'user acceptance testing'] },
-      { label: '8', a: ['serah terima dan pelatihan', 'serah terima & pelatihan', 'serah terima dan pelatihan pengguna', 'serah terima', 'pelatihan', 'handover'] },
-      { label: 'Kode aktivitas level 3 kedua di bawah 3.1', a: ['3.1.2', '312'] }],
-    ex: 'Milestone dari pemberi kerja disisipkan di antara tahap Waterfall, seperti Soal 2 UTS tahun lalu yang memakai Design Thinking. Contoh level 2 dan 3: 3.1 desain database, 3.1.1 ERD, 3.1.2 kamus data. ' + MP_CERITA }
+    ex: 'EV = CPI × AC = 1,25 × 80 = 100. PV = EV/SPI = 100/0,8 = 125. CV = 100 − 80 = 20. SV = 100 − 125 = −25. EAC = 400/1,25 = 320. Waktu = 10/0,8 = 12,5 bulan. Persen selesai = EV/BAC = 100/400 = 25%. ' + MP_CERITA }
 ]);
 
 BANK.isian('mp', 'cp', 'Critical Path (Latihan Pertemuan 5)', [
