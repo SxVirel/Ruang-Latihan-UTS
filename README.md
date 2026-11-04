@@ -5,7 +5,7 @@ Aplikasi latihan UTS untuk lima mata kuliah. Berjalan offline di laptop Windows,
 | Mata kuliah | Isi |
 |---|---|
 | Keamanan Siber | 258 pilihan ganda + 2 esai, materi minggu 1-7, 23 prediksi uraian dan isian |
-| Kecerdasan Artifisial | 50 isian dan esai |
+| Kecerdasan Artifisial | 57 soal uraian bertahap untuk 4 materi UTS (Soal 1 UTS 2025 = LKS GA-2 dan 3 soal mirip, metaheuristik, GA, GA kombinatorial, NSGA-II) + 33 isian minggu 5-6, materi 15 bab dengan pembahasan UTS 2025 |
 | Komputasi Awan | 37 isian dan esai + 3 lab interaktif |
 | Forensik Digital | 66 pilihan ganda + 24 isian kisi-kisi (tiap sesi selalu 20 PG + 5 isian), materi 7 dek, plus 36 isian dan esai lama di tab Uraian & Isian |
 | Manajemen Proyek | 70 isian hitungan dari kisi-kisi, soal UTS 2026 Genap, dan soal remedial 2024/2025 (NPV, ROI, ROA, payback, EV, critical path, ES sampai slack, PERT) + soal mirip ujian itu, materi 10 bab dengan diagram WBS dan network diagram, lab CPM |

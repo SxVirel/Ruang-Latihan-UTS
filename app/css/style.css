@@ -139,7 +139,7 @@ button, a, summary, label { -webkit-tap-highlight-color: transparent; touch-acti
 .materi-soal { border: 1px solid var(--line); border-left: 4px solid var(--indigo-2); border-radius: 0 8px 8px 0; padding: 8px 12px; display: flex; flex-direction: column; gap: 4px; }
 .materi-soal p { margin: 0; white-space: pre-line; line-height: 1.6; max-width: 70ch; }
 
-/* ---------- diagrams (WBS chart, network) ---------- */
+/* ---------- diagrams (WBS chart, network, roulette bar) ---------- */
 .diagram { margin: 0; display: flex; flex-direction: column; gap: 8px; }
 .diagram-scroll { overflow-x: auto; max-width: 100%; padding-bottom: 4px; }
 .dg { display: block; max-width: none; }
@@ -155,6 +155,18 @@ button, a, summary, label { -webkit-tap-highlight-color: transparent; touch-acti
 .dg-node { fill: var(--sheet); stroke: var(--muted); stroke-width: 1.5; }
 .dg-node.crit { fill: var(--indigo-soft); stroke: var(--indigo-2); stroke-width: 2.5; }
 .dg-rule { stroke: var(--line); }
+.wh { stroke: var(--sheet); stroke-width: 2; }
+.wh0 { fill: var(--indigo-soft); } .wh1 { fill: var(--yellow-soft); } .wh2 { fill: var(--ok-soft); } .wh3 { fill: var(--bad-soft); }
+
+/* ---------- chromosome rows (GA) ---------- */
+.genes { display: inline-flex; flex-direction: column; gap: 6px; }
+.gene-row { display: flex; align-items: center; gap: 4px; }
+.gene-label { min-width: 72px; font-size: var(--fs-2); font-weight: 600; color: var(--muted); }
+.gene { width: 30px; height: 30px; flex: none; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 6px; background: var(--sheet); font-family: var(--mono); font-size: var(--fs-3); }
+.gene.on { background: var(--indigo-soft); border-color: var(--indigo-2); font-weight: 700; }
+.gene.alt { background: var(--yellow-soft); border-color: var(--yellow-2); }
+.gene-pos .gene { border: 0; background: none; height: 16px; color: var(--muted); font-size: var(--fs-1); }
+.gene-note { margin-left: 8px; white-space: nowrap; }
 
 .wbs { display: inline-flex; flex-direction: column; align-items: center; min-width: 100%; padding: 4px; font-size: var(--fs-2); line-height: 1.35; }
 .wbs ul { list-style: none; margin: 0; padding: 0; }
@@ -376,6 +388,12 @@ mark { background: linear-gradient(transparent 50%, var(--yellow-2) 50%); color:
 .points input { margin-top: 4px; accent-color: var(--ok); }
 .points label.on { border-color: var(--ok); background: var(--ok-soft); }
 .model { white-space: pre-line; font-size: var(--fs-3); border-left: 4px solid var(--indigo); padding-left: 12px; overflow-wrap: anywhere; }
+
+/* ---------- staged items: one block per step ---------- */
+.step { border: 1px solid var(--line); border-left: 4px solid var(--indigo-2); border-radius: 0 var(--r) var(--r) 0; padding: 12px 16px; min-width: 0; }
+.step.done { border-left-color: var(--ok); }
+.step-num { font-size: var(--fs-1); text-transform: uppercase; letter-spacing: .12em; color: var(--muted); font-weight: 600; margin: 0; }
+.step .qtext { font-size: var(--fs-4); }
 
 /* ---------- tools ---------- */
 .tabs { display: flex; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid var(--line); }

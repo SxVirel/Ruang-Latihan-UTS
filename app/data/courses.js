@@ -6,8 +6,9 @@ BANK.course('ks', {
 });
 BANK.course('ka', {
   name: 'Kecerdasan Artifisial', code: 'KA', kind: 'isian', secsPerItem: 150,
-  blurb: 'GA kombinatorial, NSGA-II, dasar machine learning',
-  about: 'Isian dan hitungan dari minggu 5-7: operator permutasi (PMX, OX, mutasi), constraint, Tabu Search, dominance dan crowding distance NSGA-II, generalisasi, baseline, serta precision dan recall.'
+  blurb: 'Uraian bertahap 4 materi UTS: metaheuristik, GA, GA kombinatorial (TSP, PMX, OX), NSGA-II',
+  about: 'Latihan soal mengikuti 4 materi UTS dari slide dosen: Introduction to Metaheuristic Search, Genetic Algorithm, GA for Combinatorial Problems, dan Multi-Objective Optimisation. Bentuknya uraian bertahap seperti soal esai: setiap soal dipecah menjadi langkah a, b, c yang dibuka satu per satu. Ada Soal 1 UTS 2025 (sama dengan LKS GA-2) beserta tiga soal mirip, NSGA-II dari latihan slide Week 6, dan isian minggu 5-6. Tab Materi berisi pembahasan UTS 2025 dan ringkasan tiap materi dengan diagram kromosom dan roulette. Materi learning (minggu 7) ada di tab Uraian & Isian karena di luar UTS.',
+  materiLead: 'Materi disusun mengikuti 4 materi UTS, diawali pola ujian dan pembahasan Soal 1 UTS 2025. Ketuk satu bab untuk membukanya.'
 });
 BANK.course('ca', {
   name: 'Komputasi Awan', code: 'CL', kind: 'isian', secsPerItem: 240, labs: ['clocks', 'chord', 'consistency'],

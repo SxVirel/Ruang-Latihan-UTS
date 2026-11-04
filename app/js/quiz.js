@@ -1,20 +1,41 @@
-// Session runner for multiple choice, fill-in and essay items.
+// Session runner for multiple choice, fill-in, essay and staged (steps) items.
 // Practice mode gives feedback per item; exam mode grades everything at the end, with a timer.
+// A staged item is one story with several steps. Each step is a fill or an essay part, graded the same way,
+// and in practice mode the next step opens only after the current one is checked.
 (function (root) {
   var h = UI.h;
   var LETTERS = 'ABCDE';
 
+  // The steps of a staged item as fill or essay items, built once per item.
+  function parts(it) {
+    if (!it._parts) {
+      it._parts = it.steps.map(function (p, i) {
+        return Object.assign({ id: it.id + '-' + (i + 1), type: p.fields ? 'fill' : 'essay' }, p);
+      });
+    }
+    return it._parts;
+  }
+
+  function hasEssay(it) {
+    return it.type === 'essay' || (it.type === 'steps' && parts(it).some(function (p) { return p.type === 'essay'; }));
+  }
+
   function prepare(it) {
     if (it.type === 'mcq') return { order: UI.shuffle([it.a].concat(it.w)), pick: -1, done: false, score: 0 };
     if (it.type === 'fill') return { inputs: it.fields.map(function () { return ''; }), marks: null, done: false, score: 0 };
+    if (it.type === 'steps') return { ps: parts(it).map(prepare), at: 0, done: false, score: 0 };
     return { text: '', ticks: it.points.map(function () { return false; }), revealed: false, done: false, score: 0 };
   }
 
-  function isOk(it, st) { return it.type === 'essay' ? st.score >= 0.6 : st.score >= 0.999; }
+  function isOk(it, st) {
+    if (it.type === 'essay') return st.score >= 0.6;
+    return it.type === 'steps' ? st.score >= 0.8 : st.score >= 0.999;
+  }
 
   function answered(it, st) {
     if (it.type === 'mcq') return st.pick >= 0;
     if (it.type === 'fill') return st.inputs.some(function (v) { return String(v).trim() !== ''; });
+    if (it.type === 'steps') return parts(it).some(function (p, i) { return answered(p, st.ps[i]); });
     return st.text.trim() !== '';
   }
 
@@ -25,6 +46,10 @@
       st.score = st.marks.filter(Boolean).length / it.fields.length;
     }
     if (it.type === 'essay') st.score = st.ticks.filter(Boolean).length / it.points.length;
+    if (it.type === 'steps') {
+      parts(it).forEach(function (p, i) { grade(p, st.ps[i]); });
+      st.score = st.ps.reduce(function (sum, x) { return sum + x.score; }, 0) / st.ps.length;
+    }
     st.done = true;
   }
 
@@ -94,6 +119,7 @@
         it.table ? table(it.table) : null);
       if (it.type === 'mcq') sec.appendChild(mcqBody(it, s));
       else if (it.type === 'fill') sec.appendChild(fillBody(it, s));
+      else if (it.type === 'steps') sec.appendChild(stepsBody(it, s));
       else sec.appendChild(essayBody(it, s));
       if (S.confirming) sec.appendChild(confirmBox());
       return sec;
@@ -120,9 +146,7 @@
       return box;
     }
 
-    function fillBody(it, s) {
-      var showKey = S.mode === 'practice' && s.done;
-      var box = h('div', { class: 'stack' });
+    function fieldGrid(it, s, showKey) {
       var grid = h('div', { class: 'fields' });
       it.fields.forEach(function (f, i) {
         var cls = 'input' + (showKey ? (s.marks[i] ? ' ok' : ' bad') : '');
@@ -137,46 +161,93 @@
           input,
           showKey && !s.marks[i] ? h('span', { class: 'key' }, 'Kunci: ' + Check.display(f)) : null));
       });
-      box.appendChild(grid);
+      return grid;
+    }
+
+    // Check and "show key" buttons for a fill item or a fill step; check() grades and redraws.
+    function fillButtons(s, check) {
+      return h('div', { class: 'row' },
+        h('button', { class: 'btn', type: 'button', onclick: check }, 'Periksa'),
+        h('button', { class: 'btn ghost', type: 'button', onclick: function () { s.inputs = s.inputs.map(function () { return ''; }); check(); } }, 'Tidak tahu, lihat kunci'),
+        h('span', { class: 'small muted' }, 'Desimal boleh pakai koma. Urutan huruf boleh berspasi.'));
+    }
+
+    function fillBody(it, s) {
+      var showKey = S.mode === 'practice' && s.done;
+      var box = h('div', { class: 'stack' });
+      box.appendChild(fieldGrid(it, s, showKey));
       if (showKey && it.ex) box.appendChild(h('div', { class: 'explain' }, h('strong', null, s.score >= 0.999 ? 'Benar. ' : 'Pembahasan. '), it.ex));
-      if (S.mode === 'practice' && !s.done) {
-        box.appendChild(h('div', { class: 'row' },
-          h('button', { class: 'btn', type: 'button', onclick: checkFill }, 'Periksa'),
-          h('button', { class: 'btn ghost', type: 'button', onclick: function () { s.inputs = s.inputs.map(function () { return ''; }); checkFill(); } }, 'Tidak tahu, lihat kunci'),
-          h('span', { class: 'small muted' }, 'Desimal boleh pakai koma. Urutan huruf boleh berspasi.')));
-      } else {
-        box.appendChild(nav(showKey));
-      }
+      if (S.mode === 'practice' && !s.done) box.appendChild(fillButtons(s, checkFill));
+      else box.appendChild(nav(showKey));
       return box;
     }
 
-    function essayBody(it, s) {
-      var box = h('div', { class: 'stack' });
-      var reveal = S.mode === 'practice' && s.revealed;
+    // Answer box, key and self-grading of one essay. save() stores the grade; step = true for a step of a staged item.
+    function essayInto(box, it, s, save, step) {
       box.appendChild(h('textarea', {
         class: 'textarea', id: 'e-' + it.id, placeholder: 'Tulis jawabanmu dulu, lalu buka kunci untuk menilai sendiri.',
         readonly: s.done, 'data-autofocus': !s.revealed ? 'true' : null,
         oninput: function () { s.text = this.value; }
       }, s.text));
-      if (S.mode === 'practice' && !s.revealed) {
+      if (S.mode !== 'practice') return;
+      if (!s.revealed) {
         box.appendChild(h('div', { class: 'row' },
           h('button', { class: 'btn', type: 'button', onclick: function () { s.revealed = true; render(); } }, 'Lihat kunci jawaban'),
           h('span', { class: 'small muted' }, 'Kamu akan menilai sendiri berdasarkan poin kunci.')));
-        return box;
+        return;
       }
-      if (reveal) {
-        box.appendChild(pointsList(it, s, s.done));
-        if (it.model) box.appendChild(h('div', { class: 'model' }, it.model));
-        if (it.ex) box.appendChild(h('div', { class: 'explain' }, it.ex));
-        if (!s.done) {
-          box.appendChild(h('div', { class: 'row' },
-            h('button', { class: 'btn', type: 'button', onclick: function () { grade(it, s); Store.recordItem(it.id, isOk(it, s)); render(); } }, 'Simpan nilai'),
-            h('span', { class: 'small muted' }, 'Centang poin yang sudah kamu tulis.')));
-          return box;
-        }
+      box.appendChild(pointsList(it, s, s.done));
+      if (it.model) box.appendChild(h('div', { class: 'model' }, it.model));
+      if (it.ex) box.appendChild(h('div', { class: 'explain' }, it.ex));
+      if (!s.done) {
+        box.appendChild(h('div', { class: 'row' },
+          h('button', { class: 'btn', type: 'button', onclick: save }, 'Simpan nilai'),
+          h('span', { class: 'small muted' }, 'Centang poin yang sudah kamu tulis.')));
+      } else if (!step) {
         box.appendChild(h('div', { class: 'explain' }, h('strong', null, 'Nilai: ' + UI.pct(s.score) + '. '), isOk(it, s) ? 'Cukup lengkap.' : 'Ulangi lagi nanti, soal masuk bank salah.'));
       }
-      box.appendChild(nav(s.done));
+    }
+
+    function essayBody(it, s) {
+      var box = h('div', { class: 'stack' });
+      essayInto(box, it, s, function () { grade(it, s); Store.recordItem(it.id, isOk(it, s)); render(); });
+      if (S.mode !== 'practice' || s.done) box.appendChild(nav(s.done));
+      return box;
+    }
+
+    // Practice shows the steps up to the open one; the exam shows every step at once.
+    function stepsBody(it, s) {
+      var practice = S.mode === 'practice';
+      var box = h('div', { class: 'stack' });
+      var upto = practice ? s.at : it.steps.length - 1;
+      for (var i = 0; i <= upto; i++) box.appendChild(stepBlock(it, s, i));
+      if (practice && s.done) {
+        box.appendChild(h('div', { class: 'explain' }, h('strong', null, 'Nilai soal: ' + UI.pct(s.score) + '. '),
+          isOk(it, s) ? 'Langkahnya sudah benar.' : 'Ulangi lagi nanti, soal masuk bank salah.', it.ex ? ' ' + it.ex : ''));
+      }
+      if (!practice || s.done) box.appendChild(nav(s.done));
+      return box;
+    }
+
+    function stepBlock(it, s, i) {
+      var p = parts(it)[i], ps = s.ps[i], practice = S.mode === 'practice';
+      var showKey = practice && ps.done;
+      var box = h('div', { class: 'step stack' + (showKey ? ' done' : '') },
+        h('span', { class: 'step-num' }, 'Langkah ' + (i + 1) + ' dari ' + it.steps.length),
+        h('p', { class: 'qtext' }, p.q),
+        p.table ? table(p.table) : null);
+      if (p.type === 'fill') {
+        box.appendChild(fieldGrid(p, ps, showKey));
+        if (showKey && p.ex) box.appendChild(h('div', { class: 'explain' }, h('strong', null, ps.score >= 0.999 ? 'Benar. ' : 'Pembahasan. '), p.ex));
+        if (practice && !ps.done) box.appendChild(fillButtons(ps, function () { checkStep(i); }));
+      } else {
+        essayInto(box, p, ps, function () { checkStep(i); }, true);
+      }
+      if (showKey && i === s.at && i < it.steps.length - 1) {
+        box.appendChild(h('div', { class: 'row' },
+          h('button', { class: 'btn hl', type: 'button', 'data-autofocus': 'true', onclick: function () { nextStep(); } }, 'Lanjut ke langkah ' + (i + 2)),
+          h('span', { class: 'small muted' }, h('span', { class: 'kbd' }, 'Enter'), ' untuk lanjut')));
+      }
       return box;
     }
 
@@ -250,6 +321,22 @@
       render();
     }
 
+    // Grade one step of a staged item. The item is recorded once its last step is graded.
+    function checkStep(i) {
+      var it = cur(), s = st();
+      grade(parts(it)[i], s.ps[i]);
+      if (i === it.steps.length - 1) {
+        grade(it, s);
+        Store.recordItem(it.id, isOk(it, s));
+      }
+      render();
+    }
+
+    function nextStep() {
+      var s = st();
+      if (s.at < cur().steps.length - 1 && s.ps[s.at].done) { s.at++; render(); }
+    }
+
     function go(i) { if (i >= 0 && i < n()) { S.idx = i; S.confirming = false; render(); } }
 
     function next() {
@@ -269,26 +356,36 @@
       S.timeUp = timeUp;
       if (timerId) { clearInterval(timerId); timerId = null; }
       S.items.forEach(function (it, i) { if (it.type !== 'essay') grade(it, S.st[i]); });
-      if (S.items.some(function (it) { return it.type === 'essay'; })) { S.grading = true; render(); return; }
+      if (S.items.some(hasEssay)) { S.grading = true; render(); return; }
       finalize();
+    }
+
+    // Essays to self-grade after an exam: essay items and the essay steps of staged items.
+    function essaysToGrade() {
+      var out = [];
+      S.items.forEach(function (it, i) {
+        if (it.type === 'essay') out.push({ it: it, s: S.st[i], label: 'Soal ' + (i + 1), topic: it.topic });
+        if (it.type === 'steps') parts(it).forEach(function (p, k) {
+          if (p.type === 'essay') out.push({ it: p, s: S.st[i].ps[k], label: 'Soal ' + (i + 1) + ' · langkah ' + (k + 1), topic: it.topic });
+        });
+      });
+      return out;
     }
 
     function gradingView() {
       var box = h('div', { class: 'stack' },
         h('div', { class: 'head' }, h('span', { class: 'eyebrow' }, 'Langkah terakhir'), h('h2', null, 'Nilai sendiri jawaban esai'),
           h('p', { class: 'lead' }, 'Bandingkan jawabanmu dengan poin kunci. Centang poin yang sudah kamu tulis.')));
-      S.items.forEach(function (it, i) {
-        if (it.type !== 'essay') return;
-        var s = S.st[i];
+      essaysToGrade().forEach(function (e) {
         box.appendChild(h('section', { class: 'sheet stack' },
-          h('div', { class: 'row between' }, h('span', { class: 'qnum' }, 'Soal ' + (i + 1)), h('span', { class: 'chip' }, it.topic)),
-          h('p', { class: 'qtext' }, it.q),
-          h('div', { class: 'model' }, s.text.trim() || '(kosong)'),
-          pointsList(it, s, false),
-          it.model ? h('details', null, h('summary', null, 'Contoh jawaban lengkap'), h('div', { class: 'model' }, it.model)) : null));
+          h('div', { class: 'row between' }, h('span', { class: 'qnum' }, e.label), h('span', { class: 'chip' }, e.topic)),
+          h('p', { class: 'qtext' }, e.it.q),
+          h('div', { class: 'model' }, e.s.text.trim() || '(kosong)'),
+          pointsList(e.it, e.s, false),
+          e.it.model ? h('details', null, h('summary', null, 'Contoh jawaban lengkap'), h('div', { class: 'model' }, e.it.model)) : null));
       });
       box.appendChild(h('div', { class: 'row' }, h('button', { class: 'btn hl', type: 'button', onclick: function () {
-        S.items.forEach(function (it, i) { if (it.type === 'essay') grade(it, S.st[i]); });
+        S.items.forEach(function (it, i) { if (hasEssay(it)) grade(it, S.st[i]); });
         S.grading = false; finalize();
       } }, 'Lihat hasil')));
       return box;
@@ -343,6 +440,22 @@
       var body = h('div', { class: 'review-item' },
         h('div', { class: 'row between' }, h('span', { class: 'qnum' }, 'Soal ' + (i + 1)), h('span', { class: 'chip bad' }, UI.pct(s.score))),
         h('p', null, it.q), it.table ? table(it.table) : null);
+      if (it.type === 'steps') {
+        parts(it).forEach(function (p, k) {
+          body.appendChild(h('p', { class: 'step-num' }, 'Langkah ' + (k + 1) + ' · ' + UI.pct(s.ps[k].score)));
+          body.appendChild(h('p', null, p.q));
+          if (p.table) body.appendChild(table(p.table));
+          reviewAnswers(body, p, s.ps[k]);
+          if (p.ex) body.appendChild(h('div', { class: 'explain small' }, p.ex));
+        });
+      } else {
+        reviewAnswers(body, it, s);
+      }
+      if (it.ex) body.appendChild(h('div', { class: 'explain' }, it.ex));
+      return body;
+    }
+
+    function reviewAnswers(body, it, s) {
       if (it.type === 'mcq') {
         body.appendChild(h('p', { class: 'ans' }, 'Jawabanmu: ', s.pick >= 0 ? h('s', null, s.order[s.pick]) : '(kosong)'));
         body.appendChild(h('p', { class: 'ans' }, 'Kunci: ', h('b', null, it.a)));
@@ -354,8 +467,6 @@
       } else {
         body.appendChild(h('ul', { class: 'small' }, it.points.map(function (p, k) { return h('li', null, (s.ticks[k] ? '✓ ' : '✗ ') + p); })));
       }
-      if (it.ex) body.appendChild(h('div', { class: 'explain' }, it.ex));
-      return body;
     }
 
     function onKey(e) {
@@ -363,11 +474,14 @@
       var tag = (e.target.tagName || '').toLowerCase();
       var it = cur(), s = st();
       if (tag === 'textarea') return;
+      var openStep = it.type === 'steps' && S.mode === 'practice' && !s.done ? parts(it)[s.at] : null;
       if (tag === 'input' && e.target.type === 'text') {
         if (e.key === 'Enter' && S.mode === 'practice' && it.type === 'fill' && !s.done) { e.preventDefault(); checkFill(); }
+        else if (e.key === 'Enter' && openStep && openStep.type === 'fill' && !s.ps[s.at].done) { e.preventDefault(); checkStep(s.at); }
         else if (e.key === 'Enter' && S.mode === 'exam') { e.preventDefault(); go(S.idx + 1); }
         return;
       }
+      if (e.key === 'Enter' && openStep && s.ps[s.at].done && tag !== 'button') { e.preventDefault(); nextStep(); return; }
       if (e.ctrlKey || e.metaKey || e.altKey) return;
       if (it.type === 'mcq') {
         var k = e.key.toLowerCase();

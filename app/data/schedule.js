@@ -1,7 +1,7 @@
 // Jadwal UTS pribadi. Sumber: "2627-1 Jadwal UTS FIF", kelas BS1IF-48-REG01,
 // kecuali Forensik Digital yang kelas gabungan BS1IF-47-GAB01.
 // Nomor absen di awal kelas, jadi room = ruangan pertama tiap kelas;
-// ruangan paruh kedua ditulis di note.
+// ruangan paruh kedua ditulis di note. gedung per ujian menimpa gedung default.
 (function (root) {
   var SCHEDULE = {
     term: 'UTS Ganjil 2026/2027',
@@ -19,6 +19,12 @@
         date: '2026-11-04', day: 'Rabu', time: '08.00 - 10.15 WIB', jenis: 'Onsite · ujian tertulis',
         room: '(A203B) KU1.02.06', range: 'Nomor urut 1-21',
         note: 'Ditandai "Bersamaan" di jadwal FIF: ada mata kuliah lain pada jam yang sama. Kelas 43 mahasiswa dipecah dua ruangan: nomor urut 22-43 di (A204A) KU1.02.07.'
+      },
+      {
+        course: 'ka', name: 'Kecerdasan Artifisial', kode: 'CAK3DAB3', kelas: 'BS1IF-48-REG01',
+        date: '2026-11-05', day: 'Kamis', time: '08.00 - 10.15 WIB', jenis: 'Onsite · ujian tertulis',
+        room: 'TULT 0711', gedung: 'Telkom University Landmark Tower (TULT)', range: 'Nomor urut 1-19',
+        note: 'Kelas 38 mahasiswa dipecah dua ruangan: nomor urut 20-38 di TULT 0714. Slide dosen: 08.00-10.00 (120 menit), 4 soal esai, open notes 1 lembar A4 bolak-balik, kalkulator boleh. Semua kelas KA ujian bersamaan. Siang harinya ada Forensik Digital.'
       },
       {
         course: 'fd', name: 'Forensik Digital', kode: 'CAK4JBB3', kelas: 'BS1IF-47-GAB01',

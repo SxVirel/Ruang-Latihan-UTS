@@ -161,7 +161,7 @@
         h('div', { class: 'row' },
           h('p', { class: 'exam-when' }, h('strong', { class: 'mono' }, ex.time), ' · ', longDate(ex)),
           h('span', { class: 'chip' }, ex.jenis)),
-        h('p', { class: 'exam-where' }, h('strong', { class: 'mono' }, ex.room), ' ', h('span', { class: 'muted small' }, SCHEDULE.gedung)),
+        h('p', { class: 'exam-where' }, h('strong', { class: 'mono' }, ex.room), ' ', h('span', { class: 'muted small' }, ex.gedung || SCHEDULE.gedung)),
         ex.note ? h('p', { class: 'explain small' }, ex.note) : null,
         h('a', { class: 'btn ghost sm', href: '#/c/' + ex.course }, 'Latihan ' + (B.courses[ex.course] ? B.courses[ex.course].code : ex.name))));
   }
@@ -202,7 +202,7 @@
   }
 
   // ---------------------------------------------------------------- course
-  var TYPE_LABEL = { mcq: 'pilihan ganda', fill: 'isian', essay: 'esai' };
+  var TYPE_LABEL = { mcq: 'pilihan ganda', fill: 'isian', essay: 'esai', steps: 'uraian bertahap' };
   function typeLabel(t) { return TYPE_LABEL[t] || t; }
   function countOf(items, type) { return items.filter(function (it) { return it.type === type; }).length; }
   // "20 pilihan ganda + 5 isian", built from the course's mix setting.
@@ -219,8 +219,8 @@
     if (c.kind === 'mcq') {
       return 'Pilihan ganda · ' + countOf(counts, 'mcq') + ' soal' + (counts.some(function (it) { return it.type === 'essay'; }) ? ' + esai' : '');
     }
-    return (counts.some(function (it) { return it.type === 'essay'; }) ? 'Isian & esai · ' : 'Isian · ') + counts.length + ' soal' +
-      (!uraian && c.labs && c.labs.length ? ' · ' + c.labs.length + ' lab' : '');
+    var kinds = countOf(counts, 'steps') ? 'Uraian bertahap & isian · ' : countOf(counts, 'essay') ? 'Isian & esai · ' : 'Isian · ';
+    return kinds + counts.length + ' soal' + (!uraian && c.labs && c.labs.length ? ' · ' + c.labs.length + ' lab' : '');
   }
 
   function course(id, tab) {
@@ -357,6 +357,8 @@
         b.soal ? h('div', { class: 'materi-soal' }, h('span', { class: 'eyebrow' }, 'Contoh soal'), h('p', null, b.soal)) : null,
         b.wbs ? Diagram.wbs(b.wbs) : null,
         b.net ? Diagram.net(b.net) : null,
+        b.genes ? Diagram.genes(b.genes) : null,
+        b.wheel ? Diagram.wheel(b.wheel) : null,
         b.tabel ? h('div', { class: 'table-wrap' }, h('table', { class: 'materi-table' },
           h('thead', null, h('tr', null, b.tabel.head.map(function (c) { return h('th', { scope: 'col' }, c); }))),
           h('tbody', null, b.tabel.rows.map(function (r) { return h('tr', null, r.map(function (c) { return h('td', null, c); })); })))) : null,
@@ -383,7 +385,8 @@
 
   function limitFor(courseId, items) {
     var c = B.courses[courseId];
-    return items.reduce(function (sum, it) { return sum + itemSecs(c, it.type); }, 0);
+    // A staged item gets the time of one item per step.
+    return items.reduce(function (sum, it) { return sum + itemSecs(c, it.type) * (it.steps ? it.steps.length : 1); }, 0);
   }
 
   // Timer for a fixed mix, so the setup screen can show it before a session is drawn.

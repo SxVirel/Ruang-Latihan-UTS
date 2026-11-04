@@ -1,8 +1,9 @@
-// Kecerdasan Artifisial — minggu 5, 6, 7 (slide Week-5/6/7_KA)
+// Kecerdasan Artifisial — isian minggu 5 dan 6 (slide Week-5/6_KA): GA kombinatorial, Tabu Search, NSGA-II.
+// Minggu 7 (learning) di luar materi UTS, jadi ada di tab Uraian & Isian, bukan di latihan biasa.
 var HARD = ['hard', 'hard constraint', 'keras'];
 var SOFT = ['soft', 'soft constraint', 'lunak'];
 
-BANK.isian('ka', 'w5', 'GA Kombinatorial (M5)', [
+BANK.isian('ka', 'w5', 'Isian Week 5: GA Kombinatorial & Tabu', [
   { type: 'fill', q: 'Berapa banyak kemungkinan tur (permutasi) untuk TSP dengan 6 kota? Berapa banyak subset untuk knapsack dengan 10 item?',
     fields: [{ label: 'Tur 6 kota (n!)', a: 720, tol: 0 }, { label: 'Subset 10 item (2^n)', a: 1024, tol: 0 }],
     ex: 'Permutasi = n! = 720. Subset = 2^n = 1024. Untuk 20 kota, 20! ≈ 2,4 × 10^18 tur: enumerasi mustahil.' },
@@ -74,7 +75,7 @@ BANK.isian('ka', 'w5', 'GA Kombinatorial (M5)', [
     ex: 'D benar. A salah (duplikat/hilang kota), B salah (sisa posisi diisi berbeda), C salah (repair O1 justru memberi 13 conflicts, terbaik), E salah (Tabu menerima move memburuk jika semua move membaik tabu).' }
 ]);
 
-BANK.isian('ka', 'w6', 'NSGA-II (M6)', [
+BANK.isian('ka', 'w6', 'Isian Week 6: NSGA-II', [
   { type: 'fill', q: 'Kedua objektif diminimalkan. Untuk tiap pasangan, tulis "A" jika A mendominasi B, "B" jika B mendominasi A, atau "incomparable".',
     fields: [
       { label: 'A=(3,45), B=(3,49)', a: ['A', 'A dominates B', 'A mendominasi B'] },
@@ -126,7 +127,7 @@ BANK.isian('ka', 'w6', 'NSGA-II (M6)', [
     points: ['Jumlah generasi tetap (paling umum, sesuai budget)', 'Front berhenti bergerak antar generasi', 'Indikator kualitas seperti hypervolume mendatar', 'Tidak ada titik "nol konflik" yang menandai selesai, jadi dipakai budget'] }
 ]);
 
-BANK.isian('ka', 'w7', 'Intro Learning (M7)', [
+BANK.uraian('ka', 'w7', 'Intro Learning (M7, di luar UTS)', [
   { type: 'essay', q: 'Definisikan learning menurut Mitchell (1997) dan terapkan pada kasus prediksi kelulusan mahasiswa.',
     points: ['Program belajar dari experience E pada task T diukur dengan P jika performa pada T menurut P meningkat dengan E', 'T: memprediksi apakah mahasiswa lulus', 'E: data 400 mahasiswa yang sudah menempuh mata kuliah', 'P: akurasi pada mahasiswa yang belum pernah dilihat program'] },
   { type: 'fill', q: 'Jenis masalah: supervised, unsupervised, reinforcement, atau search (bukan learning)?',

@@ -1,4 +1,5 @@
-// Simple diagrams for the Materi tab: a WBS chart and an activity network (AOA or AON).
+// Simple diagrams for the Materi tab: a WBS chart, an activity network (AOA or AON),
+// chromosome rows, and a roulette wheel bar.
 (function (root) {
   var h = root.UI.h, s = root.UI.s;
 
@@ -119,5 +120,54 @@
         (aon ? 'Isi kotak: ES dan EF di atas, LS dan LF di bawah.' : 'Angka di atas lingkaran: waktu paling awal | waktu paling lambat node itu.')));
   }
 
-  root.Diagram = { wbs: wbs, net: net };
+  // Chromosome rows, e.g. parents and offspring of a crossover.
+  // spec: { pos?: true, rows: [{ label, genes: 'ABCDEF' | [...], mark?: [positions], mark2?: [positions], note? }], caption? }
+  // mark highlights genes (a copied segment, a mutated bit); mark2 is a second colour (genes from the other parent).
+  function genes(spec) {
+    var list = function (g) { return typeof g === 'string' ? g.split('') : g; };
+    var n = Math.max.apply(null, spec.rows.map(function (r) { return list(r.genes).length; }));
+    var rows = spec.rows.map(function (r) {
+      return h('div', { class: 'gene-row' }, h('span', { class: 'gene-label' }, r.label),
+        list(r.genes).map(function (g, i) {
+          var on = r.mark && r.mark.indexOf(i + 1) >= 0, alt = r.mark2 && r.mark2.indexOf(i + 1) >= 0;
+          return h('span', { class: 'gene' + (on ? ' on' : alt ? ' alt' : '') }, String(g));
+        }),
+        r.note ? h('span', { class: 'gene-note small muted' }, r.note) : null);
+    });
+    if (spec.pos) {
+      var nums = [];
+      for (var i = 1; i <= n; i++) nums.push(h('span', { class: 'gene' }, String(i)));
+      rows.unshift(h('div', { class: 'gene-row gene-pos' }, h('span', { class: 'gene-label' }, 'posisi'), nums));
+    }
+    return h('figure', { class: 'diagram' },
+      h('div', { class: 'diagram-scroll' }, h('div', { class: 'genes' }, rows)),
+      spec.caption ? h('figcaption', { class: 'small muted' }, spec.caption) : null);
+  }
+
+  // Roulette wheel drawn as one bar: each slice is as wide as its probability, arrows mark the random numbers r.
+  // spec: { items: [{ label, p }], r?: [numbers] }
+  function wheel(spec) {
+    var W = 640, x0 = 20, len = 600, y = 44, bh = 30;
+    var svg = s('svg', { class: 'dg', viewBox: '0 0 ' + W + ' 112', width: W, height: 112, role: 'img', 'aria-label': 'Roulette wheel' });
+    var at = 0, dec = function (v) { return v.toFixed(4).replace('.', ','); };
+    spec.items.forEach(function (it, i) {
+      var w = it.p * len, x = x0 + at * len;
+      svg.appendChild(s('rect', { class: 'wh wh' + (i % 4), x: x, y: y, width: w, height: bh }));
+      if (w > 44) svg.appendChild(s('text', { class: 'dg-name', x: x + w / 2, y: y + 19, 'text-anchor': 'middle' }, it.label));
+      at += it.p;
+      svg.appendChild(s('text', { class: 'dg-small', x: x0 + at * len, y: y + bh + 16, 'text-anchor': i === spec.items.length - 1 ? 'end' : 'middle' }, dec(at)));
+    });
+    svg.appendChild(s('text', { class: 'dg-small', x: x0, y: y + bh + 16, 'text-anchor': 'start' }, '0'));
+    (spec.r || []).forEach(function (r, i) {
+      var x = x0 + r * len, ty = i % 2 ? 14 : 28;
+      svg.appendChild(s('line', { class: 'dg-edge', x1: x, y1: ty + 4, x2: x, y2: y - 2 }));
+      svg.appendChild(s('polygon', { class: 'dg-head', points: [[x, y], [x - 4, y - 7], [x + 4, y - 7]].join(' ') }));
+      svg.appendChild(s('text', { class: 'dg-small', x: x, y: ty, 'text-anchor': 'middle' }, 'r = ' + r.toFixed(2).replace('.', ',')));
+    });
+    return h('figure', { class: 'diagram' },
+      h('div', { class: 'diagram-scroll' }, svg),
+      h('figcaption', { class: 'small muted' }, 'Lebar irisan = probabilitas seleksi. Angka di bawah = kumulatif; kromosom terpilih adalah irisan tempat r jatuh.'));
+  }
+
+  root.Diagram = { wbs: wbs, net: net, genes: genes, wheel: wheel };
 })(this);

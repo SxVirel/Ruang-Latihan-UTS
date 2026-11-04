@@ -98,7 +98,68 @@ test('uraian items stay out of the normal practice pool', () => {
 });
 
 test('only known item types', () => {
-  for (const it of all) assert.ok(['mcq', 'fill', 'essay'].includes(it.type), it.id + ' ' + it.type);
+  for (const it of all) assert.ok(['mcq', 'fill', 'essay', 'steps'].includes(it.type), it.id + ' ' + it.type);
+});
+
+// A staged item is a story plus steps; each step is graded like a fill item (fields) or an essay (points).
+test('staged items have well formed steps that accept their own keys', () => {
+  const staged = data.isian.filter(i => i.type === 'steps');
+  assert.ok(staged.length >= 40, 'only ' + staged.length);
+  for (const it of staged) {
+    assert.ok(it.q && it.steps && it.steps.length >= 2, it.id);
+    it.steps.forEach((s, k) => {
+      const where = it.id + ' step ' + (k + 1);
+      assert.ok(s.q, where);
+      assert.ok(!!s.fields !== !!s.points, where + ' needs fields or points, not both');
+      if (s.points) assert.ok(s.points.length >= 2, where);
+      if (s.table) for (const r of s.table.rows) assert.equal(r.length, s.table.head.length, where);
+      for (const f of s.fields || []) {
+        const key = typeof f.a === 'number' ? String(f.a) : (Array.isArray(f.a) ? f.a[0] : f.a);
+        assert.ok(Check.checkField(f, key), where + ' rejects its own key ' + key);
+        assert.ok(Check.checkField(f, Check.display(f)), where + ' rejects displayed key');
+      }
+    });
+  }
+});
+
+test('Kecerdasan Artifisial practice covers the four UTS materi in staged form', () => {
+  const ka = data.isian.filter(it => it.course === 'ka');
+  const staged = { uts: 1, mtsp: 3, meta: 3, moo: 6, konsep: 4, proses: 4, jadwal: 4, komb: 4, cross: 4, tsp: 4, lks: 4 };
+  for (const t of Object.keys(staged)) {
+    const items = ka.filter(it => it.id.startsWith('ka-' + t + '-'));
+    assert.ok(items.length >= staged[t], t + ' has ' + items.length);
+    assert.ok(items.every(it => it.type === 'steps' && !it.section), t);
+  }
+  // Weeks 5 and 6 (Tabu Search, NSGA-II) are exam materi; week 7 (learning) is not, so it sits in the uraian tab.
+  assert.ok(ka.some(it => it.id === 'ka-w5-16' && !it.section));
+  assert.ok(ka.filter(it => /^ka-w6-/.test(it.id)).every(it => !it.section));
+  assert.ok(ka.filter(it => /^ka-w7-/.test(it.id)).every(it => it.section === 'uraian'));
+});
+
+// Last year's UTS question 1 (= LKS GA-2): recompute the tours from the distance matrix.
+test('the UTS 2025 TSP key matches its distance matrix', () => {
+  const it = data.isian.find(i => i.id === 'ka-uts-1');
+  const head = it.table.head.slice(1), D = {};
+  it.table.rows.forEach(r => head.forEach((c, k) => { D[r[0] + c] = r[k + 1]; }));
+  const len = s => s.split('').reduce((sum, c, k, a) => sum + D[head[c - 1] + head[a[(k + 1) % a.length] - 1]], 0);
+  assert.equal(len('12345'), 33);
+  const a = it.steps[0].fields, f = it.steps[5].fields;
+  ['12345', '24135', '51324', '32145'].forEach((s, k) => assert.equal(a[2 * k].a, len(s), s));
+  it.steps[4].fields.slice(1).forEach((m, k) => assert.equal(f[2 * k].a, len(m.a), m.a));
+});
+
+test('Kecerdasan Artifisial materi is well formed and its roulette bars add up to one', () => {
+  const weeks = data.materi.ka;
+  assert.ok(weeks.length >= 10, 'only ' + weeks.length);
+  for (const w of weeks) {
+    assert.ok(w.label && w.judul && w.ringkas && w.bagian.length, w.judul);
+    for (const b of w.bagian) {
+      assert.ok(b.h && (b.poin || b.tabel || b.genes || b.wheel), b.h);
+      if (b.tabel) for (const r of b.tabel.rows) assert.equal(r.length, b.tabel.head.length, b.h);
+      if (b.wheel) assert.ok(Math.abs(b.wheel.items.reduce((s, x) => s + x.p, 0) - 1) < 1e-9, b.h);
+      if (b.genes) for (const r of b.genes.rows) for (const p of (r.mark || []).concat(r.mark2 || [])) assert.ok(p >= 1 && p <= r.genes.length, b.h + ' ' + r.label);
+    }
+  }
 });
 
 test('Manajemen Proyek is fill-in only, like the exam', () => {
