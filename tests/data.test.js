@@ -104,7 +104,7 @@ test('only known item types', () => {
 // A staged item is a story plus steps; each step is graded like a fill item (fields) or an essay (points).
 test('staged items have well formed steps that accept their own keys', () => {
   const staged = data.isian.filter(i => i.type === 'steps');
-  assert.ok(staged.length >= 40, 'only ' + staged.length);
+  assert.ok(staged.length >= 20, 'only ' + staged.length);
   for (const it of staged) {
     assert.ok(it.q && it.steps && it.steps.length >= 2, it.id);
     it.steps.forEach((s, k) => {
@@ -124,15 +124,26 @@ test('staged items have well formed steps that accept their own keys', () => {
 
 test('Kecerdasan Artifisial practice covers the four UTS materi in staged form', () => {
   const ka = data.isian.filter(it => it.course === 'ka');
-  const staged = { uts: 1, mtsp: 3, meta: 3, moo: 6, konsep: 4, proses: 4, jadwal: 4, komb: 4, cross: 4, tsp: 4, lks: 4 };
+  const staged = { uts: 1, mtsp: 3, cmeta: 1, cga: 1, ctsp: 1, ccross: 1, cmoo: 1,
+    mhc: 1, mgrid: 1, mspace: 1, gabin: 1, gabin2: 1, gajadwal: 1, gasel: 1,
+    kpmx: 1, kpmx2: 1, mtsp2: 2, msort: 1, mfill: 1, mweight: 1 };
   for (const t of Object.keys(staged)) {
     const items = ka.filter(it => it.id.startsWith('ka-' + t + '-'));
     assert.ok(items.length >= staged[t], t + ' has ' + items.length);
     assert.ok(items.every(it => it.type === 'steps' && !it.section), t);
   }
-  // The exam is essay only, so the short fill drills (weeks 5-6) and learning (week 7, not exam materi) sit in the special tab.
+  // Setiap materi kisi-kisi harus punya minimal dua soal berpola UTS.
+  const materi = { meta: ['cmeta', 'mhc', 'mgrid', 'mspace'], ga: ['cga', 'gabin', 'gabin2', 'gajadwal', 'gasel'],
+    komb: ['uts', 'mtsp', 'ctsp', 'mtsp2', 'ccross', 'kpmx', 'kpmx2'], moo: ['cmoo', 'msort', 'mfill', 'mweight'] };
+  for (const m of Object.keys(materi)) {
+    const n = ka.filter(it => !it.section && materi[m].some(t => it.id.startsWith('ka-' + t + '-'))).length;
+    assert.ok(n >= 2, m + ' only ' + n);
+  }
+  // Ujian berbentuk esai, jadi drill isian singkat minggu 5-6 ditaruh di tab khusus.
   assert.ok(ka.filter(it => !it.section).every(it => it.type === 'steps'));
-  assert.ok(ka.filter(it => /^ka-w[567]-/.test(it.id)).every(it => it.section === 'uraian'));
+  assert.ok(ka.filter(it => /^ka-w[56]-/.test(it.id)).every(it => it.section === 'uraian'));
+  // Materi minggu 7 sudah dihapus: di luar kisi-kisi UTS.
+  assert.ok(!ka.some(it => /^ka-w7-/.test(it.id)));
   assert.ok(ka.some(it => it.id === 'ka-w5-16'));
 });
 

@@ -1,5 +1,5 @@
-// Kecerdasan Artifisial — isian singkat minggu 5, 6, 7 (slide Week-5/6/7_KA). Semuanya di tab khusus, bukan di latihan biasa:
-// minggu 5-6 masuk materi UTS tetapi formatnya isian singkat (UTS berbentuk esai), minggu 7 (learning) di luar materi UTS.
+// Kecerdasan Artifisial — isian singkat minggu 5 dan 6 (slide Week-5/6_KA). Semuanya di tab khusus, bukan di latihan biasa:
+// minggu 5-6 masuk materi UTS tetapi formatnya isian singkat (UTS berbentuk esai). Materi minggu 7 sudah dihapus karena di luar kisi-kisi.
 var HARD = ['hard', 'hard constraint', 'keras'];
 var SOFT = ['soft', 'soft constraint', 'lunak'];
 
@@ -127,72 +127,3 @@ BANK.uraian('ka', 'w6', 'Isian Week 6: NSGA-II', [
     points: ['Jumlah generasi tetap (paling umum, sesuai budget)', 'Front berhenti bergerak antar generasi', 'Indikator kualitas seperti hypervolume mendatar', 'Tidak ada titik "nol konflik" yang menandai selesai, jadi dipakai budget'] }
 ]);
 
-BANK.uraian('ka', 'w7', 'Intro Learning (M7, di luar UTS)', [
-  { type: 'essay', q: 'Definisikan learning menurut Mitchell (1997) dan terapkan pada kasus prediksi kelulusan mahasiswa.',
-    points: ['Program belajar dari experience E pada task T diukur dengan P jika performa pada T menurut P meningkat dengan E', 'T: memprediksi apakah mahasiswa lulus', 'E: data 400 mahasiswa yang sudah menempuh mata kuliah', 'P: akurasi pada mahasiswa yang belum pernah dilihat program'] },
-  { type: 'fill', q: 'Jenis masalah: supervised, unsupervised, reinforcement, atau search (bukan learning)?',
-    fields: [
-      { label: 'A. Prediksi pelunasan dari 5.000 data pinjaman berlabel', a: ['supervised'] },
-      { label: 'B. Kelompokkan 10.000 pelanggan tanpa label', a: ['unsupervised'] },
-      { label: 'C. Atur 30 ujian ke 8 slot agar bentrok minimal', a: ['search', 'optimisasi', 'optimization', 'search optimization', 'bukan learning'] },
-      { label: 'D. Program catur belajar dari jutaan permainan melawan dirinya', a: ['reinforcement', 'reinforcement learning'] }],
-    ex: 'C sudah diselesaikan di minggu 1-6 dengan algoritma search (GA, Tabu, NSGA-II).' },
-  { type: 'fill', q: 'Hitung ukuran hypothesis space. Attendance bilangan bulat 0-100, GPA satu desimal 0,0-4,0.',
-    fields: [{ label: '"Lulus jika attendance ≥ t"', a: 101, tol: 0 }, { label: '"Lulus jika attendance ≥ a DAN GPA ≥ b"', a: 4141, tol: 0 }],
-    ex: 'Threshold t punya 101 nilai. GPA 0,0..4,0 punya 41 nilai, jadi 101 × 41 = 4.141 aturan.' },
-  { type: 'fill', q: 'Classification atau regression?',
-    fields: [
-      { label: 'Lama rawat inap pasien (hari)', a: ['regression', 'regresi'] },
-      { label: 'Pelanggan beli lagi dalam 90 hari?', a: ['classification', 'klasifikasi'] },
-      { label: 'Nilai akhir mahasiswa (0-100)', a: ['regression', 'regresi'] },
-      { label: 'Logistic regression termasuk metode', a: ['classification', 'klasifikasi'] }],
-    ex: 'Label kategori = classification. Label angka kontinu = regression. Logistic regression memprediksi kelas.' },
-  { type: 'fill', q: 'Diagnosis dari akurasi train/test: overfitting, underfitting, wajar, atau mencurigakan?',
-    fields: [
-      { label: 'A. Train 99,8%, test 71%', a: ['overfitting', 'overfit'] },
-      { label: 'B. Train 68%, test 66%', a: ['underfitting', 'underfit'] },
-      { label: 'C. Train 66%, test 81%', a: ['mencurigakan', 'suspicious', 'aneh', 'eksperimen salah'] },
-      { label: 'D. Train 86%, test 84%', a: ['wajar', 'reasonable', 'baik', 'bagus'] }],
-    ex: 'Gap besar = overfit. Keduanya rendah dan dekat = underfit. Test jauh di atas train menandakan masalah eksperimen (leakage, split salah, test terlalu mudah).' },
-  { type: 'fill', q: 'kNN pada data mahasiswa, k dari 1 sampai 180.',
-    fields: [{ label: 'Training error saat k = 1 (%)', a: 0, tol: 0 }, { label: 'k dengan test error terbaik', a: 12, tol: 0 }, { label: 'Test error terbaik (%)', a: 10.8, tol: 0.05 }],
-    ex: 'k = 1 menghafal (train error 0, test 20,8%). k = 12: train 14,6%, test 10,8%. Model yang fit lebih buruk justru memprediksi lebih baik.' },
-  { type: 'fill', q: 'Baseline mayoritas "selalu lulus" = 73,2%. Logistic regression: train 84,6%, test 83,3%.',
-    fields: [{ label: 'Peningkatan di atas baseline (poin)', a: 10.1, tol: 0.05 }, { label: 'Gap train-test (poin)', a: 1.3, tol: 0.05 }],
-    ex: 'Klaim yang jujur: "10 poin di atas baseline mayoritas, pada 120 mahasiswa yang tidak dipakai training". Gap 1,3 kecil, tidak ada overfitting serius.' },
-  { type: 'fill', q: 'Tulis akurasi baseline untuk tiap tugas.',
-    fields: [{ label: 'Spam: 38% email spam, baseline "bukan spam" (%)', a: 62, tol: 0.05 }, { label: 'Cacat produksi 1 per 1.000, baseline "tidak cacat" (%)', a: 99.9, tol: 0.05 }],
-    ex: 'Baseline cacat 99,9% menunjukkan akurasi tidak berguna untuk data tidak seimbang. Pakai recall/precision.' },
-  { type: 'fill', q: 'Prediksi dropout (24 dari 400 mahasiswa). Model B: TN 352, FP 24, FN 9, TP 15. Hitung (dalam %, 1 desimal).',
-    table: { head: ['', 'Pred: tidak dropout', 'Pred: dropout'], rows: [['Aktual tidak dropout (376)', 352, 24], ['Aktual dropout (24)', 9, 15]] },
-    fields: [{ label: 'Accuracy', a: 91.8, tol: 0.1 }, { label: 'Precision', a: 38.5, tol: 0.1 }, { label: 'Recall', a: 62.5, tol: 0.1 }],
-    ex: 'Accuracy = (352+15)/400 = 91,8%. Precision = 15/(15+24) = 38,5%. Recall = 15/24 = 62,5%. Model A "tidak ada dropout" akurasi 94% tapi recall 0.' },
-  { type: 'fill', q: 'Prediksi mesin rusak minggu depan, 500 mesin, 40 rusak. TP 28, FN 12, FP 62, TN 398. Repair 200, kerusakan tak terduga 5.000. Hitung metrik (%), lalu penghematan model dibanding tidak melakukan apa-apa.',
-    table: { head: ['', 'Pred: rusak', 'Pred: aman', 'Total'], rows: [['Aktual rusak', 28, 12, 40], ['Aktual aman', 62, 398, 460], ['Total', 90, 410, 500]] },
-    fields: [{ label: 'Accuracy', a: 85.2, tol: 0.1 }, { label: 'Precision', a: 31.1, tol: 0.1 }, { label: 'Recall', a: 70, tol: 0.1 },
-      { label: 'Penghematan', a: 122000, tol: 1 }],
-    ex: 'Accuracy 426/500. Precision 28/90. Recall 28/40. Tanpa model: 40 × 5.000 = 200.000. Dengan model: 90 × 200 + 12 × 5.000 = 78.000. Hemat 122.000. Naikkan recall: satu kerusakan terlewat 25× lebih mahal dari satu repair.' },
-  { type: 'fill', q: 'Error prediksi nilai: 20 dan 40 poin. Hitung MAE dan RMSE.',
-    fields: [{ label: 'MAE', a: 30, tol: 0.01 }, { label: 'RMSE', a: 31.62, tol: 0.01 }],
-    ex: 'MAE = (20+40)/2 = 30. RMSE = √((400+1600)/2) = √1000 = 31,62. RMSE lebih sensitif terhadap error besar. Jangan laporkan R² sendirian.' },
-  { type: 'fill', q: 'Metrik yang dioptimalkan untuk tiap situasi.',
-    fields: [
-      { label: 'A. Seleksi tutoring gratis, risiko menolak mahasiswa yang butuh', a: ['recall'] },
-      { label: 'B. Menandai dugaan plagiarisme ke komite', a: ['precision', 'presisi'] },
-      { label: 'C. Prediksi jumlah pendaftar untuk beli komputer', a: ['mae', 'rmse', 'mae atau rmse', 'mae/rmse'] },
-      { label: 'D. Akurasi 96% pada fault 3%: baseline "selalu normal" (%)', a: 97, tol: 0.05 }],
-    ex: 'D adalah peringatan: model 96% lebih buruk dari baseline 97%. Lihat recall dan confusion matrix.' },
-  { type: 'fill', q: 'Nama "dial kapasitas" pada tiap metode.',
-    fields: [{ label: 'Polynomial fit', a: ['degree', 'derajat', 'degree polinomial'] }, { label: 'k-nearest neighbours', a: ['k'] }, { label: 'Decision tree', a: ['max depth', 'kedalaman', 'maximum depth', 'kedalaman maksimum'] }],
-    ex: 'kNN: k kecil = kapasitas tinggi. Semua metode menunjukkan kurva U pada test error.' },
-  { type: 'fill', q: 'Bias atau variance?',
-    fields: [{ label: 'Polinom derajat 1 (train error 1,96)', a: ['bias', 'high bias'] }, { label: 'Polinom derajat 12 (train error 0,02)', a: ['variance', 'high variance', 'varians'] }],
-    ex: 'Bias = salah karena terlalu sederhana (underfit). Variance = salah karena mengejar noise (overfit). Derajat 3 (0,86) paling seimbang.' },
-  { type: 'essay', q: 'Apa itu data leakage? Beri tiga contoh dan cara mencegahnya.',
-    points: ['Fitur berisi informasi yang tidak tersedia saat prediksi dibuat', 'Contoh: memakai nilai ujian akhir untuk memprediksi gagal mata kuliah', 'Contoh: memakai jumlah semester terdaftar untuk memprediksi dropout', 'Contoh: normalisasi dengan statistik seluruh data sebelum split', 'Gejala: akurasi terlalu tinggi, test error hampir sama dengan train dan mendekati nol', 'Pencegahan: hanya fitur yang tersedia saat prediksi, fit preprocessing di data train saja'] },
-  { type: 'essay', q: 'Laporan mahasiswa: "Saya memuat 500 record dan menormalisasi semua fitur. Lalu split 80/20 dan melatih decision tree. Akurasi training 100%. Saya mencoba 12 kedalaman dan melaporkan test accuracy terbaik, 91%." Temukan empat kesalahan.',
-    points: ['Normalisasi sebelum split = leakage statistik test ke training', 'Training 100% menandakan pohon menghafal (overfitting)', 'Memilih kedalaman dengan test set membuat skor test terlalu optimis; pakai validation set atau cross-validation', 'Tidak ada baseline (kesalahan yang tidak terlihat di teks)', 'Versi benar: pilih kedalaman dengan validasi, uji test sekali, bandingkan dengan baseline mayoritas'] },
-  { type: 'fill', q: 'Self-check M7: hanya satu benar. (A) Model dengan training error nol adalah model bagus. (B) Akurasi lebih tinggi selalu berarti classifier lebih berguna. (C) Logistic regression adalah metode regresi. (D) Test data boleh dipakai memilih model. (E) Model bisa generalisasi baik walau tidak sempurna di data training.',
-    fields: [{ label: 'Pernyataan benar', a: 'E' }],
-    ex: 'E benar (kNN k = 12 vs k = 1). A salah (bisa overfit), B salah (data tidak seimbang), C salah (klasifikasi), D salah (test hanya untuk evaluasi akhir).' }
-]);

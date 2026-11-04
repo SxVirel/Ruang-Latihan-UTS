@@ -1,6 +1,6 @@
 // Kecerdasan Artifisial — materi UTS (slide dosen): Introduction to Metaheuristic Search, Genetic Algorithm,
-// GA for Combinatorial Problems, Multi-Objective Optimisation. Ditambah pembahasan Soal UTS 2025 (= LKS GA-2)
-// dan ringkasan minggu 7 (di luar UTS). Disusun sendiri dari slide Week 1-7 dan catatan MOGA (RSM); bukan salinan slide.
+// GA for Combinatorial Problems, Multi-Objective Optimisation. Ditambah pembahasan Soal UTS 2025 (= LKS GA-2).
+// Bab minggu 7 (machine learning) sudah dihapus karena di luar kisi-kisi UTS. Disusun sendiri dari slide Week 1-6 dan catatan MOGA (RSM); bukan salinan slide.
 // genes: { pos?, rows: [{ label, genes, mark?, mark2?, note? }] } dan wheel: { items: [{ label, p }], r? } digambar oleh js/diagram.js.
 BANK.materi('ka', [
   {
@@ -41,20 +41,22 @@ BANK.materi('ka', [
           ['A4', '3 2 1 4 5', 'C-B-A-D-E-C: 7+8+6+9+8', '38', '0,0263', '0,26', '0,74 – 1'],
           ['Total', '', '', '', '0,1003', '1', '']] } },
       { h: 'c-d. Parent dan order crossover', genes: { pos: true, rows: [
-          { label: 'P1 = A1', genes: '12345', mark: [3, 4] }, { label: 'P2 = A2', genes: '24135', mark2: [3, 4] },
-          { label: 'Anak1', genes: '21345', mark: [3, 4], mark2: [1, 2, 5], note: 'urutan A2 dari gen 5: 5 2 4 1 3 → buang 3, 4' },
-          { label: 'Anak2', genes: '24135', mark2: [3, 4], mark: [1, 2, 5], note: 'urutan A1 dari gen 5: 5 1 2 3 4 → buang 1, 3' },
-          { label: 'P3 = A4', genes: '32145', mark: [3, 4] }, { label: 'P4 = A1', genes: '12345', mark2: [3, 4] },
-          { label: 'Anak3', genes: '23145', mark: [3, 4], mark2: [1, 2, 5] }, { label: 'Anak4', genes: '21345', mark2: [3, 4], mark: [1, 2, 5] }] },
+          { label: 'P1 = A1', genes: '12345', mark: [2, 3, 4] }, { label: 'P2 = A2', genes: '24135', mark2: [2, 3, 4] },
+          { label: 'Anak1', genes: '12345', mark: [2, 3, 4], mark2: [1, 5], note: 'urutan A2 dari gen 5: 5 2 4 1 3 → buang 2, 3, 4 → sisa 5, 1' },
+          { label: 'Anak2', genes: '24135', mark2: [2, 3, 4], mark: [1, 5], note: 'urutan A1 dari gen 5: 5 1 2 3 4 → buang 4, 1, 3 → sisa 5, 2' },
+          { label: 'P3 = A4', genes: '32145', mark: [2, 3, 4] }, { label: 'P4 = A1', genes: '12345', mark2: [2, 3, 4] },
+          { label: 'Anak3', genes: '32145', mark: [2, 3, 4], mark2: [1, 5], note: 'urutan A1 dari gen 5: 5 1 2 3 4 → buang 2, 1, 4 → sisa 5, 3' },
+          { label: 'Anak4', genes: '12345', mark2: [2, 3, 4], mark: [1, 5], note: 'urutan A4 dari gen 5: 5 3 2 1 4 → buang 2, 3, 4 → sisa 5, 1' }] },
         poin: ['0,201 → A1 (0 – 0,30); 0,440 → A2 (0,30 – 0,51); 0,876 → A4 (0,74 – 1); 0,107 → A1.',
-          'TP1 = 2 dan TP2 = 4 artinya potongan setelah gen 2 dan setelah gen 4, jadi segmen = gen 3-4.',
-          'Isi sisa mulai gen ke-5 lalu melingkar ke gen 1 dan 2, mengikuti urutan induk lain yang dibaca mulai gen ke-5.'] },
+          'Kunci di sini membaca TP sebagai indeks gen yang termasuk: TP1 = 2 dan TP2 = 4 berarti segmen gen ke-2 sampai ke-4 (soal menyebutnya "rentang indeks", dan panah TP di tabel jawaban menunjuk sel ke-2 dan ke-4). Contoh OX di soal tidak memberi angka TP, jadi tafsiran "potong setelah gen 2 dan gen 4" (segmen gen 3-4) juga mungkin; tulis asumsimu di lembar ujian.',
+          'Isi sisa mulai gen ke-5 lalu melingkar ke gen 1 dan 2, mengikuti urutan induk lain yang dibaca mulai gen ke-5.',
+          'Di soal ini keempat anak kebetulan sama dengan induknya. Bukan kesalahan hitung: dengan 5 gen dan segmen 3 gen, dua gen sisa jatuh tepat di posisi yang sama seperti induknya.'] },
       { h: 'e-g. Mutasi, generasi baru, dan jalur terbaik', tabel: { head: ['Anak', 'Random', 'Mutasi?', 'Hasil', 'Rute', 'Jarak', 'Fitness'], rows: [
-          ['Anak1', '0,21', 'Tidak (≥ 0,2)', '2 1 3 4 5', 'B-A-C-D-E-B', '46', '0,0217'],
+          ['Anak1', '0,21', 'Tidak (≥ 0,2)', '1 2 3 4 5', 'A-B-C-D-E-A', '33', '0,0303'],
           ['Anak2', '0,54', 'Tidak', '2 4 1 3 5', 'B-D-A-C-E-B', '49', '0,0204'],
-          ['Anak3', '0,05', 'Ya, tukar gen 1 dan 5', '5 3 1 4 2', 'E-C-A-D-B-E', '49', '0,0204'],
-          ['Anak4', '0,19', 'Ya, tukar gen 2 dan 3', '2 3 1 4 5', 'B-C-A-D-E-B', '47', '0,0213']] },
-        ingat: 'Jalur terbaik yang didapat: A1 = A→B→C→D→E→A dengan jarak 33 (ini juga optimum global, dicek dengan mencoba semua permutasi). Tanpa elitisme A1 hilang dan generasi baru justru memburuk (terbaik 46). Tulis keduanya di jawaban g, lalu sebutkan bahwa elitisme akan mempertahankan A1.' }
+          ['Anak3', '0,05', 'Ya, tukar gen 1 dan 5', '5 2 1 4 3', 'E-B-A-D-C-E', '39', '0,0256'],
+          ['Anak4', '0,19', 'Ya, tukar gen 2 dan 3', '1 3 2 4 5', 'A-C-B-D-E-A', '43', '0,0233']] },
+        ingat: 'Jalur terbaik yang didapat: A1 = A→B→C→D→E→A dengan jarak 33 (ini juga optimum global, dicek dengan mencoba semua permutasi). Anak1 mewarisi rute itu apa adanya, jadi tanpa elitisme pun rute terbaik tidak hilang, tetapi generasi baru tidak membaik (rata-rata jarak 40,75 → 41,00). Sebutkan bahwa elitisme tidak mengubah jawaban g di soal ini. Dengan tafsiran segmen gen 3-4: anak 21345, 24135, 23145, 21345; setelah mutasi 21345, 24135, 53142, 23145; jarak 46, 49, 49, 47; A1 (33) hilang karena tanpa elitisme, jadi jawaban g tetap A→B→C→D→E→A = 33 tetapi dari generasi awal.' }
     ]
   },
   {
@@ -500,31 +502,6 @@ BANK.materi('ka', [
         'Front sejati: 1 slot/179, 2/49, 3/13, 4/4, 5/0. Penghematan per tambahan slot 130, 36, 9, 4. Knee point = 3 slot.',
         'Weighted sum: skor = w·slot + (1 − w)·bentrok. w harus dipilih sebelum trade-off terlihat, dan pada front cekung sebagian solusi tidak pernah terpilih. Wajar jika nilai tukar diketahui (misalnya rupiah per slot).',
         'Skala nyata: N = 100, 30 gen, 250 generasi = 25.000 evaluasi; pool 200 butuh 19.900 perbandingan per sort.'
-      ] }
-    ]
-  },
-  {
-    label: 'Week 7 · di luar UTS', judul: 'Pengantar Machine Learning',
-    ringkas: 'Learning menurut Mitchell, jenis masalah, generalisasi, baseline, dan metrik.',
-    bagian: [
-      { h: 'Definisi dan jenis', poin: [
-        'Mitchell (1997): program belajar dari pengalaman E terhadap tugas T dengan ukuran P jika performanya pada T menurut P meningkat dengan E.',
-        'Supervised (data berlabel), unsupervised (tanpa label, misalnya clustering), reinforcement (belajar dari hadiah, misalnya catur melawan diri sendiri).',
-        'Menjadwalkan ujian bukan learning, melainkan search/optimasi seperti minggu 1-6.',
-        'Classification memprediksi kelas (logistic regression termasuk di sini); regression memprediksi angka kontinu.'
-      ] },
-      { h: 'Generalisasi', poin: [
-        'Overfitting: train sangat tinggi, test jauh lebih rendah (99,8% vs 71%). Underfitting: keduanya rendah dan dekat (68% vs 66%).',
-        'Test jauh di atas train menandakan eksperimen salah: leakage atau split salah.',
-        'Dial kapasitas: derajat polinom, k pada kNN (k kecil = kapasitas tinggi), kedalaman decision tree. Test error membentuk kurva U.',
-        'kNN k = 1 menghafal (train error 0, test 20,8%); k = 12 memberi test error terbaik 10,8%.'
-      ] },
-      { h: 'Baseline dan metrik', poin: [
-        'Baseline mayoritas: selalu tebak kelas terbanyak. Model harus mengalahkannya (contoh 73,2% vs model 83,3%).',
-        'Data tidak seimbang: akurasi menipu. Cacat 1 per 1.000 memberi baseline 99,9%.',
-        'Precision = TP/(TP + FP); recall = TP/(TP + FN). Pilih recall jika melewatkan kasus mahal, precision jika alarm palsu mahal.',
-        'Regresi: MAE = rata-rata |error|, RMSE = √(rata-rata error²), lebih sensitif pada error besar.',
-        'Data leakage: fitur yang tidak tersedia saat prediksi, atau normalisasi sebelum split. Test set hanya untuk evaluasi akhir.'
       ] }
     ]
   }
