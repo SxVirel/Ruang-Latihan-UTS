@@ -1,9 +1,9 @@
-// Kecerdasan Artifisial — isian minggu 5 dan 6 (slide Week-5/6_KA): GA kombinatorial, Tabu Search, NSGA-II.
-// Minggu 7 (learning) di luar materi UTS, jadi ada di tab Uraian & Isian, bukan di latihan biasa.
+// Kecerdasan Artifisial — isian singkat minggu 5, 6, 7 (slide Week-5/6/7_KA). Semuanya di tab khusus, bukan di latihan biasa:
+// minggu 5-6 masuk materi UTS tetapi formatnya isian singkat (UTS berbentuk esai), minggu 7 (learning) di luar materi UTS.
 var HARD = ['hard', 'hard constraint', 'keras'];
 var SOFT = ['soft', 'soft constraint', 'lunak'];
 
-BANK.isian('ka', 'w5', 'Isian Week 5: GA Kombinatorial & Tabu', [
+BANK.uraian('ka', 'w5', 'Isian Week 5: GA Kombinatorial & Tabu', [
   { type: 'fill', q: 'Berapa banyak kemungkinan tur (permutasi) untuk TSP dengan 6 kota? Berapa banyak subset untuk knapsack dengan 10 item?',
     fields: [{ label: 'Tur 6 kota (n!)', a: 720, tol: 0 }, { label: 'Subset 10 item (2^n)', a: 1024, tol: 0 }],
     ex: 'Permutasi = n! = 720. Subset = 2^n = 1024. Untuk 20 kota, 20! ≈ 2,4 × 10^18 tur: enumerasi mustahil.' },
@@ -75,7 +75,7 @@ BANK.isian('ka', 'w5', 'Isian Week 5: GA Kombinatorial & Tabu', [
     ex: 'D benar. A salah (duplikat/hilang kota), B salah (sisa posisi diisi berbeda), C salah (repair O1 justru memberi 13 conflicts, terbaik), E salah (Tabu menerima move memburuk jika semua move membaik tabu).' }
 ]);
 
-BANK.isian('ka', 'w6', 'Isian Week 6: NSGA-II', [
+BANK.uraian('ka', 'w6', 'Isian Week 6: NSGA-II', [
   { type: 'fill', q: 'Kedua objektif diminimalkan. Untuk tiap pasangan, tulis "A" jika A mendominasi B, "B" jika B mendominasi A, atau "incomparable".',
     fields: [
       { label: 'A=(3,45), B=(3,49)', a: ['A', 'A dominates B', 'A mendominasi B'] },

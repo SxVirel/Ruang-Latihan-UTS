@@ -130,10 +130,10 @@ test('Kecerdasan Artifisial practice covers the four UTS materi in staged form',
     assert.ok(items.length >= staged[t], t + ' has ' + items.length);
     assert.ok(items.every(it => it.type === 'steps' && !it.section), t);
   }
-  // Weeks 5 and 6 (Tabu Search, NSGA-II) are exam materi; week 7 (learning) is not, so it sits in the uraian tab.
-  assert.ok(ka.some(it => it.id === 'ka-w5-16' && !it.section));
-  assert.ok(ka.filter(it => /^ka-w6-/.test(it.id)).every(it => !it.section));
-  assert.ok(ka.filter(it => /^ka-w7-/.test(it.id)).every(it => it.section === 'uraian'));
+  // The exam is essay only, so the short fill drills (weeks 5-6) and learning (week 7, not exam materi) sit in the special tab.
+  assert.ok(ka.filter(it => !it.section).every(it => it.type === 'steps'));
+  assert.ok(ka.filter(it => /^ka-w[567]-/.test(it.id)).every(it => it.section === 'uraian'));
+  assert.ok(ka.some(it => it.id === 'ka-w5-16'));
 });
 
 // Last year's UTS question 1 (= LKS GA-2): recompute the tours from the distance matrix.

@@ -219,7 +219,7 @@
     if (c.kind === 'mcq') {
       return 'Pilihan ganda · ' + countOf(counts, 'mcq') + ' soal' + (counts.some(function (it) { return it.type === 'essay'; }) ? ' + esai' : '');
     }
-    var kinds = countOf(counts, 'steps') ? 'Uraian bertahap & isian · ' : countOf(counts, 'essay') ? 'Isian & esai · ' : 'Isian · ';
+    var kinds = countOf(counts, 'steps') === counts.length ? 'Uraian bertahap · ' : countOf(counts, 'steps') ? 'Uraian bertahap & isian · ' : countOf(counts, 'essay') ? 'Isian & esai · ' : 'Isian · ';
     return kinds + counts.length + ' soal' + (!uraian && c.labs && c.labs.length ? ' · ' + c.labs.length + ' lab' : '');
   }
 
@@ -254,7 +254,7 @@
 
     var tabList = [['latihan', 'Latihan soal']];
     if (weeks) tabList.push(['materi', 'Materi']);
-    if (hasUraian) tabList.push(['uraian', 'Uraian & Isian']);
+    if (hasUraian) tabList.push(['uraian', c.uraianLabel || 'Uraian & Isian']);
     tabList = tabList.concat(labs.map(function (l) { return [l, Labs[l].name]; }));
     if (tabList.length > 1) {
       var tabs = h('div', { class: 'tabs', role: 'tablist' });
@@ -272,7 +272,7 @@
     }
 
     if (uraian) {
-      wrap.appendChild(h('p', { class: 'lead' }, 'Prediksi buatan sendiri mengikuti pola Latihan 1 dan kisi-kisi, bukan soal asli dosen. Tulis jawaban dulu, lalu centang poin yang terpenuhi.'));
+      wrap.appendChild(h('p', { class: 'lead' }, c.uraianLead || 'Prediksi buatan sendiri mengikuti pola Latihan 1 dan kisi-kisi, bukan soal asli dosen. Tulis jawaban dulu, lalu centang poin yang terpenuhi.'));
     }
 
     var setup = h('section', { class: 'sheet stack' });

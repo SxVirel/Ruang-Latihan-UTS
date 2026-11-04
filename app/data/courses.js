@@ -7,7 +7,9 @@ BANK.course('ks', {
 BANK.course('ka', {
   name: 'Kecerdasan Artifisial', code: 'KA', kind: 'isian', secsPerItem: 150,
   blurb: 'Uraian bertahap 4 materi UTS: metaheuristik, GA, GA kombinatorial (TSP, PMX, OX), NSGA-II',
-  about: 'Latihan soal mengikuti 4 materi UTS dari slide dosen: Introduction to Metaheuristic Search, Genetic Algorithm, GA for Combinatorial Problems, dan Multi-Objective Optimisation. Bentuknya uraian bertahap seperti soal esai: setiap soal dipecah menjadi langkah a, b, c yang dibuka satu per satu. Ada Soal 1 UTS 2025 (sama dengan LKS GA-2) beserta tiga soal mirip, NSGA-II dari latihan slide Week 6, dan isian minggu 5-6. Tab Materi berisi pembahasan UTS 2025 dan ringkasan tiap materi dengan diagram kromosom dan roulette. Materi learning (minggu 7) ada di tab Uraian & Isian karena di luar UTS.',
+  about: 'Latihan soal mengikuti 4 materi UTS dari slide dosen: Introduction to Metaheuristic Search, Genetic Algorithm, GA for Combinatorial Problems, dan Multi-Objective Optimisation. Bentuknya uraian bertahap seperti soal esai: setiap soal dipecah menjadi langkah a, b, c yang dibuka satu per satu. Ada Soal 1 UTS 2025 (sama dengan LKS GA-2) beserta tiga soal mirip, dan NSGA-II dari latihan slide Week 6. Tab Materi berisi pembahasan UTS 2025 dan ringkasan tiap materi dengan diagram kromosom dan roulette. Isian singkat minggu 5-6 dan learning minggu 7 dipisah di tab Di luar format UTS.',
+  uraianLabel: 'Di luar format UTS',
+  uraianLead: 'Soal isian singkat minggu 5-6 (materinya masuk UTS, tetapi UTS berbentuk esai) dan learning minggu 7 (di luar materi UTS). Untuk latihan tambahan saja; latihan utama ada di tab Latihan soal.',
   materiLead: 'Materi disusun mengikuti 4 materi UTS, diawali pola ujian dan pembahasan Soal 1 UTS 2025. Ketuk satu bab untuk membukanya.'
 });
 BANK.course('ca', {
