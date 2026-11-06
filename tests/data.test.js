@@ -308,8 +308,10 @@ test('Komputasi Awan materi is well formed and the bank follows the seven kisi-k
   assert.deepEqual(topics, ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'uts2425', 'uts2526']);
   for (let n = 1; n <= 7; n++) {
     const items = ca.filter(it => it.id.startsWith('ca-u' + n + '-'));
-    assert.ok(items.length >= 8, 'u' + n + ' ' + items.length);
-    assert.ok(items.filter(it => it.type === 'steps').length >= 2, 'u' + n + ' exam-style packages');
+    assert.ok(items.length >= 5, 'u' + n + ' ' + items.length);
+    // Every practice item is an exam-style a/b/c package, not a short drill.
+    assert.ok(items.every(it => it.type === 'steps' && it.steps.length >= 2), 'u' + n + ' exam-style packages');
+    assert.ok(items.filter(it => it.q.length >= 150).length >= 3, 'u' + n + ' story packages');
     // Self-written keys are labelled.
     assert.ok(items.every(it => /perlu dicek/.test(it.ex)), 'u' + n + ' self-written label');
   }

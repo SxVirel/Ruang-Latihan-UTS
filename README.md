@@ -6,7 +6,7 @@ Aplikasi latihan UTS untuk lima mata kuliah. Berjalan offline di laptop Windows,
 |---|---|
 | Keamanan Siber | 258 pilihan ganda + 2 esai, materi minggu 1-7, 23 prediksi uraian dan isian |
 | Kecerdasan Artifisial | 23 soal uraian bertahap berpola UTS, dibagi ke 4 materi kisi-kisi (minimal 4 soal per materi) + 33 isian minggu 5-6, materi 14 bab dengan pembahasan UTS 2025 |
-| Komputasi Awan | Soal asli UTS 24/25 dan 25/26 (14 soal bertahap, gambar digambar ulang) + 70 soal latihan per nomor kisi-kisi UTS 2026 (paket a/b/c bergaya UTS, hashing ASCII Chord), materi 8 bab mengikuti kisi-kisi, + 3 lab interaktif |
+| Komputasi Awan | Soal asli UTS 24/25 dan 25/26 (14 soal bertahap, gambar digambar ulang) + 41 paket soal latihan a/b/c per nomor kisi-kisi UTS 2026 (sebagian besar soal cerita, hashing ASCII Chord), materi 8 bab mengikuti kisi-kisi, + 3 lab interaktif |
 | Forensik Digital | 66 pilihan ganda + 24 isian kisi-kisi (tiap sesi selalu 20 PG + 5 isian), materi 7 dek, plus 36 isian dan esai lama di tab Uraian & Isian |
 | Manajemen Proyek | 70 isian hitungan dari kisi-kisi, soal UTS 2026 Genap, dan soal remedial 2024/2025 (NPV, ROI, ROA, payback, EV, critical path, ES sampai slack, PERT) + soal mirip ujian itu, materi 10 bab dengan diagram WBS dan network diagram, lab CPM |
 
