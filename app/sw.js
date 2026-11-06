@@ -1,5 +1,5 @@
 // Offline copy for the hosted app. Network first, so new questions appear whenever the phone is online.
-var CACHE = 'latihan-uts-v16';
+var CACHE = 'latihan-uts-v17';
 var FILES = [
   './', 'index.html', 'css/style.css', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png',
   'js/bank.js', 'js/check.js', 'js/store.js', 'js/ui.js', 'js/diagram.js', 'js/session.js', 'js/quiz.js', 'js/tools-ui.js', 'js/app.js',

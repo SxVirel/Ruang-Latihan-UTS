@@ -1,9 +1,11 @@
 // Komputasi Awan — soal asli UTS Genap 2024/2025 dan Ganjil 2025/2026, satu soal bertahap per nomor.
 // Teks soal disalin dari PDF ujian (ejaan asli dipertahankan). Gambar digambar ulang sebagai diagram SVG
-// atau tabel. PDF tidak memuat kunci, jadi semua kunci dan contoh jawaban disusun sendiri.
+// atau tabel. Kunci 24/25 disusun sendiri; kunci 25/26 dicocokkan dengan file solusi UTS 25/26.
 // Vector/Lamport clock dihitung dengan app/js/tools/clocks.js, konsistensi diperiksa dengan consistency.js.
 (function () {
   var S = ' Kunci disusun sendiri — perlu dicek.';
+  // UTS 25/26 punya file solusi (Solusi_uts_komputasi_awan_distribusi_25261.pdf); kuncinya dicocokkan dengan file itu.
+  var K = ' Kunci dicocokkan dengan file solusi UTS 25/26.';
 
   BANK.isian('ca', 'uts2425', 'Soal Asli UTS 24/25', [
     { type: 'steps',
@@ -180,14 +182,14 @@
           points: ['Centralized: satu titik pusat mengendalikan proses dan sumber daya', 'Decentralized: kendali dibagi ke beberapa pusat lokal (hub)', 'Distributed: tidak ada pusat, node setara bekerja sama dan tampak sebagai satu sistem', 'Contoh atau dampak single point of failure'],
           model: 'Centralized: satu node pusat memegang data dan keputusan, misalnya aplikasi di satu server; jika server mati, layanan berhenti. Decentralized: kendali dibagi ke beberapa pusat lokal, misalnya email yang tiap domainnya punya mail server sendiri. Distributed: tidak ada pusat; node-node setara bekerja sama dan tampak sebagai satu sistem, misalnya jaringan P2P atau cluster.' },
         { q: 'b. Jelaskan definisi Distribution Transparency dan sebutkan tipe-tipenya! (4 poin)',
-          points: ['Definisi: menyembunyikan bahwa proses dan sumber daya tersebar di banyak komputer', 'Access, location, relocation, migration', 'Replication, concurrency, failure', 'Persistence pada daftar 8 tipe'],
+          points: ['Definisi: kemampuan menyembunyikan kompleksitas (proses dan sumber daya yang tersebar) sehingga sistem tampak sebagai satu kesatuan', 'Access: perbedaan cara mengakses data/objek; Location: lokasi fisik objek', 'Relocation: perpindahan objek yang sedang digunakan; Migration: objek berpindah lokasi dari waktu ke waktu', 'Replication: objek punya banyak salinan; Concurrency: banyak pengguna mengakses bersamaan; Failure: kegagalan dan pemulihan', 'File solusi menyebut tujuh tipe (persistence hanya ada di daftar lama)'],
           model: 'Distribution transparency adalah sifat sistem terdistribusi yang menyembunyikan dari pengguna bahwa proses dan sumber dayanya tersebar secara fisik. Tipenya: access, location, relocation, migration, replication, concurrency, dan failure transparency; daftar lama menambahkan persistence.' },
         { q: 'c. Jelaskan sistem Shared Memory dan Private Memory pada Parallel Computing berikut! (3 poin)',
           figure: { type: 'memory' },
           points: ['Shared memory (multiprocessor): beberapa prosesor mengakses memori bersama lewat interconnect', 'Komunikasi lewat baca/tulis memori bersama, perlu sinkronisasi', 'Private memory (multicomputer): tiap prosesor punya memori sendiri', 'Komunikasi lewat message passing melalui interconnect; lebih mudah diskalakan'],
           model: 'Pada shared memory, semua prosesor terhubung ke modul memori yang sama melalui interconnect, sehingga data cukup ditulis satu prosesor dan dibaca prosesor lain; mudah diprogram, tetapi interconnect dan memori menjadi bottleneck saat prosesor bertambah. Pada private memory, setiap prosesor memiliki memorinya sendiri, dan pertukaran data dilakukan lewat pesan melalui interconnect; lebih sulit diprogram tetapi bisa diskalakan sampai ribuan node.' }
       ],
-      ex: 'Soal asli UTS Ganjil 2025/2026 nomor 1. Gambar 1c digambar ulang.' + S },
+      ex: 'Soal asli UTS Ganjil 2025/2026 nomor 1. Gambar 1c digambar ulang.' + K },
 
     { type: 'steps',
       q: 'Soal No. 2: Arsitektur Sistem (total 10 poin)',
@@ -199,7 +201,7 @@
           points: ['Terstruktur: topologi mengikuti aturan (ring, tree)', 'Terstruktur: item data ditempatkan deterministik, key = hash(data) di node tertentu (DHT)', 'Terstruktur: lookup efisien O(log N), pasti ketemu (Chord)', 'Tak terstruktur: tetangga acak, item data di node mana saja', 'Tak terstruktur: pencarian dengan flooding atau random walk, tidak pasti ketemu (Gnutella)'],
           model: 'Pada overlay terstruktur, misalnya Chord, setiap item data diberi key hasil hash dan wajib disimpan di node tertentu, yaitu succ(key). Karena tempatnya pasti, pencarian cukup O(log N) hop dan selalu berhasil. Pada overlay tak terstruktur, node terhubung secara acak dan data disimpan di mana saja, sehingga query disebar dengan flooding atau random walk; boros pesan dan tidak menjamin ketemu.' }
       ],
-      ex: 'Soal asli UTS Ganjil 2025/2026 nomor 2.' + S },
+      ex: 'Soal asli UTS Ganjil 2025/2026 nomor 2.' + K },
 
     { type: 'steps',
       q: 'Soal No. 3: Proses (total 10 poin)',
@@ -212,12 +214,12 @@
             { label: 'Σ i·ci (i = 1..4)', a: 1.6, tol: 0.005 },
             { label: '1 − c0', a: 0.9, tol: 0.005 },
             { label: 'TLP (2 desimal)', a: 1.78, tol: 0.01 }],
-          ex: 'Σ i·ci = 1×0,40 + 2×0,35 + 3×0,10 + 4×0,05 = 1,60. Rumus van Steen & Tanenbaum: TLP = 1,60 / (1 − 0,10) = 1,78. Jika dosen memakai rata-rata tertimbang tanpa pembagi, jawabannya 1,60; tulis rumus yang dipakai.' },
+          ex: 'Sesuai file solusi: TLP = Σ i·ci / (1 − c0), dengan c0 = durasi tanpa thread, c1 = durasi hanya 1 thread aktif, dan seterusnya. Σ i·ci = (1)(0,4) + (2)(0,35) + (3)(0,1) + (4)(0,05) = 1,6. TLP = 1,6 / 0,9 = 1,78.' },
         { q: 'c. Mengapa multithreaded client dapat bekerja lebih cepat dibanding single-threaded client dalam mengakses halaman web? (3 poin)',
           points: ['Halaman web berisi banyak objek (gambar, CSS, script)', 'Single-thread mengambil objek satu per satu dan menunggu', 'Multithread membuka beberapa koneksi sekaligus, satu thread per objek', 'Latensi jaringan tumpang tindih; halaman tampil bertahap; bisa dibagi ke replika server'],
           model: 'Halaman web memuat banyak objek. Client single-thread harus menunggu satu objek selesai sebelum meminta objek berikutnya, sehingga waktu tunggu jaringan menumpuk. Client multithread menjalankan beberapa thread yang mengambil objek secara bersamaan, sehingga waktu tunggu saling menutupi dan halaman tampil lebih cepat; jika server direplikasi, unduhan dapat dibagi ke beberapa replika.' }
       ],
-      ex: 'Soal asli UTS Ganjil 2025/2026 nomor 3.' + S },
+      ex: 'Soal asli UTS Ganjil 2025/2026 nomor 3.' + K },
 
     { type: 'steps',
       q: 'Soal No. 4: Komunikasi (total 10 poin)',
@@ -226,13 +228,13 @@
           points: ['Persistent: pesan disimpan middleware sampai diterima', 'Transient: pesan hilang jika penerima tidak aktif', 'Synchronous: pengirim diblokir (sampai submission, delivery, atau response)', 'Asynchronous: pengirim langsung lanjut', 'Kombinasi dan contoh: email (persistent async), RPC (transient sync), UDP (transient async)'],
           model: 'Persistent: pesan disimpan middleware sampai diambil, contohnya email. Transient: pesan hanya ada selama kedua pihak aktif, contohnya UDP. Synchronous: pengirim menunggu sampai pesan diterima middleware, diterima penerima, atau selesai diproses, contohnya RPC. Asynchronous: pengirim langsung melanjutkan setelah mengirim. Kombinasinya persistent asynchronous, persistent synchronous, transient asynchronous, dan transient synchronous.' },
         { q: 'b. Tipe apakah yang umumnya digunakan pada komunikasi client/server? Jelaskan! (3 poin)',
-          points: ['Buku: transient synchronous (request-reply)', 'Client diblokir sampai server membalas', 'Server harus aktif, pesan tidak disimpan', 'Kisi-kisi dosen: contoh client-server minggu 4 digolongkan transient asynchronous'],
-          model: 'Komunikasi client/server umumnya transient synchronous: client mengirim request lalu menunggu balasan, seperti pada RPC atau HTTP, dan pesan tidak disimpan sehingga server harus aktif saat itu. Catatan: kisi-kisi dosen menggolongkan contoh client-server minggu 4 sebagai transient asynchronous karena client tidak menunggu balasan; sebutkan konteks yang dipakai.' },
+          points: ['Transient synchronous (jawaban file solusi dan buku)', 'Client dan server harus aktif bersamaan', 'Client mengirim permintaan dan menunggu balasan; server menunggu permintaan masuk', 'Kelemahan: client tidak bisa mengerjakan hal lain saat menunggu dan harus segera menangani kegagalan komunikasi'],
+          model: 'Model komunikasi client-server biasanya bersifat transient synchronous, artinya client dan server harus aktif secara bersamaan. Client mengirim permintaan dan menunggu balasan, sementara server menunggu permintaan masuk. Kelemahannya, client tidak dapat mengerjakan hal lain saat menunggu respons dan harus segera menangani kegagalan komunikasi.' },
         { q: 'c. Jelaskan metode/teknik pada Multicast memungkinkan pengiriman pesan dari satu pengirim ke banyak penerima secara bersamaan (3 poin)',
-          points: ['IP multicast: router menyalin paket untuk alamat grup', 'Application-level multicast: overlay tree/mesh, node meneruskan ke anaknya', 'Kualitas overlay: link stress dan stretch', 'Flooding dan gossip (epidemic) sebagai alternatif'],
+          points: ['Application-Level Multicasting (ALM): membentuk jaringan overlay (mis. struktur pohon) untuk distribusi pesan', 'Flooding: pesan dikirim ke semua tetangga, berisiko redundansi', 'Gossip/epidemic protocol: informasi disebarkan bertahap dari satu node ke beberapa node lain sampai seluruh sistem menerima', 'Tambahan: IP multicast di lapisan jaringan; kualitas overlay diukur dengan link stress dan stretch'],
           model: 'Multicast mengirim satu pesan ke sekelompok penerima. Di lapisan jaringan, IP multicast membuat router menyalin paket untuk semua anggota grup. Di lapisan aplikasi, node membentuk pohon overlay dan setiap node meneruskan pesan ke anaknya; kualitasnya diukur dengan link stress dan stretch. Alternatifnya flooding ke semua tetangga atau gossip ke tetangga acak.' }
       ],
-      ex: 'Soal asli UTS Ganjil 2025/2026 nomor 4.' + S },
+      ex: 'Soal asli UTS Ganjil 2025/2026 nomor 4.' + K },
 
     { type: 'steps',
       q: 'Soal No. 5: Koordinasi (total 10 poin)',
@@ -245,8 +247,8 @@
         caption: 'Digambar ulang dari soal. Pesan: a→c, e→c, b→f, g→d.' },
       steps: [
         { q: 'a. Algoritma election sangat penting dalam sistem terdistribusi. Apa masalah utama yang diselesaikan oleh algoritma election? Terdapat algoritma pemilihan Bully dan Ring, pilih salah satu algoritma dan jelaskan cara kerjanya langkah demi langkah hingga informasi mengenai koordinator baru tersebut diketahui oleh seluruh proses. (4 poin)',
-          points: ['Masalah: memilih tepat satu koordinator yang disepakati semua proses setelah koordinator lama gagal', 'Ring: pemrakarsa mengirim ELECTION berisi ID-nya ke penerus, proses mati dilewati', 'Tiap proses menambahkan ID-nya lalu meneruskan', 'Saat kembali ke pemrakarsa, ID tertinggi dipilih', 'Pesan COORDINATOR diedarkan satu putaran agar semua proses tahu'],
-          model: 'Algoritma election menyelesaikan masalah pemilihan satu koordinator yang disepakati semua proses setelah koordinator lama gagal. Ring: proses disusun dalam ring logis. Proses yang menyadari kegagalan mengirim pesan ELECTION berisi ID-nya ke penerus, melewati proses yang mati. Setiap proses menambahkan ID-nya lalu meneruskan. Ketika pesan kembali ke pemrakarsa, ID tertinggi dipilih, lalu pesan COORDINATOR diedarkan satu putaran sehingga semua proses tahu koordinator baru.' },
+          points: ['Masalah: memilih koordinator secara dinamis ketika koordinator saat ini gagal', 'Bully: P_k tidak mendapat respons dari koordinator, menganggapnya mati, lalu mengirim ELECTION ke semua proses ber-ID lebih besar', 'Bully: jika tidak ada yang merespons, P_k menang; jika ada, proses ber-ID lebih tinggi mengambil alih dan mengulang election', 'Bully: pemenang mengirim pesan KOORDINATOR ke seluruh proses', 'Ring (alternatif): ELECTION beredar di ring logis membawa daftar ID, kembali ke inisiator, ID tertinggi dipilih, lalu pesan KOORDINATOR diedarkan ke seluruh ring'],
+          model: 'Algoritma election menyelesaikan kebutuhan memilih koordinator secara dinamis ketika koordinator saat ini gagal. Bully: proses P_k mengirim pesan ke koordinator tetapi tidak mendapat respons, sehingga menganggapnya mati. P_k mengirim ELECTION ke semua proses dengan ID lebih besar. Jika tidak ada yang merespons, P_k menang dan menjadi koordinator; jika ada, proses ber-ID lebih tinggi mengambil alih dan mengirim ELECTION ke proses yang lebih tinggi lagi. Koordinator baru mengirim pesan KOORDINATOR ke seluruh proses. Ring: proses disusun dalam ring logis. Proses yang menyadari kegagalan mengirim pesan ELECTION berisi ID-nya ke penerus, melewati proses yang mati. Setiap proses menambahkan ID-nya lalu meneruskan. Ketika pesan kembali ke pemrakarsa, ID tertinggi dipilih, lalu pesan COORDINATOR diedarkan satu putaran sehingga semua proses tahu koordinator baru.' },
         { q: 'b. Kita telah mempelajari Vector’s clock dan Lamport’s clock. Apa masalah utama yang dimiliki oleh Lamport’s clock? (2 poin)',
           points: ['Lamport menjamin: a → b maka L(a) < L(b)', 'Tetapi L(a) < L(b) tidak berarti a → b', 'Tidak bisa membedakan event kausal dan concurrent', 'Vector clock mengatasinya'],
           model: 'Lamport clock hanya menjamin satu arah: jika a terjadi sebelum b, maka L(a) < L(b). Sebaliknya tidak berlaku; L(a) < L(b) tidak berarti a mendahului b, karena keduanya bisa concurrent. Jadi Lamport clock tidak menangkap kausalitas, dan vector clock dipakai untuk itu.' },
@@ -254,21 +256,21 @@
           fields: [
             { label: 'a', a: '1 0 0' }, { label: 'b', a: '2 0 0' }, { label: 'c', a: '1 1 1' }, { label: 'd', a: '2 2 3' },
             { label: 'e', a: '0 0 1' }, { label: 'f', a: '2 0 2' }, { label: 'g', a: '2 0 3' }],
-          ex: 'c menerima dari a (1,0,0) dan e (0,0,1): max = (1,0,1), naikkan P2 → (1,1,1). f menerima dari b: max((0,0,1), (2,0,0)) = (2,0,1) → (2,0,2). g = (2,0,3). d: max((1,1,1), g) = (2,1,3) → (2,2,3). Lamport: a 1, b 2, c 2, d 5, e 1, f 3, g 4. Dihitung dengan clocks.js; diagram ini juga ada di lab Timestamp.' }
+          ex: 'Sama dengan file solusi. a: send pertama di P1 (1,0,0); b: (2,0,0). c menerima dari a (1,0,0) dan e (0,0,1): max = (1,0,1), tambah 1 untuk P2 → (1,1,1). e: send pertama di P3 (0,0,1). f menerima dari b: max((0,0,1), (2,0,0)) = (2,0,1) → (2,0,2). g: event berikutnya di P3 → (2,0,3). d menerima dari g: max((1,1,1), (2,0,3)) = (2,1,3) → (2,2,3). Lamport: a 1, b 2, c 2, d 5, e 1, f 3, g 4.' }
       ],
-      ex: 'Soal asli UTS Ganjil 2025/2026 nomor 5.' + S },
+      ex: 'Soal asli UTS Ganjil 2025/2026 nomor 5.' + K },
 
     { type: 'steps',
       q: 'Soal No. 6: Penamaan (total 10 poin)',
       steps: [
         { q: 'a. Jelaskan apa yang kamu ketahui tentang "The Principle Mobile IP"? (4 poin)',
-          points: ['Contoh home-based approach untuk entitas bergerak', 'Host punya home address tetap dan home agent di jaringan asal', 'Di jaringan tamu host mendapat care-of address (lewat foreign agent) dan mendaftarkannya', 'Home agent meneruskan paket lewat tunnel ke care-of address', 'Kekurangan: triangle routing, home agent harus selalu aktif'],
+          points: ['Mekanisme agar perangkat yang berpindah lokasi tetap bisa dihubungi melalui satu alamat IP tetap (jawaban file solusi)', 'Contoh home-based approach untuk entitas bergerak', 'Host punya home address tetap dan home agent di jaringan asal', 'Di jaringan tamu host mendapat care-of address (lewat foreign agent) dan mendaftarkannya', 'Home agent meneruskan paket lewat tunnel ke care-of address', 'Kekurangan: triangle routing, home agent harus selalu aktif'],
           model: 'Prinsip Mobile IP: setiap host bergerak memiliki home address tetap dan home agent di jaringan asalnya. Ketika host pindah ke jaringan lain, ia memperoleh care-of address, biasanya lewat foreign agent, lalu mendaftarkannya ke home agent. Pengirim tetap mengirim ke home address; home agent menangkap paket dan meneruskannya lewat tunnel ke care-of address, lalu memberi tahu pengirim alamat terbaru. Alamat yang dikenal aplikasi tidak berubah walau lokasi berubah.' },
         { q: 'b. Soal cerita Kasus "The Principle Mobile IP":\nImmanuel seorang warga negara Indonesia dan tinggal di Jakarta selalu menggunakan teknologi VOIP Whatsapp untuk berkomunikasi dengan koleganya, beliau menggunakan Telkomsel sebagai provider internetnya.\nPada saat Immanuel mengunjungi Singapore, beliau menggunakan jaringan data yang berbeda (misalnya dari Telkomsel roaming ke SingaporeTelecom(Singtel)).\nTetapi Immanuel tetap ingin memiliki satu IP "tetap" (Home IP) meskipun secara fisik atau jaringan berubah, agar panggilan tidak terputus dan koneksi tetap stabil.\nPertanyaannya: Bagaimana sistem "Mobile IP" menangani kasus ini? (6 poin)',
-          points: ['Home address = IP dari Telkomsel; home agent di jaringan Telkomsel', 'Di Singapura, jaringan Singtel (foreign agent) memberi care-of address', 'Perangkat mendaftarkan care-of address ke home agent (registration)', 'Kolega tetap mengirim paket suara ke home address', 'Home agent mencegat dan meneruskan lewat tunnel (IP-in-IP) ke care-of address', 'Aplikasi melihat IP yang sama sehingga panggilan tidak putus; latensi bertambah (triangle routing)'],
+          points: ['Telkomsel memberi IP (DHCP) ke ponsel Immanuel; Telkomsel berperan sebagai Home Agent', 'Di Singapura ponsel masuk jaringan Singtel dan mendapat IP lokal baru, yaitu Care of Address (CoA)', 'Immanuel mendaftarkan CoA ke Home Agent Telkomsel Jakarta', 'Orang lain tetap menghubungi lewat IP lama; Home Agent meneruskan ke CoA secara transparan (distribution transparency)', 'Home address = IP dari Telkomsel; home agent di jaringan Telkomsel', 'Di Singapura, jaringan Singtel (foreign agent) memberi care-of address', 'Perangkat mendaftarkan care-of address ke home agent (registration)', 'Kolega tetap mengirim paket suara ke home address', 'Home agent mencegat dan meneruskan lewat tunnel (IP-in-IP) ke care-of address', 'Aplikasi melihat IP yang sama sehingga panggilan tidak putus; latensi bertambah (triangle routing)'],
           model: 'Perangkat Immanuel tetap memiliki home address dari Telkomsel, dan home agent berada di jaringan Telkomsel. Saat tersambung ke Singtel, perangkat memperoleh care-of address dari jaringan Singtel (foreign agent) lalu mendaftarkannya ke home agent. Kolega tetap mengirim paket WhatsApp ke home address; home agent mencegat paket itu dan membungkusnya dalam tunnel ke care-of address di Singapura. Immanuel membalas langsung ke koleganya. Karena IP yang dilihat aplikasi tidak berubah, panggilan tetap tersambung, dengan tambahan latensi karena jalur segitiga.' }
       ],
-      ex: 'Soal asli UTS Ganjil 2025/2026 nomor 6.' + S },
+      ex: 'Soal asli UTS Ganjil 2025/2026 nomor 6.' + K },
 
     { type: 'steps',
       q: 'Soal No. 7: Konsistensi dan Fault Tolerant (total 10 poin)',
@@ -288,10 +290,10 @@
             { label: 'Urutan nilai yang dilihat semua pembaca', a: ['c b', 'c lalu b', 'c kemudian b'] }],
           ex: 'Gambar ini sama dengan UTS 24/25 7a. Urutan global W2(x)a → R1(x)a → W1(x)c → R3(x)c → R4(x)c → W2(x)b → R3(x)b → R4(x)b memenuhi sequential consistency. Setiap diagram yang sequentially consistent pasti juga causally consistent.' },
         { q: 'c. Jelaskan bagaimana cara kerja dan fungsi Web proxy melakukan konsep replikasi Web? (3 poin)',
-          points: ['Proxy di antara browser dan web server, menyimpan salinan (cache)', 'Cache hit: dilayani dari salinan; miss: ambil dari server asal lalu disimpan', 'Validasi: TTL/Expires, conditional GET (If-Modified-Since), 304 Not Modified', 'Fungsi: kurangi latensi, beban server, bandwidth; client-initiated replication'],
+          points: ['Web proxy: server perantara antara client dan internet; permintaan melewati proxy dulu (file solusi)', 'Fungsi utama: mengurangi lalu lintas dan meningkatkan kinerja sisi klien', 'Proxy di antara browser dan web server, menyimpan salinan (cache)', 'Cache hit: dilayani dari salinan; miss: ambil dari server asal lalu disimpan', 'Validasi: TTL/Expires, conditional GET (If-Modified-Since), 304 Not Modified', 'Fungsi: kurangi latensi, beban server, bandwidth; client-initiated replication'],
           model: 'Web proxy berada di antara browser dan web server dan menyimpan salinan halaman yang pernah diminta. Jika halaman diminta lagi dan salinannya masih valid, proxy langsung melayaninya; jika tidak ada atau kedaluwarsa, proxy mengambil dari server asal lalu menyimpannya. Kesegaran salinan diperiksa dengan TTL atau conditional GET. Fungsinya mengurangi latensi, beban server, dan bandwidth; ini termasuk client-initiated replication.' }
       ],
-      ex: 'Soal asli UTS Ganjil 2025/2026 nomor 7.' + S }
+      ex: 'Soal asli UTS Ganjil 2025/2026 nomor 7.' + K }
   ]);
   // Nomor soal asli, agar sesi yang hanya berisi soal asli tampil urut 1 sampai 7 (lihat app.js).
   BANK.data.isian.forEach(function (it) {

@@ -1,6 +1,7 @@
 // Komputasi Awan — materi per nomor kisi-kisi UTS 2026.
 // Ringkasan disusun sendiri dari buku Distributed Systems (van Steen & Tanenbaum), soal UTS 24/25 dan 25/26,
-// dokumen SOAL (Chord dengan hashing ASCII), dan kisi-kisi yang dikumpulkan pemilik. Pembahasan disusun sendiri.
+// dokumen SOAL (Chord dengan hashing ASCII), kisi-kisi yang dikumpulkan pemilik, dan file solusi UTS 25/26
+// (bab UTS 25/26). Pembahasan bab lain disusun sendiri.
 BANK.materi('ca', [
   {
     label: 'Pengantar', judul: 'Kisi-kisi UTS 2026 dan cara menjawab', hlm: '-',
@@ -20,13 +21,92 @@ BANK.materi('ca', [
         ['Jumlah soal', '7 nomor, tiap nomor a/b/c', '7 nomor, a/b/c (nomor 2 dan 6 hanya a/b)'],
         ['Bobot', '15 poin per nomor', '10 poin per nomor, sub-soal 2 sampai 6 poin'],
         ['Hitungan', 'Vector clock semua event, kausalitas pesan', 'Vector clock semua event, analisis R(x)/W(x)']] },
-        poin: ['Soal aslinya ada di topik Soal Asli UTS 24/25 dan 25/26 pada Latihan soal.', 'Topik 1 sampai 7 berisi latihan per nomor kisi-kisi 2026, termasuk paket soal a/b/c bergaya UTS.'] },
+        poin: ['Soal aslinya ada di topik Soal Asli UTS 24/25 dan 25/26 pada Latihan soal. Pembahasan resmi UTS 25/26 ada di bab UTS 25/26.', 'Topik 1 sampai 7 berisi latihan per nomor kisi-kisi 2026, termasuk paket soal a/b/c bergaya UTS.'] },
       { h: 'Pola jawaban esai', poin: [
         'Definisi satu kalimat, lalu poin-poin, lalu contoh nyata.',
         'Soal "bandingkan": buat tabel (aspek, A, B).',
         'Soal "jelaskan cara kerja": tulis langkah bernomor.',
         'Soal hitungan atau diagram: tulis aturan, langkah per event, lalu hasil. Nilai parsial didapat dari langkah.'
       ], ingat: 'Bobot sub-soal kecil (2 sampai 4 poin): jawab padat, kira-kira setengah halaman.' }
+    ]
+  },
+  {
+    label: 'UTS 25/26', judul: 'Pembahasan resmi UTS Ganjil 2025/2026', hlm: '-',
+    ringkas: 'Jawaban setiap nomor UTS 25/26 menurut file solusi, ditambah catatan "Pelajari" dari file itu yang menjadi petunjuk materi UTS berikutnya.',
+    bagian: [
+      { h: 'Petunjuk "Pelajari" dari file solusi', tabel: { head: ['No', 'Catatan di file solusi', 'Bab materi'], rows: [
+        ['1', 'Pelajari komunikasi sinkron asinkron', 'Soal 1 (trade-off transparansi) dan Soal 4'],
+        ['2', 'Pelajari komponen dan arsitektur Publish Subscribe, RESTful', 'Soal 2'],
+        ['3', 'Pelajari Dispatcher/Worker Model, Container', 'Soal 3'],
+        ['4', 'Pelajari materi RPC (Remote Procedure Call)', 'Soal 4'],
+        ['5', 'Pelajari Logical Clock', 'Soal 5'],
+        ['6', 'Pelajari Naming pada Reticulum, DHT pada Chord', 'Soal 6'],
+        ['7', 'Pelajari Sequentially dan Causally Consistent', 'Soal 7']] },
+        ingat: 'Catatan ini sama dengan kisi-kisi 2026 yang dikumpulkan dari teman, jadi kisi-kisinya kuat.' },
+      { h: 'No. 1: Sistem Terdistribusi', poin: [
+        'a. Centralized: semua data dan proses dikendalikan satu server pusat; jika server rusak, sistem berhenti.',
+        'a. Decentralized: ada beberapa server atau pusat kontrol yang saling terhubung, jadi tidak bergantung pada satu titik.',
+        'a. Distributed: tugas dan data dibagi ke banyak komputer (node) yang bekerja bersama sebagai satu kesatuan sistem.',
+        'a. Ringkasnya: centralized satu server pusat, decentralized beberapa server pusat, distributed semua node setara dan bekerja bersama.',
+        'b. Distribution transparency: kemampuan sistem terdistribusi menyembunyikan kompleksitasnya dari pengguna sehingga sistem tampak seperti satu kesatuan.',
+        'b. Access: menyembunyikan perbedaan cara mengakses data atau objek. Location: menyembunyikan lokasi fisik objek.',
+        'b. Relocation: menyembunyikan perpindahan objek yang sedang digunakan ke lokasi lain. Migration: menyembunyikan bahwa objek dapat berpindah lokasi dari waktu ke waktu.',
+        'b. Replication: menyembunyikan bahwa objek punya banyak salinan. Concurrency: menyembunyikan bahwa beberapa pengguna mengakses objek bersamaan. Failure: menyembunyikan kegagalan dan pemulihan.',
+        'c. Shared memory: beberapa prosesor (P) terhubung ke satu interconnect dan berbagi satu memori utama (M), sehingga setiap prosesor dapat membaca dan menulis ke tempat yang sama.',
+        'c. Private memory: setiap prosesor punya memori sendiri; antar prosesor berkomunikasi lewat interconnect (jaringan), tidak ada memori yang dibagi, dan data harus dikirim lewat jaringan.'
+      ], soal: 'a. Apa yang dimaksud sistem centralized, decentralized, dan distributed? (3 poin) b. Jelaskan definisi Distribution Transparency dan sebutkan tipe-tipenya! (4 poin) c. Jelaskan sistem Shared Memory dan Private Memory pada Parallel Computing! (3 poin)' },
+      { h: 'No. 2: Arsitektur Sistem', poin: [
+        'a. Klien-server: peran asimetris. Server memegang otoritas terpusat, mengelola sumber daya utama (logika data/layanan), dan menyediakan layanan; klien hanya meminta dan memakai layanan.',
+        'a. P2P: peran sebagian besar simetris. Setiap peer setara, bertindak sebagai klien sekaligus server; kepemilikan sumber daya tersebar ke seluruh jaringan.',
+        'a. Ketahanan: klien-server berisiko menjadi single point of failure (server gagal, sistem berhenti). P2P lebih tahan karena kegagalan satu peer berdampak minimal dan bisa ditutupi peer lain.',
+        'b. Overlay tak terstruktur: koneksi acak antar peer; pencarian probabilistik dengan flooding atau random walk; keberhasilan tidak dijamin dan biaya bandwidth tinggi; cocok untuk konten populer atau banyak direplikasi.',
+        'b. Overlay terstruktur (mis. DHT): skema deterministik memetakan alamat peer dan kunci data (dengan fungsi hash); perutean tertarget menjamin sumber daya ditemukan dalam jumlah langkah yang dapat diprediksi; efisien untuk konten langka atau spesifik.'
+      ], soal: 'a. Perbedaan C-S dan P2P dari sisi pembagian peran, kepemilikan sumber daya, dan ketahanan (5 poin). b. Overlay terstruktur vs tak terstruktur dalam menempatkan item data (5 poin).' },
+      { h: 'No. 3: Proses', poin: [
+        'a. Many-to-one: banyak thread user dipetakan ke satu kernel thread; OS hanya mengenali satu thread sehingga jika satu thread terblokir seluruh proses ikut terblokir; tidak mendukung paralelisme pada multiprocessor.',
+        'a. One-to-one: setiap thread user dipetakan ke satu kernel thread; OS dapat menjadwalkan thread di beberapa CPU sehingga mendukung paralelisme; overhead lebih besar karena tiap operasi thread butuh interaksi dengan kernel.',
+        'b. TLP = Σ i·ci / (1 − c0), dengan ci = fraksi waktu tepat i thread aktif. Σ i·ci = (1)(0,4) + (2)(0,35) + (3)(0,1) + (4)(0,05) = 1,6; 1 − c0 = 0,9; TLP = 1,6 / 0,9 = 1,78.',
+        'c. Multithreaded client menyembunyikan latensi jaringan: satu thread menunggu I/O sementara thread lain secara paralel mengambil resource lain, misalnya gambar dari halaman HTML yang sama.'
+      ], soal: 'a. Many-to-one vs one-to-one (4 poin). b. Hitung TLP dengan c0 = 0,10, c1 = 0,40, c2 = 0,35, c3 = 0,10, c4 = 0,05 (3 poin). c. Mengapa multithreaded client lebih cepat mengakses halaman web? (3 poin)',
+        ingat: 'Kisi-kisi 2026 nomor 3 bergeser ke container dan tanpa hitungan, tetapi model dispatcher/worker disebut di catatan "Pelajari".' },
+      { h: 'No. 4: Komunikasi', poin: [
+        'a. Transient: pesan yang tidak dapat dikirim segera dihapus (misalnya bila penerima tidak aktif). Persistent: pesan disimpan sampai berhasil dikirim, bahkan bila penerima sedang offline.',
+        'a. Synchronous: menunggu respons secara langsung. Asynchronous: mengirim pesan tanpa menunggu balasan.',
+        'b. Client-server biasanya transient synchronous: client dan server harus aktif bersamaan; client mengirim permintaan dan menunggu balasan, server menunggu permintaan masuk. Kelemahannya, client tidak bisa mengerjakan hal lain saat menunggu dan harus segera menangani kegagalan komunikasi.',
+        'c. Multicast: Application-Level Multicasting (overlay berbentuk pohon), flooding (kirim ke semua tetangga, berisiko redundan), dan gossip/epidemic protocol (informasi disebar bertahap sampai seluruh sistem menerima).'
+      ], soal: 'a. Sebutkan dan jelaskan tipe-tipe komunikasi (4 poin). b. Tipe yang umum pada client/server (3 poin). c. Teknik multicast (3 poin).' },
+      { h: 'No. 5: Koordinasi', poin: [
+        'a. Masalah yang diselesaikan algoritma election: memilih koordinator secara dinamis ketika koordinator saat ini gagal.',
+        'a. Bully: P_k tidak mendapat respons dari koordinator lalu menganggapnya mati. P_k mengirim ELECTION ke semua proses ber-ID lebih besar. Jika tidak ada yang merespons, P_k menang; jika ada, proses ber-ID lebih tinggi mengambil alih dan mengirim ELECTION ke proses yang lebih tinggi. Pemenang mengirim KOORDINATOR ke seluruh proses.',
+        'a. Ring: proses tersusun dalam ring logis; bila suksesor mati, pesan dikirim ke suksesor berikutnya. Inisiator mengirim ELECTION beserta daftar ID ke suksesor aktif. Pesan kembali ke inisiator, yang memilih koordinator baru dari daftar ID, lalu mengedarkan KOORDINATOR ke seluruh ring.',
+        'b. Masalah Lamport clock: L(a) < L(b) tidak menjamin a → b, sehingga tidak bisa mendeteksi apakah dua peristiwa concurrent hanya dari timestamp-nya.'
+      ], tabel: { head: ['Event', 'Vector clock (P1,P2,P3)', 'Keterangan'], rows: [
+        ['a', '(1,0,0)', 'Event pertama di P1'],
+        ['b', '(2,0,0)', 'Send berikutnya di P1'],
+        ['c', '(1,1,1)', 'Terima dari a (1,0,0) dan e (0,0,1): max = (1,0,1), tambah 1 untuk P2'],
+        ['d', '(2,2,3)', 'Terima dari g (2,0,3): max((1,1,1), (2,0,3)) = (2,1,3), tambah 1 untuk P2'],
+        ['e', '(0,0,1)', 'Send pertama di P3'],
+        ['f', '(2,0,2)', 'Terima dari b (2,0,0): max((0,0,1), (2,0,0)) = (2,0,1), tambah 1 untuk P3'],
+        ['g', '(2,0,3)', 'Event berikutnya di P3']] },
+        soal: 'c. Gunakan vector clock untuk menentukan timestamp semua event (4 poin). Pesan: a→c, e→c, b→f, g→d.' },
+      { h: 'No. 6: Penamaan (Mobile IP)', poin: [
+        'a. Mobile IP: mekanisme agar perangkat yang berpindah lokasi (laptop, smartphone) tetap bisa dihubungi melalui satu alamat IP tetap walaupun posisinya berubah.',
+        'b. Langkah 1: saat berlangganan, Telkomsel memberi IP ke ponsel Immanuel lewat DHCP; Telkomsel disebut Home Agent.',
+        'b. Langkah 2: di Singapura, ponsel otomatis masuk jaringan Singtel.',
+        'b. Langkah 3: di jaringan itu Immanuel mendapat IP lokal baru yang disebut Care of Address (CoA).',
+        'b. Langkah 4: Immanuel mendaftarkan CoA ke Home Agent Telkomsel Jakarta.',
+        'b. Langkah 5: orang lain tetap menghubungi lewat IP lama; Home Agent meneruskan ke CoA secara transparan (distribution transparency terpenuhi), dan nomor WhatsApp Immanuel tetap terlihat sama di level aplikasi.'
+      ], soal: 'a. Jelaskan "The Principle Mobile IP" (4 poin). b. Kasus Immanuel roaming dari Telkomsel ke Singtel (6 poin).',
+        ingat: 'Kisi-kisi 2026 nomor 6 bergeser ke naming pada Reticulum dan DHT pada Chord (lihat bab Soal 6).' },
+      { h: 'No. 7: Konsistensi dan Fault Tolerant', tabel: { head: ['Proses', '7a: operasi yang digambar (kiri lebih dulu)'], rows: [
+        ['P1', 'R(x)a, lalu W(x)b'], ['P2', 'W(x)a (paling awal), lalu W(x)c'], ['P3', 'R(x)b, lalu R(x)c'], ['P4', 'R(x)b, lalu R(x)c']] },
+        poin: [
+          'b. Gambar 7b: P1 membaca a lalu menulis c; P2 menulis a lalu b; P3 dan P4 membaca c lalu b.',
+          'b. Syarat sequential consistency: (1) semua operasi dari semua proses dapat diurutkan dalam satu sekuens global, (2) urutan itu mempertahankan program order tiap proses, (3) setiap read mengembalikan nilai write terakhir pada urutan global.',
+          'b. Kesimpulan file solusi: diagram dapat diurutkan secara sequentially consistent, misalnya W2(x)a, R1(x)a, W1(x)c, R3(x)c, R4(x)c, W2(x)b, R3(x)b, R4(x)b. Karena sequential, diagram ini juga causally consistent.',
+          'c. Web proxy: server perantara antara client dan internet; permintaan pengguna melewati proxy terlebih dahulu, tidak langsung ke situs tujuan.',
+          'c. Fungsi utama web proxy: mengurangi lalu lintas dan meningkatkan kinerja sisi klien dengan menyimpan salinan (cache); bisa menjadi rumit bila permintaan harus melewati banyak jalur komunikasi.'
+        ], soal: 'a. Gambarkan urutan operasi P1-P4 (3 poin). b. Sequentially atau causally consistent? (4 poin). c. Cara kerja dan fungsi web proxy dalam replikasi web (3 poin).' }
     ]
   },
   {
