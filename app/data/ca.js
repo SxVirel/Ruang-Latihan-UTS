@@ -147,7 +147,30 @@
             'Cloud dan cluster tersusun dari banyak komputer terpisah, jadi memakai private memory'],
           model: 'Pada shared memory, seperti mesin X, semua prosesor membaca dan menulis memori yang sama sehingga mudah diprogram, tetapi butuh lock dan bus memori menjadi bottleneck bila prosesor bertambah. Pada private memory, seperti mesin Y, tiap komputer punya memori sendiri dan bertukar data dengan mengirim pesan. Cara ini lebih sulit diprogram tetapi bisa ditambah sampai ribuan node. Cloud tersusun dari ribuan server terpisah, sehingga secara alami memakai model private memory.' }
       ],
-      ex: 'Bagian teori dokumen SOAL dalam bentuk cerita.' + S }
+      ex: 'Bagian teori dokumen SOAL dalam bentuk cerita.' + S },
+    { type: 'steps', q: 'Latihan UTS Soal No. 1: Sistem Terdistribusi (total 10 poin)',
+      steps: [
+        { q: 'a. Jelaskan apa yang dimaksud komunikasi asinkron dan mengapa teknik ini dipakai untuk menyembunyikan latensi pada sistem terdistribusi! Berikan satu contoh. (3 poin)',
+          points: ['Komunikasi asinkron: pengirim tidak menunggu balasan, langsung melanjutkan pekerjaan',
+            'Latensi jaringan jarak jauh besar; bila menunggu (synchronous), aplikasi terasa macet',
+            'Dengan asinkron, pekerjaan lain tetap berjalan sambil menunggu balasan (hiding communication latency)',
+            'Contoh: validasi form di browser, email terkirim di latar belakang, upload foto sambil tetap bisa chat'],
+          model: 'Komunikasi asinkron berarti pengirim tidak menunggu balasan dan langsung melanjutkan pekerjaannya. Pada sistem terdistribusi, latensi ke server yang jauh bisa ratusan milidetik. Bila aplikasi menunggu setiap balasan, pengguna merasa sistem lambat. Dengan komunikasi asinkron, aplikasi tetap melayani pengguna sambil menunggu balasan, sehingga latensi tersembunyi. Contohnya aplikasi chat yang tetap bisa dipakai saat foto sedang diunggah.' },
+        { q: 'b. Transparansi distribusi sepenuhnya hampir mustahil dicapai. Jelaskan alasannya dengan dua contoh trade-off: antara transparansi dan performa, serta antara transparansi dan komunikasi asinkron! (4 poin)',
+          points: ['Transparansi vs performa: replication transparency penuh menuntut semua salinan selalu sama; sinkronisasi antar replika jauh lambat dan mahal',
+            'Latensi antar benua tidak bisa disembunyikan sepenuhnya',
+            'Transparansi vs asinkron: operasi asinkron belum tentu selesai saat pengguna lanjut, jadi status tertunda kadang harus diperlihatkan (mis. email masih di outbox)',
+            'Server lambat tidak bisa dibedakan dari server mati, jadi failure transparency penuh tidak mungkin',
+            'Kesimpulan: tingkat transparansi dipilih seimbang (degree of transparency)'],
+          model: 'Pertama, transparansi dan performa: agar replikasi benar-benar tidak terlihat, semua salinan harus selalu sama, padahal menyinkronkan replika yang berjauhan butuh waktu dan biaya besar, sehingga sistem menjadi lambat. Kedua, transparansi dan komunikasi asinkron: untuk menyembunyikan latensi, operasi dikirim secara asinkron dan pengguna langsung lanjut, tetapi operasi itu bisa tertunda atau gagal, sehingga sistem kadang harus memperlihatkan statusnya, misalnya email yang masih di outbox. Selain itu, server lambat tidak bisa dibedakan dari server mati. Karena itu transparansi penuh tidak realistis.' },
+        { q: 'c. Saat sinyal lemah, aplikasi email kampus menampilkan email yang baru dikirim seolah sudah terkirim, padahal masih tertunda dan akhirnya gagal. Transparansi apa yang dicoba dicapai, dan mengapa perilaku ini justru merugikan pengguna? (3 poin)',
+          points: ['Yang dicoba: failure transparency dan menyembunyikan latensi lewat pengiriman asinkron',
+            'Pengguna mengira email sudah sampai, padahal gagal, sehingga informasi penting tidak tersampaikan',
+            'Lebih baik sistem memperlihatkan status (outbox, tertunda, gagal) agar pengguna bisa bertindak',
+            'Contoh nyata bahwa transparansi penuh tidak selalu diinginkan'],
+          model: 'Aplikasi mencoba mencapai failure transparency dan menyembunyikan latensi dengan mengirim email secara asinkron. Masalahnya, pengguna mengira email sudah terkirim padahal gagal, sehingga pesan penting tidak sampai dan pengguna tidak tahu harus mengirim ulang. Lebih baik aplikasi memperlihatkan status seperti outbox atau gagal terkirim. Ini contoh bahwa transparansi penuh tidak selalu diinginkan.' }
+      ],
+      ex: 'Mengikuti kisi-kisi tambahan nomor 1: transparansi dan komunikasi asinkron.' + S }
   ]);
 
   // ================= Soal 2 =================
@@ -295,7 +318,30 @@
             'Tantangan: pencocokan predikat di broker mahal dan sulit diskalakan saat event dan subscription sangat banyak'],
           model: 'Notifikasi itu memakai content-based subscription karena syaratnya atas nilai atribut event, yaitu harga di atas Rp9.000. Pada topic-based, pengguna berlangganan seluruh event topik "saham/BBCA" dan harus menyaring sendiri. Content-based lebih ekspresif, tetapi broker harus memeriksa predikat setiap subscription untuk setiap event harga, sehingga pencocokannya mahal saat event dan pengguna sangat banyak.' }
       ],
-      ex: 'Soal cerita gaya arsitektur, RESTful, dan basis subscription.' + S }
+      ex: 'Soal cerita gaya arsitektur, RESTful, dan basis subscription.' + S },
+    { type: 'steps', q: 'Latihan UTS Soal No. 2: Arsitektur Sistem (total 10 poin)',
+      steps: [
+        { q: 'a. Pada arsitektur publish-subscribe, jelaskan: (i) komponen, (ii) interface, dan (iii) konektor! (3 poin)',
+          points: ['(i) Komponen: publisher, subscriber, dan broker/middleware event',
+            '(ii) Interface: operasi publish(event) dan subscribe(topik atau syarat), serta notify ke subscriber',
+            '(iii) Konektor: event bus atau broker (mis. MQTT, Kafka) yang mencocokkan event dengan subscription lalu meneruskannya',
+            'Publisher dan subscriber tidak saling mengenal (referentially decoupled)'],
+          model: 'Komponen publish-subscribe adalah publisher yang menerbitkan event, subscriber yang menerima event, dan broker yang menjadi perantara. Interface-nya berupa operasi publish untuk menerbitkan event dan subscribe untuk mendaftarkan minat pada topik atau syarat tertentu, lalu broker memanggil notify ke subscriber. Konektornya adalah event bus atau broker, misalnya MQTT atau Kafka, yang mencocokkan setiap event dengan daftar subscription dan meneruskannya.' },
+        { q: 'b. Pada arsitektur RESTful, jelaskan: (i) komponen, (ii) interface, dan (iii) konektor! Sebutkan juga operasi standar yang dipakai pada interface tersebut. (4 poin)',
+          points: ['(i) Komponen: sumber daya (resource) yang dikelola layanan, diberi nama URI',
+            '(ii) Interface: seragam untuk semua layanan (uniform interface)',
+            '(iii) Konektor: HTTP request-reply, stateless, pesan self-describing',
+            'Operasi: PUT (membuat), GET (membaca state), DELETE (menghapus), POST (mengubah dengan mengirim state baru)'],
+          model: 'Pada RESTful, komponennya adalah sumber daya yang dikelola layanan dan diberi nama lewat URI. Interface-nya seragam untuk semua layanan. Konektornya adalah pesan request-reply, umumnya HTTP, yang self-describing dan stateless. Operasi standarnya PUT untuk membuat sumber daya, GET untuk membaca state, DELETE untuk menghapus, dan POST untuk mengubah dengan mengirim state baru.' },
+        { q: 'c. Aplikasi monitoring gedung memakai REST dan publish-subscribe. Tentukan apakah unsur berikut termasuk komponen, interface, atau konektor! (3 poin)',
+          fields: [
+            { label: 'Sensor suhu yang menerbitkan data', a: ['komponen', 'component', 'komponen publisher', 'publisher'] },
+            { label: 'Broker MQTT yang meneruskan event ke dashboard', a: ['konektor', 'connector'] },
+            { label: 'Operasi GET /rooms/12 dan subscribe("suhu/12")', a: ['interface', 'antarmuka'] },
+            { label: 'Resource /rooms/12 yang dikelola server', a: ['komponen', 'component', 'resource'] }],
+          ex: 'Komponen = apa yang dihubungkan (sensor, dashboard, resource). Interface = kontrak operasinya (GET, publish, subscribe). Konektor = jalur komunikasinya (HTTP, broker).' }
+      ],
+      ex: 'Mengikuti kisi-kisi tambahan nomor 2: komponen, interface, konektor.' + S }
   ]);
 
   // ================= Soal 3 =================
@@ -730,6 +776,7 @@
 
   // ================= Soal 6 =================
   var RING = '{1, 4, 9, 11, 14, 18, 20, 21, 28}';
+  var R = ' Materi Reticulum tidak ada di slide yang tersedia; kunci disusun dari dokumentasi Reticulum.';
   BANK.isian('ca', 'u6', '6. Penamaan & Chord', [
     { type: 'steps', q: 'Soal (dokumen SOAL, lihat slide 8-35): Misalnya ada 4 buah node server (m = 4) yaitu A, B, C, D. ID server = total ASCII alamat IP mod 16; hash key file = total ASCII nama file mod 16.',
       table: { head: ['Nama server', 'IP Address'], rows: [['A', '202.168.0.15'], ['B', '202.168.0.2'], ['C', '202.168.0.10'], ['D', '202.168.0.12']] },
@@ -846,7 +893,54 @@
             'Chord (DHT) menemukan lokasi flat name dengan O(log N) hop tanpa broadcast, skalabel'],
           model: 'Pertama, structured naming pada DNS: lms.kampus.ac.id tersusun hierarkis dan diselesaikan per tingkat. Kedua, flat naming pada key SHA-1 file tugas: identifier tanpa struktur yang tidak memberi petunjuk lokasi. Ketiga, attribute-based naming pada LDAP: dosen dicari dengan pasangan atribut-nilai. Chord dipakai karena flat name tidak bisa diselesaikan per tingkat; Chord menentukan node penyimpan dari hash key dan menemukannya dalam O(log N) hop tanpa broadcast, sehingga skalabel.' }
       ],
-      ex: 'Soal cerita teori dasar penamaan (kisi-kisi nomor 6).' + S }
+      ex: 'Soal cerita teori dasar penamaan (kisi-kisi nomor 6).' + S },
+    { type: 'steps', q: 'Latihan UTS Soal No. 6: Penamaan (total 10 poin)',
+      steps: [
+        { q: 'a. Jelaskan konsep identity pada Reticulum Network Stack: bagaimana identitas dibentuk dan apa itu destination hash! (4 poin)',
+          points: ['Identity: pasangan kunci kriptografi yang dibuat sendiri, tanpa otoritas pusat',
+            'Terdiri dari kunci X25519 (enkripsi) dan Ed25519 (tanda tangan), total 512 bit; kunci privat disimpan sendiri',
+            'Destination diberi nama bertitik "aplikasi.aspek", mis. "chatapp.user"',
+            'Destination hash: SHA-256 dari nama destination dan identity, dipotong menjadi 128 bit (32 karakter heksadesimal)',
+            'Destination hash dipakai sebagai alamat tujuan paket dan disebarkan lewat announce'],
+          model: 'Di Reticulum, setiap pihak membuat identitasnya sendiri berupa pasangan kunci kriptografi, yaitu kunci X25519 untuk enkripsi dan kunci Ed25519 untuk tanda tangan, tanpa perlu server pusat. Aplikasi kemudian membuat destination dengan nama bertitik, misalnya "chatapp.user". Destination hash adalah hasil SHA-256 dari nama destination dan identity yang dipotong menjadi 128 bit. Hash inilah yang menjadi alamat tujuan paket, dan keberadaannya disebarkan ke jaringan lewat pesan announce.' },
+        { q: 'b. Lengkapi pernyataan berikut tentang Reticulum! (3 poin)',
+          fields: [
+            { label: 'Panjang destination hash (bit)', a: 128, tol: 0 },
+            { label: 'Fungsi hash yang dipakai', a: ['sha-256', 'sha256', 'sha 256'] },
+            { label: 'Pesan untuk menyebarkan keberadaan destination ke jaringan', a: ['announce', 'announcement'] },
+            { label: 'Destination hash termasuk name, identifier, atau address?', a: ['identifier', 'id'] }],
+          ex: 'Destination hash 16 byte = 128 bit, hasil SHA-256 yang dipotong. Announce membawa hash, kunci publik, dan tanda tangan. Hash unik, tetap, dan merujuk satu destination, jadi berperan sebagai identifier.' },
+        { q: 'c. Apa perbedaan mendasar destination hash Reticulum dengan alamat IP? Kaitkan dengan konsep name, identifier, dan address! (3 poin)',
+          points: ['Alamat IP diberikan jaringan (DHCP, ISP) dan menunjukkan lokasi di topologi; berubah saat pindah jaringan',
+            'Destination hash dihitung sendiri dari kunci, tidak bergantung lokasi, tetap sama di jaringan mana pun',
+            'Destination hash terikat kunci publik sehingga bisa diverifikasi; IP tidak membuktikan pemiliknya',
+            'IP adalah address (access point); destination hash adalah identifier (flat name)'],
+          model: 'Alamat IP diberikan oleh jaringan dan menunjukkan letak perangkat di topologi, sehingga berubah ketika perangkat pindah jaringan dan bisa dipakai ulang perangkat lain. Dalam teori penamaan, IP adalah address. Destination hash Reticulum dihitung sendiri dari kunci dan nama destination, tidak bergantung lokasi, tetap sama walau pindah media, dan terikat kunci publik sehingga pemiliknya bisa dibuktikan. Karena unik, tetap, dan tidak dipakai ulang, destination hash berperan sebagai identifier pada flat naming.' }
+      ],
+      ex: 'Mengikuti kisi-kisi tambahan nomor 6: identitas pada Reticulum.' + R + S },
+    { type: 'steps', q: 'Latihan UTS Soal No. 6: Studi Kasus Jaringan Darurat (total 10 poin). Saat banjir besar, internet dan BTS di sebuah kabupaten mati. Relawan memasang Reticulum di atas radio LoRa. Relawan Sari membuat aplikasi chat posko dengan destination "posko.chat". Tidak ada server DHCP maupun DNS. Esok harinya, Sari pindah ke posko lain yang terhubung lewat Wi-Fi lokal, tetapi relawan lain tetap bisa mengirim pesan ke alamat yang sama.',
+      steps: [
+        { q: 'a. Tanpa DHCP dan DNS, bagaimana Sari mendapatkan identitas dan alamat tujuan untuk aplikasi chat-nya? Bagaimana relawan lain mengetahui alamat itu? (3 poin)',
+          points: ['Sari membuat identity sendiri: pasangan kunci X25519 dan Ed25519',
+            'Destination "posko.chat" + identity di-hash (SHA-256, dipotong 128 bit) menjadi destination hash',
+            'Tidak perlu otoritas pusat karena hash dihitung sendiri dan unik secara probabilistik',
+            'Sari mengirim announce; transport node mencatat jalurnya sehingga relawan lain tahu cara mencapai hash itu'],
+          model: 'Sari membuat identity sendiri berupa pasangan kunci X25519 dan Ed25519. Dari nama destination "posko.chat" dan identity itu dihitung destination hash 128 bit dengan SHA-256. Karena dihitung sendiri dan unik secara probabilistik, tidak dibutuhkan DHCP atau server pusat. Agar relawan lain tahu, aplikasi Sari mengirim announce yang berisi destination hash, kunci publik, dan tanda tangan; node lain mencatat arah datangnya sehingga tahu jalur menuju hash tersebut.' },
+        { q: 'b. Jawab pertanyaan berikut berdasarkan cerita! (4 poin)',
+          fields: [
+            { label: 'Apakah destination hash Sari berubah setelah pindah ke Wi-Fi? (ya/tidak)', a: ['tidak', 'no', 'tetap'] },
+            { label: 'Jumlah karakter heksadesimal destination hash', a: 32, tol: 0 },
+            { label: 'Tipe destination untuk pesan pribadi terenkripsi ke satu identity', a: ['single'] },
+            { label: 'Pada jaringan IP biasa, apakah alamat Sari berubah setelah pindah jaringan? (ya/tidak)', a: ['ya', 'yes', 'berubah'] }],
+          ex: 'Hash dihitung dari kunci dan nama, bukan dari lokasi, jadi tetap. 128 bit = 16 byte = 32 karakter heksadesimal. Tipe single terenkripsi untuk satu identity. Alamat IP bergantung jaringan, jadi berubah.' },
+        { q: 'c. Mengapa model identitas Reticulum cocok untuk jaringan darurat seperti ini, dibanding jaringan berbasis IP? (3 poin)',
+          points: ['Tidak butuh infrastruktur pusat (DHCP, DNS, ISP) yang sedang mati',
+            'Alamat tetap walau perangkat pindah media atau posko (location independent)',
+            'Bisa berjalan di media lambat seperti LoRa dan radio paket',
+            'Identitas terikat kunci, pesan bisa dienkripsi dan diverifikasi tanpa otoritas sertifikat'],
+          model: 'Pada jaringan berbasis IP, perangkat butuh DHCP untuk mendapat alamat dan DNS untuk menemukan layanan, padahal infrastruktur itu mati saat bencana. Reticulum tidak butuh infrastruktur pusat karena setiap pihak menghitung alamatnya sendiri dari kunci. Alamatnya juga tidak berubah ketika perangkat pindah dari LoRa ke Wi-Fi, sehingga relawan lain tetap bisa menghubungi Sari. Selain itu, pesan bisa dienkripsi dan diverifikasi memakai kunci identity tanpa otoritas sertifikat.' }
+      ],
+      ex: 'Soal cerita identitas Reticulum.' + R + S }
   ]);
 
   // ================= Soal 7 =================
@@ -984,5 +1078,191 @@
           ex: 'W(x)a → W(x)b kausal karena b adalah balasan setelah P2 membaca a. P4 yang membaca b lalu a melihat balasan sebelum pesan aslinya, jadi causal dilanggar. Sequential hanya menuntut satu interleaving yang sama, bukan urutan waktu nyata.' }
       ],
       ex: 'Soal cerita grup chat dengan variasi pelanggaran kausal.' + S }
+  ]);
+
+  // ================= Latihan PDF teman =================
+  // Teks soal disalin persis dari Latihan_UTS_Komputasi_Awan_Terdistribusi.pdf (latihan buatan sendiri,
+  // bukan soal resmi). PDF tidak memuat kunci; semua kunci di bawah disusun sendiri dan hitungan dicek
+  // dengan clocks.js, chord.js, dan consistency.js.
+  var P = ' Soal dari PDF latihan teman (bukan soal resmi); PDF tidak memuat kunci.' + S;
+  var DL = { type: 'clock', procs: 3,
+    events: [
+      { id: 'a', p: 0, t: 10 }, { id: 'b', p: 0, t: 33 }, { id: 'c', p: 0, t: 85 },
+      { id: 'd', p: 1, t: 26 }, { id: 'e', p: 1, t: 49 }, { id: 'f', p: 1, t: 67 },
+      { id: 'g', p: 2, t: 15 }, { id: 'h', p: 2, t: 62 }, { id: 'i', p: 2, t: 73 }],
+    msgs: [{ from: 'a', to: 'd' }, { from: 'e', to: 'h' }, { from: 'i', to: 'c' }],
+    caption: 'Diagram tiga proses dari PDF latihan. Semua clock awal 0, setiap event menaikkan clock sebesar 1.' };
+  // Semua pasangan concurrent pada DL (urutan bebas) dan pasangan happened-before (x lalu y).
+  var CONC = ['a g', 'b d', 'b e', 'b f', 'b g', 'b h', 'b i', 'c f', 'd g', 'e g', 'f g', 'f h', 'f i'];
+  var HB = ['a b', 'a c', 'a d', 'a e', 'a f', 'a h', 'a i', 'b c', 'd c', 'e c', 'g c', 'h c', 'i c',
+    'd e', 'd f', 'd h', 'd i', 'e f', 'e h', 'e i', 'g h', 'g i', 'h i'];
+  var CL = ops([['P1', 'W(x)a', '', 'W(x)c', ''], ['P2', '', 'R(x)a', 'W(x)b', ''], ['P3', '', 'R(x)a', 'R(x)c', 'R(x)b'], ['P4', '', 'R(x)a', 'R(x)b', 'R(x)c']]);
+
+  BANK.isian('ca', 'latpdf', 'Latihan PDF Teman (bukan soal resmi)', [
+    { type: 'steps', q: 'Soal No. 1: Sistem Terdistribusi (total 10 poin)',
+      steps: [
+        { q: 'a. Jelaskan perbedaan sistem centralized, decentralized, dan distributed! Berikan satu contoh untuk masing-masing sistem. (3 poin)',
+          points: ['Centralized: satu titik pusat mengendalikan data dan keputusan; contoh sistem akademik di satu server',
+            'Decentralized: kendali dibagi ke beberapa pusat lokal; contoh email, DNS per zona',
+            'Distributed: tanpa pusat, node setara bekerja sama dan tampak sebagai satu sistem; contoh BitTorrent, blockchain, cluster',
+            'Centralized punya single point of failure; distributed paling tahan kegagalan tetapi koordinasinya paling sulit'],
+          model: 'Centralized berarti satu node pusat memegang data dan keputusan, misalnya sistem akademik di satu server; bila server mati, seluruh layanan berhenti. Decentralized membagi kendali ke beberapa pusat lokal, misalnya email yang setiap domainnya punya mail server sendiri. Distributed tidak punya pusat: node-node setara bekerja sama sehingga tampak sebagai satu sistem, misalnya BitTorrent atau blockchain.' },
+        { q: 'b. Jelaskan definisi Distribution Transparency, lalu sebutkan seluruh tipenya beserta penjelasan singkat dan satu contoh untuk dua tipe yang kamu pilih! (4 poin)',
+          points: ['Definisi: menyembunyikan fakta bahwa proses dan sumber daya tersebar secara fisik di banyak komputer',
+            'Access: menyembunyikan perbedaan representasi data dan cara akses',
+            'Location: menyembunyikan letak objek; relocation: objek dipindah saat dipakai; migration: objek dipindah ke lokasi lain',
+            'Replication: objek punya beberapa salinan; concurrency: objek dipakai bersama; failure: kegagalan dan pemulihan objek',
+            'Dua contoh, mis. location: URL tidak menunjukkan server fisik; replication: CDN menyimpan salinan video'],
+          model: 'Distribution transparency adalah sifat sistem terdistribusi yang menyembunyikan dari pengguna bahwa proses dan sumber dayanya tersebar di banyak komputer, sehingga sistem tampak sebagai satu komputer. Tipenya: access (perbedaan representasi data dan cara akses), location (di mana objek berada), relocation (objek dipindah saat dipakai), migration (objek dipindah ke lokasi lain), replication (objek punya beberapa salinan), concurrency (objek dipakai bersama), dan failure (kegagalan dan pemulihan objek). Contoh location: alamat www.telkomuniversity.ac.id tidak menunjukkan server fisiknya. Contoh replication: video YouTube disalin ke banyak server CDN, tetapi pengguna hanya melihat satu video.' },
+        { q: 'c. Transparansi distribusi sepenuhnya hampir mustahil dicapai. Jelaskan alasannya dengan memberikan dua contoh trade-off (misalnya antara transparansi dan performa, atau transparansi dan komunikasi asinkron)! (3 poin)',
+          points: ['Transparansi vs performa: menjaga semua replika selalu konsisten (replication transparency penuh) butuh sinkronisasi mahal; latensi WAN tidak bisa disembunyikan',
+            'Transparansi vs komunikasi asinkron/kegagalan: server lambat tidak bisa dibedakan dari server mati, jadi menyembunyikan kegagalan membuat client terus menunggu atau retry',
+            'Kadang pengguna perlu tahu lokasi atau status, mis. memilih printer terdekat, notifikasi email terkirim tertunda',
+            'Kesimpulan: tingkat transparansi dipilih seimbang dengan performa (degree of transparency)'],
+          model: 'Pertama, transparansi dan performa: agar replikasi tidak terlihat, semua salinan harus selalu sama, padahal sinkronisasi antar replika yang berjauhan mahal dan latensi jaringan tetap terasa. Kedua, transparansi dan komunikasi asinkron atau kegagalan: sistem tidak bisa membedakan server yang lambat dari server yang mati, sehingga menyembunyikan kegagalan membuat client terus menunggu atau mengulang request. Karena itu transparansi penuh tidak realistis dan tingkatnya dipilih sesuai kebutuhan.' }
+      ],
+      ex: 'Mirip UTS 25/26 nomor 1a-1b.' + P },
+    { type: 'steps', q: 'Soal No. 2: Arsitektur Sistem (total 10 poin)',
+      steps: [
+        { q: 'a. Pada arsitektur berbasis publish-subscribe, komponen dapat dikoordinasikan dengan empat gaya, yaitu direct, mailbox, event-based, dan shared data space. Lengkapi tabel berikut dengan menuliskan gaya yang sesuai pada kotak (1) sampai (4), lalu jelaskan arti referentially coupled dan temporally coupled! (4 poin)',
+          table: { head: ['', 'Temporally coupled', 'Temporally decoupled'], rows: [['Referentially coupled', '(1)', '(2)'], ['Referentially decoupled', '(3)', '(4)']] },
+          fields: [
+            { label: '(1)', a: ['direct', 'direct coordination', 'langsung'] },
+            { label: '(2)', a: ['mailbox', 'mailbox coordination'] },
+            { label: '(3)', a: ['event based', 'event-based', 'event based coordination'] },
+            { label: '(4)', a: ['shared data space', 'shared dataspace', 'tuple space'] }],
+          ex: 'Referentially coupled: pihak yang berkomunikasi harus saling mengetahui identitas (nama atau alamat) secara eksplisit. Temporally coupled: pengirim dan penerima harus sama-sama aktif (berjalan) pada saat komunikasi.' },
+        { q: 'b. Pada arsitektur RESTful, jelaskan: (i) komponen, (ii) interface, dan (iii) konektor! Sebutkan juga operasi standar yang dipakai pada interface tersebut. (3 poin)',
+          points: ['(i) Komponen: sumber daya (resource) yang dikelola layanan dan diberi nama URI',
+            '(ii) Interface: sama untuk semua layanan (uniform interface)',
+            '(iii) Konektor: HTTP request-reply yang stateless, pesan self-describing',
+            'Operasi: PUT (membuat), GET (membaca state), DELETE (menghapus), POST (mengubah dengan mengirim state baru)'],
+          model: 'Pada RESTful, komponen adalah sumber daya yang dikelola layanan dan diidentifikasi dengan satu skema penamaan, yaitu URI, misalnya bucket dan object di Amazon S3. Interface-nya seragam untuk semua layanan. Konektornya adalah pesan request-reply, umumnya HTTP, yang self-describing dan stateless karena server tidak menyimpan state client. Operasi standarnya PUT untuk membuat sumber daya, GET untuk membaca state, DELETE untuk menghapus, dan POST untuk mengubah dengan mengirim state baru.' },
+        { q: 'c. Bandingkan arsitektur publish-subscribe dan RESTful dari sisi tingkat coupling antarkomponen dan berikan satu contoh kasus penggunaan yang cocok untuk masing-masing! (3 poin)',
+          points: ['RESTful: referentially coupled (client harus tahu URI layanan) dan temporally coupled (server harus aktif, client menunggu reply)',
+            'Publish-subscribe: referentially decoupled (publisher tidak tahu subscriber), bisa temporally decoupled bila broker menyimpan event',
+            'Pub-sub lebih longgar coupling-nya, mudah menambah subscriber',
+            'Contoh REST: aplikasi mobile membaca dan mengubah data pesanan di backend',
+            'Contoh pub-sub: sensor IoT mengirim data ke broker MQTT, notifikasi harga saham'],
+          model: 'RESTful lebih erat coupling-nya: client harus mengetahui URI sumber daya (referentially coupled) dan server harus aktif saat request dikirim karena client menunggu balasan (temporally coupled). Publish-subscribe lebih longgar: publisher tidak mengetahui subscriber (referentially decoupled), dan bila broker menyimpan event, keduanya tidak harus aktif bersamaan. RESTful cocok untuk operasi data seperti aplikasi mobile yang membaca dan mengubah pesanan di backend. Publish-subscribe cocok untuk aliran event seperti sensor IoT yang mengirim data ke broker MQTT.' }
+      ],
+      ex: 'Tabel koordinasi dari buku van Steen.' + P },
+    { type: 'steps', q: 'Soal No. 3: Proses: Virtualisasi (total 10 poin)',
+      steps: [
+        { q: 'a. Jelaskan perbedaan arsitektur Virtual Machine (VM) dan container, terutama terkait hypervisor, guest OS, dan kernel! (3 poin)',
+          points: ['VM berjalan di atas hypervisor (VMM) yang memvirtualisasi hardware',
+            'Setiap VM membawa guest OS lengkap dengan kernel sendiri',
+            'Container berjalan di atas container engine, tanpa hypervisor dan tanpa guest OS',
+            'Semua container berbagi kernel OS host; isolasi lewat namespaces dan cgroups'],
+          model: 'Pada VM, hypervisor memvirtualisasi hardware sehingga setiap VM menjalankan guest OS lengkap dengan kernelnya sendiri di atas hypervisor. Pada container, tidak ada hypervisor maupun guest OS: container engine menjalankan aplikasi sebagai proses terisolasi yang berbagi kernel OS host, dengan isolasi lewat namespaces dan pembatasan sumber daya lewat cgroups.' },
+        { q: 'b. Lengkapi tabel kelebihan (plus) dan kekurangan (minus) berikut! (4 poin)',
+          table: { head: ['Teknologi', 'Kelebihan', 'Kekurangan'], rows: [['Container', '', ''], ['Virtual Machine', '', '']] },
+          points: ['Container plus: ringan (MB), start dalam detik, overhead kecil, portabel, kepadatan tinggi, cocok microservices',
+            'Container minus: isolasi lebih lemah karena berbagi kernel, harus kernel/OS yang sama dengan host, celah kernel berdampak ke semua container',
+            'VM plus: isolasi kuat, bisa menjalankan OS berbeda dari host, cocok aplikasi lama/legacy',
+            'VM minus: berat (GB), start dalam menit, overhead guest OS, boros RAM dan disk'],
+          model: 'Container: kelebihannya ringan, menyala dalam hitungan detik, overhead kecil, dan portabel sehingga cocok untuk microservices; kekurangannya isolasi lebih lemah karena berbagi kernel host dan tidak bisa menjalankan OS dengan kernel berbeda. Virtual machine: kelebihannya isolasi kuat dan bisa menjalankan OS apa pun; kekurangannya berat karena membawa guest OS, menyala dalam hitungan menit, dan memakan lebih banyak RAM serta disk.' },
+        { q: 'c. Sebuah startup akan men-deploy 30 layanan mikro dan perlu scale-out cepat saat trafik naik. Di sisi lain, ada satu aplikasi lama yang hanya berjalan di OS berbeda dari server host. Pilih container atau VM untuk masing-masing kasus dan jelaskan alasannya! (3 poin)',
+          fields: [
+            { label: '30 layanan mikro dengan scale-out cepat', a: ['container', 'kontainer'] },
+            { label: 'Aplikasi lama di OS berbeda dari host', a: ['vm', 'virtual machine', 'mesin virtual'] }],
+          ex: 'Container ringan dan start dalam detik, sehingga instance mudah ditambah saat trafik naik. Container berbagi kernel host, jadi aplikasi yang butuh OS berbeda harus memakai VM yang membawa guest OS sendiri.' }
+      ],
+      ex: 'Kisi-kisi nomor 3: container, tanpa hitungan.' + P },
+    { type: 'steps', q: 'Soal No. 4: Komunikasi (total 10 poin)',
+      steps: [
+        { q: 'a. Jelaskan perbedaan komunikasi transient dan persistent, serta berikan satu contoh nyata untuk masing-masing! (3 poin)',
+          points: ['Persistent: pesan disimpan middleware sampai diterima penerima; penerima tidak harus aktif',
+            'Contoh persistent: email, pesan WhatsApp ke teman yang offline, message queue',
+            'Transient: pesan hanya disimpan selama pengirim dan penerima berjalan; hilang bila penerima tidak aktif',
+            'Contoh transient: datagram UDP, RPC, panggilan telepon'],
+          model: 'Pada komunikasi persistent, pesan disimpan middleware sampai diserahkan ke penerima, sehingga penerima tidak harus aktif saat pesan dikirim; contohnya email. Pada komunikasi transient, pesan hanya disimpan selama pengirim dan penerima sama-sama berjalan; bila penerima tidak aktif, pesan hilang; contohnya datagram UDP atau RPC.' },
+        { q: 'b. Jelaskan perbedaan komunikasi synchronous dan asynchronous (sebutkan titik di mana pengirim diblokir), lalu beri satu contoh untuk masing-masing! (3 poin)',
+          points: ['Synchronous: pengirim diblokir sampai syarat tertentu terpenuhi',
+            'Tiga titik blokir: request submission (diterima middleware), request delivery (sampai di penerima), after processing (selesai diproses dan dibalas)',
+            'Asynchronous: pengirim langsung melanjutkan setelah mengirim',
+            'Contoh synchronous: RPC atau HTTP request-response; contoh asynchronous: email, UDP, publish ke broker'],
+          model: 'Pada komunikasi synchronous, pengirim diblokir sampai pesan diterima middleware (request submission), sampai pesan sampai di penerima (request delivery), atau sampai penerima selesai memproses dan membalas (after processing). Contohnya RPC yang menunggu hasil. Pada komunikasi asynchronous, pengirim langsung melanjutkan pekerjaannya setelah pesan dikirim, misalnya mengirim email.' },
+        { q: 'c. Langkah-langkah pemanggilan Remote Procedure Call (RPC) pada tabel berikut dalam keadaan acak. Tuliskan urutan yang benar (1-8) pada kolom Urutan, lalu jelaskan peran client stub dan server stub! (4 poin)',
+          table: { head: ['Kode', 'Langkah', 'Urutan'], rows: [
+            ['A', 'Server stub memanggil prosedur lokal di server', ''],
+            ['B', 'Client stub mengemas parameter ke dalam pesan (marshalling)', ''],
+            ['C', 'Client memanggil client stub secara lokal', ''],
+            ['D', 'OS server meneruskan pesan ke server stub', ''],
+            ['E', 'OS client mengirim pesan melalui jaringan ke mesin server', ''],
+            ['F', 'Server stub membongkar pesan (unmarshalling) menjadi parameter', ''],
+            ['G', 'Hasil dikirim kembali ke client melalui jalur sebaliknya', ''],
+            ['H', 'Client stub membongkar hasil dan mengembalikannya ke client', '']] },
+          fields: [
+            { label: 'Urutan kode langkah 1 sampai 8', a: 'C B E D F A G H' },
+            { label: 'Nomor urut langkah A', a: 6, tol: 0 },
+            { label: 'Nomor urut langkah D', a: 4, tol: 0 }],
+          ex: 'C (1) → B (2) → E (3) → D (4) → F (5) → A (6) → G (7) → H (8). Client stub: wakil prosedur remote di sisi client yang mengemas parameter ke pesan, meminta OS mengirimnya, lalu membongkar hasil. Server stub: menerima pesan dari OS server, membongkar parameter, memanggil prosedur sebenarnya, lalu mengemas dan mengirim hasil.' }
+      ],
+      ex: 'Pola UTS 25/26 nomor 4 dengan langkah RPC.' + P },
+    { type: 'steps', q: 'Soal No. 5: Koordinasi: Logical Clock (total 10 poin). Perhatikan diagram tiga proses berikut. Semua clock awal bernilai 0 dan setiap event menaikkan clock sebesar 1.', figure: DL,
+      steps: [
+        { q: 'a. Jelaskan definisi logical clock dan situasi apa dalam sistem terdistribusi yang membuatnya diperlukan (mengapa physical clock tidak cukup)? (3 poin)',
+          points: ['Logical clock: penanda urutan event (happened-before) tanpa waktu nyata',
+            'Tidak ada jam global; jam fisik tiap mesin bergeser (clock skew/drift), sinkronisasi tidak pernah sempurna',
+            'Dua event di mesin berbeda bisa tercatat terbalik bila memakai jam fisik',
+            'Sering yang penting hanya urutan: replika database, causally ordered multicast, mutual exclusion, log terdistribusi'],
+          model: 'Logical clock adalah penanda urutan event berdasarkan relasi happened-before, bukan waktu nyata. Logical clock diperlukan karena sistem terdistribusi tidak punya jam global, dan jam fisik setiap mesin bergeser sehingga tidak pernah tepat sama. Akibatnya event yang terjadi lebih dulu bisa tercatat dengan waktu lebih besar di mesin lain. Pada banyak situasi, misalnya replika database yang harus menerapkan update dalam urutan sama, yang penting hanya urutan kejadian, bukan jamnya.' },
+        { q: 'b. Tentukan timestamp Lamport untuk event a sampai i! (3 poin)',
+          fields: [
+            { label: 'a', a: 1, tol: 0 }, { label: 'b', a: 2, tol: 0 }, { label: 'c', a: 6, tol: 0 },
+            { label: 'd', a: 2, tol: 0 }, { label: 'e', a: 3, tol: 0 }, { label: 'f', a: 4, tol: 0 },
+            { label: 'g', a: 1, tol: 0 }, { label: 'h', a: 4, tol: 0 }, { label: 'i', a: 5, tol: 0 }],
+          ex: 'd = max(0, a=1) + 1 = 2. h = max(g=1, e=3) + 1 = 4. i = 5. c = max(b=2, i=5) + 1 = 6. Dihitung dengan clocks.js.' },
+        { q: 'c. Tentukan timestamp vector clock untuk event a sampai i, lalu sebutkan satu pasangan event yang concurrent dan satu pasangan yang memiliki hubungan happened-before! (4 poin)',
+          fields: [
+            { label: 'a', a: '1 0 0' }, { label: 'b', a: '2 0 0' }, { label: 'c', a: '3 2 3' },
+            { label: 'd', a: '1 1 0' }, { label: 'e', a: '1 2 0' }, { label: 'f', a: '1 3 0' },
+            { label: 'g', a: '0 0 1' }, { label: 'h', a: '1 2 2' }, { label: 'i', a: '1 2 3' },
+            { label: 'Satu pasangan concurrent (mis. b d)', a: CONC.concat(CONC.map(function (s) { return s.split(' ').reverse().join(' '); })) },
+            { label: 'Satu pasangan happened-before, tulis yang lebih dulu (mis. a d)', a: HB }],
+          ex: 'h: max(g=(0,0,1), e=(1,2,0)) = (1,2,1) → (1,2,2). c: max(b=(2,0,0), i=(1,2,3)) = (2,2,3) → (3,2,3). Concurrent: ' + CONC.join(', ') + '. Happened-before (lebih dulu, lalu): ' + HB.join(', ') + '. Contoh: b = (2,0,0) dan d = (1,1,0) saling tidak ≤, jadi concurrent; a = (1,0,0) ≤ d = (1,1,0), jadi a → d.' }
+      ],
+      ex: 'Pola nomor 5 kisi-kisi 2026: logical clock dan vector clock.' + P },
+    { type: 'steps', q: 'Soal No. 6: Penamaan (total 10 poin). Perhatikan Chord ring dengan m = 4 berikut. Node aktif: N1, N4, N9, N12, dan N14.',
+      steps: [
+        { q: 'a. Jelaskan konsep identity pada Reticulum Network Stack: bagaimana identitas dibentuk, apa itu destination hash, dan apa perbedaan mendasarnya dengan alamat IP? (3 poin)',
+          points: ['Identity dibentuk dari pasangan kunci kriptografi (kunci publik dan privat) yang dibuat sendiri oleh node, tanpa otoritas pusat',
+            'Destination hash: hash (SHA-256 yang dipotong) dari nama destination (nama aplikasi dan aspek) dan kunci publik identity, dipakai sebagai alamat tujuan',
+            'Alamat IP diberikan jaringan dan bergantung lokasi/topologi; berubah bila pindah jaringan',
+            'Destination hash tidak bergantung lokasi, tetap sama di jaringan mana pun, dan sekaligus membuktikan pemilik kunci (self-certifying)'],
+          model: 'Di Reticulum, identitas dibentuk dari pasangan kunci kriptografi yang dibuat sendiri oleh setiap node, tanpa perlu server pusat. Destination hash adalah hash yang dipotong dari nama destination dan kunci publik identity; hash ini dipakai sebagai alamat tujuan paket. Perbedaannya dengan alamat IP: IP diberikan oleh jaringan dan menunjukkan lokasi, sehingga berubah bila perangkat pindah jaringan. Destination hash tidak bergantung lokasi, tetap sama di mana pun node berada, dan terikat dengan kunci publik sehingga identitasnya bisa diverifikasi.' },
+        { q: 'b. Lengkapi finger table untuk node N4! (4 poin)',
+          table: { head: ['i', 'start = (4 + 2^(i-1)) mod 16', 'Successor'], rows: [['1', '', ''], ['2', '', ''], ['3', '', ''], ['4', '', '']] },
+          fields: [
+            { label: 'Start i = 1..4', a: '5 6 8 12' },
+            { label: 'Successor i = 1..4', a: ['9 9 9 12', 'n9 n9 n9 n12'] }],
+          ex: 'Start: 4+1 = 5, 4+2 = 6, 4+4 = 8, 4+8 = 12. Successor: succ(5) = 9, succ(6) = 9, succ(8) = 9, succ(12) = 12. Dihitung dengan chord.js.' },
+        { q: 'c. Tunjukkan langkah Chord lookup untuk key 2 yang dimulai dari N9. Sebutkan node yang dilalui dan node yang menyimpan key tersebut! (3 poin)',
+          fields: [
+            { label: 'Jalur lookup dari N9', a: ['9 1 4', 'n9 n1 n4'] },
+            { label: 'Node yang menyimpan key 2', a: ['4', 'n4'] }],
+          ex: 'FT_9 = succ(10), succ(11), succ(13), succ(1) = 12, 12, 14, 1. Key 2 ∉ (9, 12], jadi pilih finger terjauh yang belum melewati 2, yaitu N1. FT_1 = 4, 4, 9, 9; key 2 ∈ (1, 4], jadi diteruskan ke N4. Key 2 disimpan di succ(2) = N4. Dihitung dengan chord.js.' }
+      ],
+      ex: 'Bagian a (identitas Reticulum) tercantum di kisi-kisi tambahan nomor 6, tetapi tidak ada di soal UTS tahun lalu maupun slide yang tersedia; kunci dari dokumentasi Reticulum.' + P },
+    { type: 'steps', q: 'Soal No. 7: Konsistensi dan Fault Tolerant (total 10 poin)',
+      steps: [
+        { q: 'a. Gambarkan diagram urutan operasi read R(x) dan write W(x) terhadap variabel bersama x oleh empat proses berikut pada garis waktu yang disediakan: P1: menulis nilai a ke x, kemudian menulis nilai b ke x. P2: membaca nilai a, kemudian membaca nilai b. P3: membaca nilai a, kemudian membaca nilai b. P4: membaca nilai b, kemudian membaca nilai a. (3 poin)',
+          points: ['P1: W(x)a lalu W(x)b', 'P2: R(x)a lalu R(x)b', 'P3: R(x)a lalu R(x)b', 'P4: R(x)b lalu R(x)a',
+            'Read digambar setelah write yang dibacanya'],
+          model: 'Gambar empat garis waktu P1 sampai P4 dengan waktu berjalan ke kanan. Garis P1: W(x)a, lalu W(x)b. Garis P2: R(x)a, lalu R(x)b. Garis P3: R(x)a, lalu R(x)b. Garis P4: R(x)b, lalu R(x)a. Catatan: karena W(x)a dan W(x)b ditulis berurutan oleh P1 (kausal), P4 yang melihat b lalu a melanggar sequential maupun causal consistency.' },
+        { q: 'b. Apakah diagram berikut sequentially consistent, causally consistent, keduanya, atau tidak keduanya? Jelaskan analisis kamu! (4 poin)', figure: CL,
+          fields: [
+            { label: 'Jawaban (sequential / causal / keduanya / tidak keduanya)', a: ['causal', 'causally consistent', 'causal saja', 'hanya causal', 'causally consistent saja'] },
+            { label: 'Pasangan write yang concurrent', a: 'b c', set: true }],
+          ex: 'P2 membaca a lalu menulis b, jadi W(x)a → W(x)b; P1 menulis a lalu c, jadi W(x)a → W(x)c. Semua proses melihat a lebih dulu. W(x)b dan W(x)c concurrent, sehingga P3 (c lalu b) dan P4 (b lalu c) boleh berbeda: causally consistent. Karena urutan b dan c berlawanan, tidak ada satu urutan global: tidak sequentially consistent. Diperiksa dengan consistency.js; ini contoh klasik buku van Steen.' },
+        { q: 'c. Jelaskan mengapa konsistensi diperlukan pada sistem terdistribusi yang menggunakan replikasi data, dan sebutkan satu contoh masalah yang muncul jika konsistensi diabaikan! (3 poin)',
+          points: ['Replikasi untuk keandalan dan performa, tetapi update di satu replika membuat replika lain berbeda',
+            'Konsistensi menjamin semua proses melihat data sesuai aturan (model) yang disepakati',
+            'Contoh masalah: saldo rekening berbeda di dua replika (setor lalu bunga 1.111 vs bunga lalu setor 1.110)',
+            'Contoh lain: stok barang terjual dua kali, balasan chat muncul sebelum pesan aslinya'],
+          model: 'Replikasi membuat sistem lebih andal dan cepat, tetapi setiap update pada satu replika harus disebarkan ke replika lain. Tanpa konsistensi, replika bisa berbeda dan pengguna membaca data usang atau bertentangan. Contohnya rekening Rp1.000 yang direplikasi di dua kota: bila satu replika menerapkan setoran Rp100 lalu bunga 1% (1.111) dan replika lain bunga lalu setoran (1.110), saldo nasabah menjadi berbeda tergantung server yang diakses.' }
+      ],
+      ex: 'Pola UTS 25/26 nomor 7.' + P }
   ]);
 })();

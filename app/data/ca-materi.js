@@ -7,14 +7,15 @@ BANK.materi('ca', [
     ringkas: 'Tujuh nomor soal beserta cakupannya, hubungannya dengan soal tahun lalu, dan pola jawaban esai.',
     bagian: [
       { h: 'Kisi-kisi per nomor', tabel: { head: ['No', 'Topik', 'Cakupan'], rows: [
-        ['1', 'Sistem terdistribusi', 'Teori dasar: centralized, decentralized, distributed; skalabilitas; transparansi (cadangan: shared/private memory, client-server vs P2P)'],
-        ['2', 'Arsitektur', 'Teori dasar gaya arsitektur; RESTful architecture; publish-subscribe architecture (tabel koordinasi, basis subscription)'],
-        ['3', 'Proses', 'Teori dasar proses dan thread; container (Docker) vs virtual machine: definisi, contoh, kelebihan, kekurangan. Tanpa hitungan'],
+        ['1', 'Sistem terdistribusi', 'Teori dasar: centralized, decentralized, distributed; distribution transparency (definisi, contoh, trade-off dengan performa dan komunikasi asinkron); skalabilitas (cadangan: shared/private memory, client-server vs P2P)'],
+        ['2', 'Arsitektur', 'Publish-subscribe dan RESTful: komponen, interface, konektor; lengkapi tabel coupled/decoupled (koordinasi); perbandingan coupling'],
+        ['3', 'Proses', 'Container (plus minus) dan virtual machine: hypervisor, guest OS, kernel; memilih container atau VM. Tanpa hitungan'],
         ['4', 'Komunikasi', 'Teori dasar transient/persistent × synchronous/asynchronous; RPC: cara kerja, stub, marshalling, varian'],
         ['5', 'Koordinasi', 'Logical clock (Lamport) dan situasi yang membutuhkannya; vector clock; mengisi timestamp dari diagram dengan bentuk berbeda'],
-        ['6', 'Penamaan', 'Teori dasar: name, identifier, address; Chord: ring, hashing (total ASCII mod 2^m), successor, finger table, lookup'],
+        ['6', 'Penamaan', 'Identitas pada Reticulum (identity, destination hash, beda dengan alamat IP); teori name/identifier/address; Chord: finger table dan lookup'],
         ['7', 'Konsistensi', 'Teori dasar: mengapa replikasi dan konsistensi; analisis diagram P1-P4 sequentially dan causally consistent']] },
-        ingat: 'Nomor 1, 4, 5, dan 7 mirip UTS 25/26. Nomor 2, 3, dan 6 bergeser ke RESTful/pub-sub, container, dan Chord.' },
+        poin: ['Tabel ini menggabungkan dua catatan kisi-kisi. Catatan tambahan menyebut identitas Reticulum di nomor 6, komponen/interface/konektor di nomor 2, dan komunikasi asinkron di nomor 1.'],
+        ingat: 'Nomor 1, 4, 5, dan 7 mirip UTS 25/26. Nomor 2, 3, dan 6 bergeser ke RESTful/pub-sub, container, serta Reticulum dan Chord.' },
       { h: 'Bentuk soal tahun lalu', tabel: { head: ['Aspek', 'UTS Genap 24/25', 'UTS Ganjil 25/26'], rows: [
         ['Jumlah soal', '7 nomor, tiap nomor a/b/c', '7 nomor, a/b/c (nomor 2 dan 6 hanya a/b)'],
         ['Bobot', '15 poin per nomor', '10 poin per nomor, sub-soal 2 sampai 6 poin'],
@@ -54,7 +55,10 @@ BANK.materi('ca', [
         ['Persistence (daftar lama)', 'Objek ada di memori atau di disk', 'Objek database']] },
         poin: [
           'Definisi: menyembunyikan fakta bahwa proses dan sumber daya tersebar secara fisik di banyak komputer, sehingga sistem tampak sebagai satu komputer.',
-          'Degree of transparency: transparansi penuh tidak selalu diinginkan. Latensi antar benua tidak bisa disembunyikan, server lambat sulit dibedakan dari server mati, dan menjaga replika selalu sama itu mahal.'
+          'Degree of transparency: transparansi penuh tidak selalu diinginkan. Latensi antar benua tidak bisa disembunyikan, server lambat sulit dibedakan dari server mati, dan menjaga replika selalu sama itu mahal.',
+          'Trade-off 1, transparansi vs performa: replication transparency penuh menuntut semua salinan selalu sama, padahal sinkronisasi antar replika yang berjauhan lambat dan mahal.',
+          'Trade-off 2, transparansi vs komunikasi asinkron: agar latensi tersembunyi, sistem memakai komunikasi asinkron (pengirim tidak menunggu). Akibatnya pengguna kadang perlu tahu bahwa operasinya belum selesai, misalnya email masih di outbox, sehingga hasilnya tidak bisa dibuat seolah-olah lokal.',
+          'Trade-off 3, transparansi vs kegagalan: server lambat tidak bisa dibedakan dari server mati, sehingga menyembunyikan kegagalan membuat client terus menunggu atau mengulang request.'
         ],
         soal: 'UTS 24/25 1a dan 25/26 1b: Jelaskan definisi distribution transparency dan sebutkan tipe-tipenya. (4 poin)',
         ingat: 'Kata kuncinya "menyembunyikan". Hafalkan tujuh tipe: access, location, relocation, migration, replication, concurrency, failure.' },
@@ -86,7 +90,7 @@ BANK.materi('ca', [
   },
   {
     label: 'Soal 2', judul: 'Arsitektur: RESTful dan Publish-Subscribe', hlm: '-',
-    ringkas: 'Gaya arsitektur dan istilah component/interface/connector, RESTful (4 karakteristik dan operasi), publish-subscribe (tabel koordinasi, shared data space, basis subscription).',
+    ringkas: 'Gaya arsitektur, komponen/interface/konektor RESTful dan publish-subscribe, RESTful (4 karakteristik dan operasi), publish-subscribe (tabel koordinasi, shared data space, basis subscription).',
     bagian: [
       { h: 'Teori dasar gaya arsitektur', poin: [
         'Gaya arsitektur: cara komponen disusun, dihubungkan, dan bertukar data.',
@@ -111,6 +115,13 @@ BANK.materi('ca', [
         ['DELETE', 'Delete a resource', 'Menghapus object'],
         ['POST', 'Modify a resource by transferring a new state', 'Mengubah object']] },
         ingat: 'Di praktik HTTP banyak API memakai POST untuk membuat dan PUT untuk mengganti. Di ujian ikuti tabel buku, lalu sebut konvensi praktiknya bila perlu.' },
+      { h: 'Komponen, interface, dan konektor', tabel: { head: ['Unsur', 'RESTful', 'Publish-subscribe'], rows: [
+        ['Komponen', 'Sumber daya (resource) yang dikelola layanan dan diberi nama URI; client dan server', 'Publisher, subscriber, dan broker/middleware event'],
+        ['Interface', 'Seragam untuk semua layanan: PUT, GET, DELETE, POST', 'publish(event) dan subscribe(topik atau syarat), lalu notify ke subscriber'],
+        ['Konektor', 'HTTP request-reply, stateless, pesan self-describing', 'Event bus/broker (mis. MQTT, Kafka) yang mencocokkan event dengan subscription'],
+        ['Coupling', 'Referentially dan temporally coupled', 'Referentially decoupled; temporally decoupled bila broker menyimpan event']] },
+        soal: 'Kisi-kisi 2026 nomor 2 dan PDF latihan 2b: Pada arsitektur RESTful, jelaskan komponen, interface, dan konektor, serta operasi standarnya.',
+        ingat: 'Komponen = apa yang dihubungkan, interface = kontrak layanannya, konektor = jalur komunikasinya.' },
       { h: 'Publish-subscribe architecture', poin: [
         'Publisher menerbitkan event tanpa tahu siapa penerimanya.',
         'Subscriber mendaftarkan minat (subscription).',
@@ -302,8 +313,8 @@ BANK.materi('ca', [
     ]
   },
   {
-    label: 'Soal 6', judul: 'Penamaan dan Chord', hlm: '-',
-    ringkas: 'Name, identifier, address dan tiga sifat identifier, flat vs structured vs attribute naming, Chord: hashing ASCII, successor, finger table, lookup.',
+    label: 'Soal 6', judul: 'Penamaan, Reticulum, dan Chord', hlm: '-',
+    ringkas: 'Name, identifier, address dan tiga sifat identifier, skema penamaan, identitas pada Reticulum (identity, destination hash, beda dengan IP), Chord: hashing ASCII, successor, finger table, lookup.',
     bagian: [
       { h: 'Name, identifier, address', tabel: { head: ['Istilah', 'Arti', 'Contoh'], rows: [
         ['Name', 'String untuk merujuk entitas', 'www.telkomuniversity.ac.id'],
@@ -317,6 +328,21 @@ BANK.materi('ca', [
         ['Flat naming', 'Identifier tanpa struktur; resolusi lewat broadcast, forwarding pointer, home-based, atau DHT', 'Chord, alamat MAC'],
         ['Structured naming', 'Name space hierarkis, mudah dibaca', 'DNS, path file'],
         ['Attribute-based naming', 'Dicari lewat pasangan atribut-nilai', 'LDAP, Active Directory']] } },
+      { h: 'Identitas pada Reticulum Network Stack', poin: [
+        'Reticulum adalah network stack yang tidak bergantung pada IP. Ia bisa berjalan di atas LoRa, radio paket, serial, maupun TCP/UDP, tanpa server pusat dan tanpa pembagian alamat.',
+        'Identity: pasangan kunci kriptografi yang dibuat sendiri oleh setiap pihak, terdiri dari kunci X25519 (enkripsi/ECDH) dan kunci Ed25519 (tanda tangan), total 512 bit. Kunci privat disimpan sendiri, kunci publik disebarkan.',
+        'Destination: titik tujuan yang diberi nama bertitik "nama_aplikasi.aspek1.aspek2", misalnya "chatapp.user". Destination bertipe single terikat pada satu identity.',
+        'Destination hash: SHA-256 dari nama destination dan identity, lalu dipotong menjadi 128 bit (16 byte, ditulis 32 karakter heksadesimal). Hash inilah yang dipakai sebagai alamat tujuan paket.',
+        'Announce: destination menyebarkan pesan announce berisi destination hash, kunci publik, dan tanda tangan. Transport node mencatat arah datangnya sehingga jaringan tahu jalur ke hash itu.',
+        'Tipe destination: single (terenkripsi untuk satu identity), group (kunci simetris bersama), plain (tidak terenkripsi, untuk broadcast), dan link (kanal terenkripsi dua arah).'
+      ], tabel: { head: ['Aspek', 'Destination hash Reticulum', 'Alamat IP'], rows: [
+        ['Cara mendapat', 'Dihitung sendiri dari kunci dan nama, tanpa otoritas pusat', 'Diberikan jaringan (DHCP, ISP, IANA)'],
+        ['Hubungan dengan lokasi', 'Tidak bergantung lokasi; tetap sama walau pindah jaringan atau media', 'Menunjukkan lokasi di topologi; berubah saat pindah jaringan'],
+        ['Keterkaitan dengan pemilik', 'Terikat kunci publik, jadi bisa diverifikasi (self-certifying)', 'Tidak membuktikan siapa pemiliknya; bisa dipakai ulang perangkat lain'],
+        ['Keunikan', 'Unik secara probabilistik karena hash 128 bit', 'Unik karena dialokasikan; bisa ditranslasi (NAT)'],
+        ['Konsep penamaan', 'Identifier pada flat naming', 'Address (access point)']] },
+        soal: 'Kisi-kisi 2026 nomor 6 dan PDF latihan 6a: Jelaskan konsep identity pada Reticulum Network Stack: bagaimana identitas dibentuk, apa itu destination hash, dan apa perbedaan mendasarnya dengan alamat IP. (3 poin)',
+        ingat: 'Tidak ada slide Reticulum di folder materi; ringkasan ini disusun dari dokumentasi Reticulum dan perlu dicek dengan catatan kelas. Kaitkan dengan teori penamaan: destination hash adalah identifier (unik, tetap, tidak dipakai ulang), sedangkan IP adalah address.' },
       { h: 'Chord: ring dan successor', poin: [
         'Node dan data diberi identifier m bit dengan fungsi hash, lalu disusun melingkar 0 sampai 2^m − 1.',
         'Di slide kelas: ID = total ASCII string mod 2^m (m = 4 berarti mod 16, m = 5 berarti mod 32). Di sistem nyata dipakai SHA-1.',

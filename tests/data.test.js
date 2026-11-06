@@ -303,9 +303,9 @@ test('Komputasi Awan materi is well formed and the bank follows the seven kisi-k
   assert.ok(weeks.filter(w => w.bagian.some(b => b.soal)).length >= 7, 'each exam topic has an example question');
   const ca = data.isian.filter(it => it.course === 'ca');
   assert.equal(new Set(ca.map(it => it.id)).size, ca.length);
-  // Only the original papers and the seven kisi-kisi topics remain.
+  // Original papers, the seven kisi-kisi topics, and the friend's practice PDF (latpdf).
   const topics = [...new Set(ca.map(it => it.id.split('-')[1]))].sort();
-  assert.deepEqual(topics, ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'uts2425', 'uts2526']);
+  assert.deepEqual(topics, ['latpdf', 'u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'uts2425', 'uts2526']);
   for (let n = 1; n <= 7; n++) {
     const items = ca.filter(it => it.id.startsWith('ca-u' + n + '-'));
     assert.ok(items.length >= 5, 'u' + n + ' ' + items.length);
