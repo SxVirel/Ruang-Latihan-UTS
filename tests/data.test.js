@@ -290,7 +290,7 @@ test('Manajemen Proyek materi is well formed and its worked tables match the dia
   }
 });
 
-test('Komputasi Awan materi is well formed and exam-pattern items sit in their own topics', () => {
+test('Komputasi Awan materi is well formed and the bank follows the seven kisi-kisi numbers', () => {
   const weeks = data.materi.ca;
   assert.ok(weeks && weeks.length >= 8, 'ca materi');
   for (const w of weeks) {
@@ -302,11 +302,17 @@ test('Komputasi Awan materi is well formed and exam-pattern items sit in their o
   }
   assert.ok(weeks.filter(w => w.bagian.some(b => b.soal)).length >= 7, 'each exam topic has an example question');
   const ca = data.isian.filter(it => it.course === 'ca');
-  const count = t => ca.filter(it => it.topic === t).length;
-  for (const t of ['Pola UTS 24/25', 'Pola UTS 25/26', 'Pola UTS 24/25 & 25/26']) assert.ok(count(t) >= 10, t + ' ' + count(t));
-  // Old ca.js items keep their material topics; ids stay unique.
   assert.equal(new Set(ca.map(it => it.id)).size, ca.length);
-  assert.ok(ca.filter(it => /^ca-(arsi|proc|kom|koor|nama|kons)-/.test(it.id)).every(it => !/^Pola UTS/.test(it.topic)));
+  // Only the original papers and the seven kisi-kisi topics remain.
+  const topics = [...new Set(ca.map(it => it.id.split('-')[1]))].sort();
+  assert.deepEqual(topics, ['u1', 'u2', 'u3', 'u4', 'u5', 'u6', 'u7', 'uts2425', 'uts2526']);
+  for (let n = 1; n <= 7; n++) {
+    const items = ca.filter(it => it.id.startsWith('ca-u' + n + '-'));
+    assert.ok(items.length >= 8, 'u' + n + ' ' + items.length);
+    assert.ok(items.filter(it => it.type === 'steps').length >= 2, 'u' + n + ' exam-style packages');
+    // Self-written keys are labelled.
+    assert.ok(items.every(it => /perlu dicek/.test(it.ex)), 'u' + n + ' self-written label');
+  }
 });
 
 test('Komputasi Awan original exam papers are staged items with drawable figures', () => {
@@ -317,7 +323,7 @@ test('Komputasi Awan original exam papers are staged items with drawable figures
     assert.ok(items.every(it => it.type === 'steps' && it.steps.length >= 2), topic);
   }
   const figs = ca.flatMap(it => [it.figure].concat((it.steps || []).map(p => p.figure))).filter(Boolean);
-  assert.equal(figs.length, 6);
+  assert.ok(figs.length >= 6);
   for (const f of figs.filter(f => f.type === 'ops')) assert.ok(f.rows.every(r => r.length === f.rows[0].length));
   for (const f of figs.filter(f => f.type === 'clock')) {
     const ids = new Set(f.events.map(e => e.id));

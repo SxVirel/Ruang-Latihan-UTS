@@ -14,20 +14,17 @@ BANK.course('ka', {
 });
 BANK.course('ca', {
   name: 'Komputasi Awan', code: 'CL', kind: 'isian', secsPerItem: 240, labs: ['clocks', 'chord', 'consistency'],
-  blurb: 'Sistem terdistribusi berpola UTS 24/25 dan 25/26, dengan materi per nomor soal',
-  about: 'Disusun dari catatan kisi-kisi dosen, soal UTS Genap 24/25 dan Ganjil 25/26, serta buku Distributed Systems (van Steen & Tanenbaum). Topik Soal Asli UTS 24/25 dan Soal Asli UTS 25/26 memuat soal ujian aslinya, satu soal bertahap per nomor dengan gambar digambar ulang. Topik Pola UTS 24/25 dan Pola UTS 25/26 berisi soal yang mengikuti sub-soal ujian itu; Pola UTS 24/25 & 25/26 berisi pola yang muncul di keduanya. Untuk fokus ke satu ujian, centang topik ujian itu ditambah topik 24/25 & 25/26. Topik lainnya berisi soal kisi-kisi. Lab interaktif melatih tiga soal hitungan yang pasti keluar.',
-  materiLead: 'Materi disusun per nomor soal UTS (7 topik yang sama di 24/25 dan 25/26). Setiap bab memuat ringkasan, tabel perbandingan, dan contoh soal ujian beserta pembahasannya. Ketuk satu bab untuk membukanya.',
+  blurb: 'Soal asli UTS 24/25 dan 25/26, latihan per nomor kisi-kisi 2026, dan materinya',
+  about: 'Disusun dari kisi-kisi UTS 2026, soal UTS Genap 24/25 dan Ganjil 25/26, dokumen SOAL (Chord dengan hashing ASCII), serta buku Distributed Systems (van Steen & Tanenbaum). Topik Soal Asli UTS 24/25 dan 25/26 memuat soal ujian aslinya dengan gambar digambar ulang. Topik 1 sampai 7 mengikuti nomor kisi-kisi 2026; tiap topik punya paket soal a/b/c bergaya UTS dan latihan singkat. Kunci di luar soal asli disusun sendiri dan perlu dicek. Lab interaktif melatih vector clock, Chord, dan konsistensi.',
+  materiLead: 'Materi disusun per nomor kisi-kisi UTS 2026. Setiap bab memuat ringkasan, tabel perbandingan, dan contoh soal beserta pembahasannya. Ketuk satu bab untuk membukanya.',
   notes: [
-    'Shared memory vs private memory, dan perbedaan jenis sistem terdistribusi.',
-    'Kenapa server multithread melayani lebih banyak client daripada single thread.',
-    'Komunikasi transient/persistent × synchronous/asynchronous beserta contohnya. Client-server minggu 4 bersifat transient asynchronous.',
-    'Multicasting: satu pengirim ke banyak penerima.',
-    'Koordinasi: sinkronisasi clock, algoritma election (Bully, Ring).',
-    'Mengisi timestamp Lamport/vector dari diagram panah antar proses (lihat lab Timestamp).',
-    'Penamaan: home-based approach (cara kerja, kelebihan, kekurangan) dan Chord: tiap node menyimpan key, cara membuat finger table.',
-    'Publish-subscribe dan gaya arsitektur: komponen, interface, connector.',
-    'Container vs virtual machine: fungsi, contoh, kelebihan, kekurangan.',
-    'Konsistensi: kenapa diperlukan, dan analisis tabel P1-P4 apakah sequentially consistent (dibaca dari kiri ke kanan).'
+    '1. Sistem terdistribusi: centralized, decentralized, distributed; skalabilitas; transparansi.',
+    '2. Arsitektur: teori dasar, RESTful architecture, publish-subscribe architecture (tabel koordinasi referentially/temporally decoupled).',
+    '3. Proses: teori dasar dan container (Docker) vs virtual machine: definisi, contoh, kelebihan, kekurangan. Tanpa hitungan.',
+    '4. Komunikasi: transient/persistent × synchronous/asynchronous dan cara kerja RPC.',
+    '5. Koordinasi: logical clock (situasi yang membutuhkannya) dan vector clock, mengisi timestamp dari diagram berbentuk berbeda.',
+    '6. Penamaan: name, identifier, address; Chord: total ASCII mod 2^m, successor, finger table, lookup.',
+    '7. Konsistensi: mengapa diperlukan, analisis diagram P1-P4 sequentially dan causally consistent.'
   ]
 });
 BANK.course('fd', {
