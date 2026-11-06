@@ -335,7 +335,10 @@
         if (set) run(id, set, prefs.mode, 'normal');
         return;
       }
-      run(id, UI.shuffle(p).slice(0, want()), prefs.mode, 'normal');
+      // A session made only of original exam papers keeps the paper order (Soal 1, 2, ...), like the real exam.
+      var paper = p.length && p.every(function (it) { return it.paper; });
+      var ordered = paper ? p.slice().sort(function (x, y) { return x.paper < y.paper ? -1 : x.paper > y.paper ? 1 : x.no - y.no; }) : UI.shuffle(p);
+      run(id, ordered.slice(0, want()), prefs.mode, 'normal');
     } }, 'Mulai');
     setup.appendChild(h('div', { class: 'row' }, startBtn,
       bankN ? h('button', { class: 'btn ghost', type: 'button', onclick: function () { runBank(id); } }, 'Ulangi ' + bankN + ' soal salah') : null,

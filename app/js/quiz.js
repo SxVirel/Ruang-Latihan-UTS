@@ -59,6 +59,9 @@
       h('tbody', null, t.rows.map(function (r) { return h('tr', null, r.map(function (c) { return h('td', null, String(c)); })); }))));
   }
 
+  // Optional drawing for an item or step: { type: 'clock' | 'memory' | ..., ...spec } (see diagram.js).
+  function fig(f) { return f && root.Diagram ? root.Diagram.figure(f) : null; }
+
   // opts: { course, items, mode: 'practice'|'exam', kind, limit (sec), title, onDone(action, payload) }
   function start(container, opts) {
     var S = {
@@ -116,7 +119,8 @@
           h('span', { class: 'qnum' }, 'Soal ' + (S.idx + 1)),
           h('span', { class: 'chip' }, it.topic)),
         h('p', { class: 'qtext' }, it.q),
-        it.table ? table(it.table) : null);
+        it.table ? table(it.table) : null,
+        fig(it.figure));
       if (it.type === 'mcq') sec.appendChild(mcqBody(it, s));
       else if (it.type === 'fill') sec.appendChild(fillBody(it, s));
       else if (it.type === 'steps') sec.appendChild(stepsBody(it, s));
@@ -235,7 +239,8 @@
       var box = h('div', { class: 'step stack' + (showKey ? ' done' : '') },
         h('span', { class: 'step-num' }, 'Langkah ' + (i + 1) + ' dari ' + it.steps.length),
         h('p', { class: 'qtext' }, p.q),
-        p.table ? table(p.table) : null);
+        p.table ? table(p.table) : null,
+        fig(p.figure));
       if (p.type === 'fill') {
         box.appendChild(fieldGrid(p, ps, showKey));
         if (showKey && p.ex) box.appendChild(h('div', { class: 'explain' }, h('strong', null, ps.score >= 0.999 ? 'Benar. ' : 'Pembahasan. '), p.ex));
@@ -439,12 +444,13 @@
     function reviewItem(it, s, i) {
       var body = h('div', { class: 'review-item' },
         h('div', { class: 'row between' }, h('span', { class: 'qnum' }, 'Soal ' + (i + 1)), h('span', { class: 'chip bad' }, UI.pct(s.score))),
-        h('p', null, it.q), it.table ? table(it.table) : null);
+        h('p', null, it.q), it.table ? table(it.table) : null, fig(it.figure));
       if (it.type === 'steps') {
         parts(it).forEach(function (p, k) {
           body.appendChild(h('p', { class: 'step-num' }, 'Langkah ' + (k + 1) + ' · ' + UI.pct(s.ps[k].score)));
           body.appendChild(h('p', null, p.q));
           if (p.table) body.appendChild(table(p.table));
+          if (p.figure) body.appendChild(fig(p.figure));
           reviewAnswers(body, p, s.ps[k]);
           if (p.ex) body.appendChild(h('div', { class: 'explain small' }, p.ex));
         });

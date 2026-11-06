@@ -308,3 +308,19 @@ test('Komputasi Awan materi is well formed and exam-pattern items sit in their o
   assert.equal(new Set(ca.map(it => it.id)).size, ca.length);
   assert.ok(ca.filter(it => /^ca-(arsi|proc|kom|koor|nama|kons)-/.test(it.id)).every(it => !/^Pola UTS/.test(it.topic)));
 });
+
+test('Komputasi Awan original exam papers are staged items with drawable figures', () => {
+  const ca = data.isian.filter(it => it.course === 'ca');
+  for (const [topic, n] of [['Soal Asli UTS 24/25', 7], ['Soal Asli UTS 25/26', 7]]) {
+    const items = ca.filter(it => it.topic === topic);
+    assert.equal(items.length, n, topic);
+    assert.ok(items.every(it => it.type === 'steps' && it.steps.length >= 2), topic);
+  }
+  const figs = ca.flatMap(it => [it.figure].concat((it.steps || []).map(p => p.figure))).filter(Boolean);
+  assert.equal(figs.length, 6);
+  for (const f of figs.filter(f => f.type === 'ops')) assert.ok(f.rows.every(r => r.length === f.rows[0].length));
+  for (const f of figs.filter(f => f.type === 'clock')) {
+    const ids = new Set(f.events.map(e => e.id));
+    assert.ok(f.msgs.every(m => ids.has(m.from) && ids.has(m.to)));
+  }
+});

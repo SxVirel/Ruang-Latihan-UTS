@@ -152,6 +152,21 @@ button, a, summary, label { -webkit-tap-highlight-color: transparent; touch-acti
 .dg-edge.crit { stroke: var(--indigo-2); stroke-width: 3; }
 .dg-head { fill: var(--muted); }
 .dg-head.crit { fill: var(--indigo-2); }
+.dg-axis { stroke: var(--ink); stroke-width: 2; }
+.dg-dot { fill: var(--ink); }
+.dg-box { fill: var(--muted); stroke: var(--ink); stroke-width: 1.5; }
+.dg-mem { fill: var(--line); stroke: var(--ink); stroke-width: 1.2; }
+.dg-cpu { fill: var(--sheet); stroke: var(--ink); stroke-width: 1.2; }
+.dg-bus { fill: var(--sheet); stroke: var(--ink); stroke-width: 1.2; }
+/* Figures inside question cards shrink to the card instead of scrolling sideways. */
+.diagram.fit { overflow: visible; padding: 10px; }
+.diagram.fit svg.dg-fit { min-width: 0; width: 100%; max-width: 640px; height: auto; }
+.dg-fit text { font-size: 17px; }
+.dg-fit .dg-small { font-size: 14px; }
+.dg-fit .dg-name { font-size: 18px; }
+.dg-ops .dg-op { font-size: 18px; font-weight: 700; fill: var(--ink); }
+.dg-ops .dg-op.faded { fill: var(--muted); font-weight: 400; }
+.dg-rule { stroke: var(--line); stroke-width: 1; }
 .dg-node { fill: var(--sheet); stroke: var(--muted); stroke-width: 1.5; }
 .dg-node.crit { fill: var(--indigo-soft); stroke: var(--indigo-2); stroke-width: 2.5; }
 .dg-rule { stroke: var(--line); }

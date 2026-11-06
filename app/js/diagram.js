@@ -169,5 +169,99 @@
       h('figcaption', { class: 'small muted' }, 'Lebar irisan = probabilitas seleksi. Angka di bawah = kumulatif; kromosom terpilih adalah irisan tempat r jatuh.'));
   }
 
-  root.Diagram = { wbs: wbs, net: net, genes: genes, wheel: wheel };
+  // Arrow from (x1,y1) to (x2,y2) with a drawn head (no <marker>, so ids never clash between figures).
+  function arrowTo(svg, x1, y1, x2, y2, cls) {
+    var dx = x2 - x1, dy = y2 - y1, len = Math.sqrt(dx * dx + dy * dy) || 1, ux = dx / len, uy = dy / len;
+    svg.appendChild(s('line', { class: cls || 'dg-edge', x1: x1, y1: y1, x2: x2 - ux * 9, y2: y2 - uy * 9 }));
+    svg.appendChild(s('polygon', { class: 'dg-head', points: [[x2, y2], [x2 - ux * 10 - uy * 5, y2 - uy * 10 + ux * 5], [x2 - ux * 10 + uy * 5, y2 - uy * 10 - ux * 5]].join(' ') }));
+  }
+
+  // Space-time diagram for Lamport and vector clock questions. Scales to the card width (class "fit").
+  // spec: { procs, events: [{ id, p, t, box?, below? }], msgs: [{ from, to, label? }], caption? }
+  // t is the horizontal position (0..100). A box event is a local event drawn as a square.
+  function clock(spec) {
+    var W = 400, top = 36, gap = 80, H = top + (spec.procs - 1) * gap + 44;
+    var X = function (t) { return 54 + t / 100 * (W - 76); };
+    var Y = function (p) { return top + p * gap; };
+    var pos = {};
+    spec.events.forEach(function (e) { pos[e.id] = { x: X(e.t), y: Y(e.p) }; });
+    var svg = s('svg', { class: 'dg dg-fit', viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Diagram proses dan pesan' });
+    for (var p = 0; p < spec.procs; p++) {
+      arrowTo(svg, 44, Y(p), W - 8, Y(p), 'dg-axis');
+      svg.appendChild(s('text', { class: 'dg-name', x: 4, y: Y(p) + 6 }, 'P' + (p + 1)));
+    }
+    spec.msgs.forEach(function (m) {
+      var a = pos[m.from], b = pos[m.to];
+      arrowTo(svg, a.x, a.y, b.x, b.y, 'dg-edge crit');
+      if (m.label) {
+        var lx = a.x + (b.x - a.x) * 0.3, ly = a.y + (b.y - a.y) * 0.3;
+        svg.appendChild(s('text', { class: 'dg-label crit', x: lx + 9, y: ly + 5 }, m.label));
+      }
+    });
+    spec.events.forEach(function (e) {
+      var q = pos[e.id], below = e.below != null ? e.below : e.p === spec.procs - 1;
+      if (e.box) svg.appendChild(s('rect', { class: 'dg-box', x: q.x - 8, y: q.y - 8, width: 16, height: 16 }));
+      else svg.appendChild(s('circle', { class: 'dg-dot', cx: q.x, cy: q.y, r: 6 }));
+      svg.appendChild(s('text', { class: 'dg-name', x: q.x, y: below ? q.y + 26 : q.y - 13, 'text-anchor': 'middle' }, e.id));
+    });
+    return h('figure', { class: 'diagram fit' }, svg,
+      spec.caption ? h('figcaption', { class: 'small muted' }, spec.caption) : null);
+  }
+
+  // Shared memory vs private memory (parallel computing), as in UTS 25/26 Soal 1c. Stacked so it fits a phone.
+  function memory(spec) {
+    var W = 330, H = 360;
+    var svg = s('svg', { class: 'dg dg-fit', viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Shared memory dan private memory' });
+    function box(x, y, t, cls) {
+      svg.appendChild(s('rect', { class: cls, x: x, y: y, width: 40, height: 30 }));
+      svg.appendChild(s('text', { class: 'dg-name', x: x + 20, y: y + 21, 'text-anchor': 'middle' }, t));
+    }
+    function wire(x1, y1, x2, y2) { svg.appendChild(s('line', { class: 'dg-edge', x1: x1, y1: y1, x2: x2, y2: y2 })); }
+    function bus(y) {
+      svg.appendChild(s('rect', { class: 'dg-bus', x: 30, y: y, width: 270, height: 24 }));
+      svg.appendChild(s('text', { class: 'dg-small', x: 165, y: y + 17, 'text-anchor': 'middle' }, 'Interconnect'));
+    }
+    // Shared: memories on top, interconnect, processors below.
+    svg.appendChild(s('text', { class: 'dg-name', x: 165, y: 18, 'text-anchor': 'middle' }, 'Shared memory'));
+    [75, 145, 215].forEach(function (x) { box(x, 28, 'M', 'dg-mem'); wire(x + 20, 58, x + 20, 76); });
+    bus(76);
+    [40, 105, 170, 235].forEach(function (x) { wire(x + 20, 100, x + 20, 118); box(x, 118, 'P', 'dg-cpu'); });
+    // Private: each processor has its own memory, nodes joined by an interconnect.
+    svg.appendChild(s('text', { class: 'dg-name', x: 165, y: 196, 'text-anchor': 'middle' }, 'Private memory'));
+    [40, 105, 170, 235].forEach(function (x) {
+      box(x, 206, 'M', 'dg-mem'); wire(x + 20, 236, x + 20, 248); box(x, 248, 'P', 'dg-cpu'); wire(x + 20, 278, x + 20, 296);
+    });
+    bus(296);
+    svg.appendChild(s('text', { class: 'dg-small', x: 165, y: 346, 'text-anchor': 'middle' }, 'Tiap prosesor punya memorinya sendiri'));
+    return h('figure', { class: 'diagram fit' }, svg,
+      h('figcaption', { class: 'small muted' }, spec && spec.caption ? spec.caption : 'Digambar ulang dari soal (di soal kedua gambar berdampingan). M = memory, P = processor.'));
+  }
+
+  // Read/write order of processes on a shared variable, drawn like the textbook figure.
+  // spec: { rows: [['P1', '', 'R(x)a', ...], ...] } — one cell per time column; a leading '~' greys the operation out.
+  function ops(spec) {
+    var cols = spec.rows[0].length - 1, W = 372, lx = 36, cw = (W - lx - 4) / cols, rh = 40, H = spec.rows.length * rh + 30;
+    var svg = s('svg', { class: 'dg dg-fit dg-ops', viewBox: '0 0 ' + W + ' ' + H, role: 'img', 'aria-label': 'Urutan operasi baca tulis' });
+    arrowTo(svg, lx, 12, W - 6, 12, 'dg-edge');
+    spec.rows.forEach(function (r, i) {
+      var y = 30 + i * rh + 28;
+      svg.appendChild(s('text', { class: 'dg-name', x: 4, y: y }, r[0]));
+      svg.appendChild(s('line', { class: 'dg-rule', x1: 0, y1: y + 12, x2: W, y2: y + 12 }));
+      r.slice(1).forEach(function (c, k) {
+        if (!c) return;
+        var faded = c.charAt(0) === '~';
+        svg.appendChild(s('text', { class: 'dg-op' + (faded ? ' faded' : ''), x: lx + cw * (k + 0.5), y: y, 'text-anchor': 'middle' }, faded ? c.slice(1) : c));
+      });
+    });
+    return h('figure', { class: 'diagram fit' }, svg,
+      h('figcaption', { class: 'small muted' }, spec.caption || 'Waktu bergerak ke kanan (panah di atas). Operasi tiap proses dibaca dari kiri ke kanan.'));
+  }
+
+  // Render a figure spec by type; used by quiz items ({ figure: { type: 'clock', ... } }).
+  function figure(spec) {
+    var fn = { clock: clock, memory: memory, ops: ops, wbs: wbs, net: net, genes: genes, wheel: wheel }[spec && spec.type];
+    return fn ? fn(spec) : null;
+  }
+
+  root.Diagram = { wbs: wbs, net: net, genes: genes, wheel: wheel, clock: clock, memory: memory, ops: ops, figure: figure };
 })(this);
