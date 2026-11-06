@@ -559,4 +559,32 @@
         { label: 'Konsensus Byzantine penuh, k = 1', a: 4, tol: 0 }],
       ex: 'Crash: k + 1. Byzantine dengan voting: 2k + 1. Konsensus Byzantine: 3k + 1. Konvensi sama dengan soal fault tolerance di bank lama.' + S }
   ]);
+
+  // Pengelompokan topik per ujian. Hanya label (it.topic) yang diganti; id soal tetap, jadi progres aman.
+  // Soal yang cocok dengan sub-soal kedua ujian masuk kelompok "24/25 & 25/26".
+  // Soal yang hanya menutup kisi-kisi tetap di topik materinya bersama soal ca.js.
+  var A = 'Pola UTS 24/25', B = 'Pola UTS 25/26', AB = 'Pola UTS 24/25 & 25/26';
+  var GROUP = {
+    sis: { 1: B, 2: B, 3: AB, 4: AB, 5: A, 6: A, 7: A, 8: B, 9: 'Arsitektur & Jenis Sistem' },
+    ars2: { 1: B, 2: B, 3: B, 4: A, 5: A, 6: A, 7: A, 8: A, 9: A },
+    proc2: { 1: A, 2: A, 3: B, 4: B, 5: B, 6: B, 7: B, 8: A, 9: A },
+    kom2: { 1: A, 2: A, 3: AB, 4: AB, 5: B, 6: A, 7: A, 8: B, 9: B },
+    koor2: { 1: AB, 2: AB, 3: AB, 4: AB, 5: B, 6: AB, 7: AB, 8: AB, 9: AB },
+    nama2: { 1: B, 2: B, 3: B, 4: A, 5: A, 6: A, 7: A },
+    kons2: { 1: AB, 2: AB, 3: AB, 4: AB, 5: AB, 6: A, 7: A, 8: B, 9: B }
+  };
+  var RANK = {}; RANK[A] = 0; RANK[B] = 1; RANK[AB] = 2;
+  var all = BANK.data.isian, mine = [], first = -1;
+  all.forEach(function (it, i) {
+    var p = /^ca-(sis|ars2|proc2|kom2|koor2|nama2|kons2)-(\d+)$/.exec(it.id);
+    if (!p) return;
+    if (first < 0) first = i;
+    var g = GROUP[p[1]][p[2]];
+    if (g) it.topic = g;
+    mine.push(it);
+  });
+  // Urutkan agar checkbox tampil 24/25, 25/26, lalu keduanya. Urutan array tidak memengaruhi id.
+  var order = mine.map(function (it, i) { return { it: it, i: i, r: RANK[it.topic] == null ? 3 : RANK[it.topic] }; })
+    .sort(function (x, y) { return x.r - y.r || x.i - y.i; }).map(function (o) { return o.it; });
+  all.splice.apply(all, [first, mine.length].concat(order));
 })();

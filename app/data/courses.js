@@ -14,8 +14,9 @@ BANK.course('ka', {
 });
 BANK.course('ca', {
   name: 'Komputasi Awan', code: 'CL', kind: 'isian', secsPerItem: 240, labs: ['clocks', 'chord', 'consistency'],
-  blurb: 'Sistem terdistribusi: timestamp, Chord, konsistensi',
-  about: 'Disusun dari catatan kisi-kisi dosen dan buku Distributed Systems (van Steen & Tanenbaum). Lab interaktif melatih tiga soal hitungan yang pasti keluar.',
+  blurb: 'Sistem terdistribusi berpola UTS 24/25 dan 25/26, dengan materi per nomor soal',
+  about: 'Disusun dari catatan kisi-kisi dosen, soal UTS Genap 24/25 dan Ganjil 25/26, serta buku Distributed Systems (van Steen & Tanenbaum). Topik Pola UTS 24/25 dan Pola UTS 25/26 berisi soal yang mengikuti sub-soal ujian itu; Pola UTS 24/25 & 25/26 berisi pola yang muncul di keduanya. Untuk fokus ke satu ujian, centang topik ujian itu ditambah topik 24/25 & 25/26. Topik lainnya berisi soal kisi-kisi. Lab interaktif melatih tiga soal hitungan yang pasti keluar.',
+  materiLead: 'Materi disusun per nomor soal UTS (7 topik yang sama di 24/25 dan 25/26). Setiap bab memuat ringkasan, tabel perbandingan, dan contoh soal ujian beserta pembahasannya. Ketuk satu bab untuk membukanya.',
   notes: [
     'Shared memory vs private memory, dan perbedaan jenis sistem terdistribusi.',
     'Kenapa server multithread melayani lebih banyak client daripada single thread.',

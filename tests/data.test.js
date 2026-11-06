@@ -289,3 +289,22 @@ test('Manajemen Proyek materi is well formed and its worked tables match the dia
     assert.equal(row.slice(1).join(), [x.es, x.ef, x.ls, x.lf, x.free, x.slack].join(), row[0]);
   }
 });
+
+test('Komputasi Awan materi is well formed and exam-pattern items sit in their own topics', () => {
+  const weeks = data.materi.ca;
+  assert.ok(weeks && weeks.length >= 8, 'ca materi');
+  for (const w of weeks) {
+    assert.ok(w.judul && w.label && w.ringkas && w.bagian.length, w.judul);
+    for (const b of w.bagian) {
+      assert.ok(b.h && (b.poin || b.tabel), b.h);
+      if (b.tabel) for (const r of b.tabel.rows) assert.equal(r.length, b.tabel.head.length, b.h);
+    }
+  }
+  assert.ok(weeks.filter(w => w.bagian.some(b => b.soal)).length >= 7, 'each exam topic has an example question');
+  const ca = data.isian.filter(it => it.course === 'ca');
+  const count = t => ca.filter(it => it.topic === t).length;
+  for (const t of ['Pola UTS 24/25', 'Pola UTS 25/26', 'Pola UTS 24/25 & 25/26']) assert.ok(count(t) >= 10, t + ' ' + count(t));
+  // Old ca.js items keep their material topics; ids stay unique.
+  assert.equal(new Set(ca.map(it => it.id)).size, ca.length);
+  assert.ok(ca.filter(it => /^ca-(arsi|proc|kom|koor|nama|kons)-/.test(it.id)).every(it => !/^Pola UTS/.test(it.topic)));
+});
